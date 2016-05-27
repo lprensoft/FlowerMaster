@@ -1,0 +1,31 @@
+﻿<Controls:MetroWindow x:Class="FlowerMaster.NewsWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:local="clr-namespace:FlowerMaster"
+                      mc:Ignorable="d"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      GlowBrush="{DynamicResource AccentColorBrush}"
+                      ResizeMode="NoResize"
+                      WindowStartupLocation="CenterScreen"
+                      Loaded="MetroWindow_Loaded"
+                      Closing="MetroWindow_Closing"
+                      Title="游戏公告" Height="400" Width="650">
+    <Grid>
+        <WebBrowser x:Name="newsWeb"
+                    x:FieldModifier="public"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    Margin="5,5,5,5"
+                    Width="640"
+                    Height="335"
+                    LoadCompleted="newsWeb_LoadCompleted"/>
+        <CheckBox x:Name="cbShowNews"
+                  VerticalAlignment="Bottom"
+                  Margin="5,0,0,5"
+                  IsChecked="True"
+                  Content="登录游戏后显示公告"/>
+
+    </Grid>
+</Controls:MetroWindow>

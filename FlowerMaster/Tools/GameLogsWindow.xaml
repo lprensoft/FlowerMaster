@@ -1,0 +1,48 @@
+﻿<Controls:MetroWindow x:Class="FlowerMaster.GameLogsWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:local="clr-namespace:FlowerMaster"
+                      mc:Ignorable="d"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      GlowBrush="{DynamicResource AccentColorBrush}"
+                      WindowStartupLocation="CenterScreen"
+                      ResizeMode="NoResize"
+                      Loaded="MetroWindow_Loaded"
+                      Title="查看游戏日志" Height="500" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="145*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0"
+               Margin="5,5,0,0"
+               Height="30"
+               VerticalAlignment="Top"
+               Content="选择账号："/>
+        <ComboBox x:Name="cbAccount"
+                  Grid.Row="0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Margin="75,5,0,0"
+                  Height="30"
+                  Width="150"></ComboBox>
+        <Label Grid.Row="0"
+               Margin="235,5,0,0"
+               Height="30"
+               VerticalAlignment="Top"
+               Content="选择日期："/>
+        <ComboBox x:Name="cbDate"
+                  Grid.Row="0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Margin="305,5,0,0"
+                  Height="30"
+                  Width="150"></ComboBox>
+        <RichTextBox x:Name="rtLog"
+                     Grid.Row="1"
+                     VerticalScrollBarVisibility="Visible"
+                     IsReadOnly="True"/>
+    </Grid>
+</Controls:MetroWindow>

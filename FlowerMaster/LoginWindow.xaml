@@ -1,0 +1,112 @@
+﻿<Controls:MetroWindow x:Class="FlowerMaster.LoginWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:local="clr-namespace:FlowerMaster"
+                      mc:Ignorable="d"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      GlowBrush="{DynamicResource AccentColorBrush}"
+                      Title="游戏登录"
+                      WindowStartupLocation="CenterScreen"
+                      ResizeMode="NoResize"
+                      Height="220"
+                      Width="350"
+                      ContentRendered="MetroWindow_ContentRendered">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="123*"/>
+            <ColumnDefinition Width="221*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="145*"/>
+            <RowDefinition Height="46*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0"
+               Grid.Column="0"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Right"
+               Margin="0,20,5,0"
+               Height="25"
+               Content="选择服务器："/>
+        <ComboBox x:Name="cbGameServer"
+                  Grid.Row="0"
+                  Grid.Column="1"
+                  Height="26"
+                  Width="150"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Left"
+                  Margin="5,20,0,0"
+                  SelectedIndex="0"
+                  SelectionChanged="cbGameServer_SelectionChanged">
+            <ComboBoxItem Content="日服-通常版"/>
+            <ComboBoxItem Content="日服-R18版"/>
+            <ComboBoxItem Content="美服"/>
+        </ComboBox>
+        <Label Grid.Column="0"
+               Grid.Row="0"
+               Height="25"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Right"
+               Margin="0,50,5,0"
+               Content="游戏账号："/>
+        <ComboBox x:Name="cbUsername"
+                  Grid.Row="0"
+                  Grid.Column="1"
+                  Height="26"
+                  Width="150"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Left"
+                  Margin="5,50,0,0"
+                  SelectionChanged="cbUsername_SelectionChanged"
+                  KeyDown="cbUsername_KeyDown"
+                  IsEditable="True">
+        </ComboBox>
+        <Label x:Name="lbDelete"
+               Grid.Row="0"
+               Grid.Column="1"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Height="25"
+               Margin="160,50,0,0"
+               Foreground="Yellow"
+               ToolTip="删除所选的账号"
+               MouseDown="lbDelete_MouseDown"
+               Content="删除"/>
+        <Label Grid.Column="0"
+               Grid.Row="0"
+               Height="25"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Right"
+               Margin="0,80,5,0"
+               Content="游戏密码："/>
+        <PasswordBox x:Name="tbPassword"
+                    Grid.Row="0"
+                     Grid.Column="1"
+                     Height="26"
+                     Width="150"
+                     VerticalAlignment="Top"
+                     HorizontalAlignment="Left"
+                     Margin="5,80,0,0"
+                     PasswordChar="*"/>
+        <CheckBox x:Name="cbRemember"
+                  Grid.Row="0"
+                  Grid.Column="1"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Left"
+                  Margin="5,115,0,0"
+                  IsChecked="True"
+                  Content="记住用户名和密码"/>
+        <Button x:Name="btnLogin"
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Margin="5,0,0,0"
+                Height="30"
+                Width="100"
+                IsDefault="True"
+                Click="btnLogin_Click"
+                Content="登录"/>
+    </Grid>
+</Controls:MetroWindow>

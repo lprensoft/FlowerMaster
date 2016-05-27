@@ -1,0 +1,41 @@
+﻿<Controls:MetroWindow x:Class="FlowerMaster.FriendsWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:local="clr-namespace:FlowerMaster"
+                      mc:Ignorable="d"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      GlowBrush="{DynamicResource AccentColorBrush}"
+                      Title="好友探秘"
+                      Height="500"
+                      Width="900"
+                      ResizeMode="NoResize"
+                      WindowStartupLocation="CenterScreen"
+                      Loaded="MetroWindow_Loaded">
+    <Grid>
+        <DataGrid x:Name="dgFriendsList"
+                                      Margin="0,0,0,0"
+                                      VerticalAlignment="Top"
+                                      HorizontalAlignment="Left"
+                                      Width="900"
+                                      Height="470"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      SelectionUnit="FullRow">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="好友" Width="100" IsReadOnly="True" Binding="{Binding name}"/>
+                <DataGridTextColumn Header="Lv" Width="47" IsReadOnly="True" Binding="{Binding lv}"/>
+                <DataGridTextColumn Header="总战力" Width="60" IsReadOnly="True" Binding="{Binding totalPower}"/>
+                <DataGridTextColumn Header="成为好友时间" Width="100" IsReadOnly="True" Binding="{Binding regTime}"/>
+                <DataGridTextColumn Header="最后登录时间" Width="100" IsReadOnly="True" Binding="{Binding lastTime}"/>
+                <DataGridTextColumn Header="副团长" Width="80" IsReadOnly="True" Binding="{Binding leader}"/>
+                <DataGridTextColumn Header="常用队角色1" Width="100" IsReadOnly="True" Binding="{Binding card1}"/>
+                <DataGridTextColumn Header="常用队角色2" Width="100" IsReadOnly="True" Binding="{Binding card2}"/>
+                <DataGridTextColumn Header="常用队角色3" Width="100" IsReadOnly="True" Binding="{Binding card3}"/>
+                <DataGridTextColumn Header="常用队角色4" Width="100" IsReadOnly="True" Binding="{Binding card4}"/>
+                <DataGridTextColumn Header="常用队角色5" Width="100" IsReadOnly="True" Binding="{Binding card5}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Controls:MetroWindow>

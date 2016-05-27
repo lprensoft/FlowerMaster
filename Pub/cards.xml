@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cardList>
+	<desc id="角色ID" name="角色名称" rare="角色稀有度" type="角色类型" rank="角色评级（仅5星以上）0-最强3-最弱" />
+	<card id="5000" name="灵兽·命" rare="5" type="无" />
+	<card id="5010" name="灵兽·攻" rare="5" type="无" />
+	<card id="5020" name="灵兽·守" rare="5" type="无" />
+	<card id="109913" name="斩狗粮5岁" rare="1" type="斩" />
+	<card id="109914" name="打狗粮5岁" rare="1" type="打" />
+	<card id="109915" name="突狗粮5岁" rare="1" type="突" />
+	<card id="109916" name="魔狗粮5岁" rare="1" type="魔" />
+	<card id="109917" name="斩狗粮20岁" rare="3" type="斩" />
+	<card id="109918" name="打狗粮20岁" rare="3" type="打" />
+	<card id="109919" name="突狗粮20岁" rare="3" type="突" />
+	<card id="109920" name="魔狗粮20岁" rare="3" type="魔" />
+	<card id="109921" name="斩狗粮100岁" rare="5" type="斩" />
+	<card id="109922" name="打狗粮100岁" rare="5" type="打" />
+	<card id="109923" name="突狗粮100岁" rare="5" type="突" />
+	<card id="109924" name="魔狗粮100岁" rare="5" type="魔" />
+	<card id="110403" name="番红花" rare="6" type="突" rank="0.5" />
+	<card id="110404" name="番红花" rare="6" type="突" rank="0.5" />
+	<card id="110801" name="雏菊" rare="6" type="突" rank="1.5" />
+	<card id="110802" name="雏菊" rare="6" type="突" rank="1.5" />
+	<card id="110803" name="瓜叶菊" rare="5" type="魔" rank="1.5" />
+	<card id="110804" name="瓜叶菊" rare="5" type="魔" rank="1.5" />
+	<card id="110901" name="报春花" rare="5" type="突" rank="1.5" />
+	<card id="110902" name="报春花" rare="5" type="突" rank="1.5" />
+	<card id="111101" name="一串红" rare="2" type="打" />
+	<card id="111102" name="一串红" rare="2" type="打" />
+	<card id="111105" name="迷迭香" rare="5" type="魔" rank="2" />
+	<card id="111106" name="迷迭香" rare="5" type="魔" rank="2" />
+	<card id="111501" name="白三色紫罗兰" rare="3" type="斩" />
+	<card id="111502" name="白三色紫罗兰" rare="3" type="斩" />
+	<card id="111503" name="黄三色堇" rare="3" type="突" />
+	<card id="111504" name="黄三色堇" rare="3" type="突" />
+	<card id="111505" name="紫三色堇" rare="2" type="魔" />
+	<card id="111506" name="紫三色堇" rare="2" type="魔" />
+	<card id="111701" name="山茶花" rare="5" type="斩" rank="1" />
+	<card id="111702" name="山茶花" rare="5" type="斩" rank="1" />
+	<card id="111703" name="山茶花" rare="5" type="斩" rank="1.5" />
+	<card id="111704" name="山茶花" rare="5" type="斩" rank="1.5" />
+	<card id="111901" name="黑蔷薇" rare="6" type="斩" rank="1" />
+	<card id="111902" name="黑蔷薇" rare="6" type="斩" rank="1" />
+	<card id="111903" name="白玫瑰" rare="3" type="斩" />
+	<card id="111904" name="白玫瑰" rare="3" type="斩" />
+	<card id="111905" name="诺瓦利斯月季" rare="3" type="魔" />
+	<card id="111906" name="诺瓦利斯月季" rare="3" type="魔" />
+	<card id="112001" name="雪花莲" rare="6" type="突" rank="0" />
+	<card id="112002" name="雪花莲" rare="6" type="突" rank="0" />
+	<card id="112601" name="六出花" rare="3" type="打" />
+	<card id="112602" name="六出花" rare="3" type="打" />
+	<card id="112801" name="文心兰" rare="5" type="斩" rank="2" />
+	<card id="112802" name="文心兰" rare="5" type="斩" rank="2" />
+	<card id="112803" name="大花惠兰" rare="5" type="打" rank="1" />
+	<card id="112804" name="大花惠兰" rare="5" type="打" rank="1" />
+	<card id="112805" name="石斛兰" rare="6" type="打" rank="1" />
+	<card id="112806" name="石斛兰" rare="6" type="打" rank="1" />
+	<card id="112809" name="日本小文心兰" rare="6" type="突" rank="0.5" />
+	<card id="112810" name="日本小文心兰" rare="6" type="突" rank="0.5" />
+	<card id="112811" name="文心兰" rare="6" type="斩" rank="0" />
+	<card id="112812" name="文心兰" rare="6" type="斩" rank="0" />
+	<card id="113501" name="狗尾草" rare="5" type="魔" rank="1" />
+	<card id="113502" name="狗尾草" rare="5" type="魔" rank="1" />
+	<card id="114801" name="八角金盘" rare="5" type="突" rank="2" />
+	<card id="114802" name="八角金盘" rare="5" type="突" rank="2" />
+	<card id="116001" name="一品红" rare="5" type="斩" rank="2" />
+	<card id="116002" name="一品红" rare="5" type="斩" rank="2" />
+	<card id="117001" name="芦荟" rare="5" type="斩" rank="0" />
+	<card id="117002" name="芦荟" rare="5" type="斩" rank="0" />
+	<card id="117601" name="岩白菜" rare="5" type="魔" rank="1" />
+	<card id="117602" name="岩白菜" rare="5" type="魔" rank="1" />
+	<card id="120101" name="木槿" rare="4" type="突" />
+	<card id="120102" name="木槿" rare="4" type="突" />
+	<card id="120201" name="红花" rare="3" type="斩" />
+	<card id="120202" name="红花" rare="3" type="斩" />
+	<card id="120203" name="绣球花" rare="3" type="打" />
+	<card id="120204" name="绣球花" rare="3" type="打" />
+	<card id="120401" name="唐菖蒲" rare="3" type="斩" />
+	<card id="120402" name="唐菖蒲" rare="3" type="斩" />
+	<card id="120701" name="桔梗" rare="3" type="魔" />
+	<card id="120702" name="桔梗" rare="3" type="魔" />
+	<card id="120801" name="向日葵" rare="2" type="斩" />
+	<card id="120802" name="向日葵" rare="2" type="斩" />
+	<card id="120805" name="堆心菊" rare="6" type="魔" rank="2" />
+	<card id="120806" name="堆心菊" rare="6" type="魔" rank="2" />
+	<card id="121303" name="红花睡莲" rare="3" type="打" />
+	<card id="121304" name="红花睡莲" rare="3" type="打" />
+	<card id="121305" name="王莲" rare="6" type="斩" rank="1" />
+	<card id="121306" name="王莲" rare="6" type="斩" rank="1" />
+	<card id="121601" name="拳参" rare="2" type="突" />
+	<card id="121602" name="拳参" rare="2" type="突" />
+	<card id="121701" name="紫茎" rare="5" type="斩" rank="0.5" />
+	<card id="121702" name="紫茎" rare="5" type="斩" rank="0.5" />
+	<card id="122001" name="玉帘" rare="4" type="魔" />
+	<card id="122002" name="玉帘" rare="4" type="魔" />
+	<card id="122003" name="葱莲" rare="5" type="打" rank="1" />
+	<card id="122004" name="葱莲" rare="5" type="打" rank="1" />
+	<card id="122301" name="旋花" rare="3" type="突" />
+	<card id="122302" name="旋花" rare="3" type="突" />
+	<card id="122305" name="牵牛花" rare="3" type="魔" />
+	<card id="122306" name="牵牛花" rare="3" type="魔" />
+	<card id="122401" name="鸡冠刺桐" rare="4" type="斩" />
+	<card id="122402" name="鸡冠刺桐" rare="4" type="斩" />
+	<card id="122701" name="卡萨布兰卡" rare="4" type="斩" />
+	<card id="122702" name="卡萨布兰卡" rare="4" type="斩" />
+	<card id="123401" name="花烛属" rare="5" type="突" rank="1.5" />
+	<card id="123402" name="花烛属" rare="5" type="突" rank="1.5" />
+	<card id="123901" name="紫茉莉" rare="5" type="魔" rank="2" />
+	<card id="123902" name="紫茉莉" rare="5" type="魔" rank="2" />
+	<card id="124001" name="王瓜" rare="5" type="斩" rank="2" />
+	<card id="124002" name="王瓜" rare="5" type="斩" rank="2" />
+	<card id="124003" name="西葫芦" rare="6" type="打" rank="0.8" />
+	<card id="124004" name="西葫芦" rare="6" type="打" rank="0.8" />
+	<card id="124201" name="帚石楠" rare="5" type="打" rank="1" />
+	<card id="124202" name="帚石楠" rare="5" type="打" rank="1" />
+	<card id="124301" name="四翅月见草" rare="5" type="魔" rank="1" />
+	<card id="124302" name="四翅月见草" rare="5" type="魔" rank="1" />
+	<card id="124501" name="洋桔梗" rare="5" type="斩" rank="1" />
+	<card id="124502" name="洋桔梗" rare="5" type="斩" rank="1" />
+	<card id="124601" name="白花酢浆草" rare="5" type="打" rank="2" />
+	<card id="124602" name="白花酢浆草" rare="5" type="打" rank="2" />
+	<card id="124703" name="栀子花" rare="5" type="打" rank="2" />
+	<card id="124704" name="栀子花" rare="5" type="打" rank="2" />
+	<card id="125001" name="飘香藤" rare="5" type="突" rank="2.5" />
+	<card id="125002" name="飘香藤" rare="5" type="突" rank="2.5" />
+	<card id="125501" name="马樱丹" rare="5" type="斩" rank="1" />
+	<card id="125502" name="马樱丹" rare="5" type="斩" rank="1" />
+	<card id="125901" name="蛇麻" rare="5" type="斩" rank="0" />
+	<card id="125902" name="蛇麻" rare="5" type="斩" rank="0" />
+	<card id="126401" name="朱砂根" rare="6" type="魔" rank="1.5" />
+	<card id="126402" name="朱砂根" rare="6" type="魔" rank="1.5" />
+	<card id="130301" name="油菜" rare="4" type="突" />
+	<card id="130302" name="油菜" rare="4" type="突" />
+	<card id="130501" name="非洲紫罗兰" rare="4" type="斩" />
+	<card id="130502" name="非洲紫罗兰" rare="4" type="斩" />
+	<card id="130801" name="马格丽特菊" rare="2" type="打" />
+	<card id="130802" name="马格丽特菊" rare="2" type="打" />
+	<card id="131001" name="仙人掌" rare="6" type="打" rank="3" />
+	<card id="131002" name="仙人掌" rare="6" type="打" rank="3" />
+	<card id="131003" name="仙人掌" rare="5" type="打" rank="1.5" />
+	<card id="131004" name="仙人掌" rare="5" type="打" rank="1.5" />
+	<card id="131401" name="铃兰" rare="5" type="魔" rank="1.5" />
+	<card id="131402" name="铃兰" rare="5" type="魔" rank="1.5" />
+	<card id="131501" name="东北堇菜" rare="5" type="打" rank="2" />
+	<card id="131502" name="东北堇菜" rare="5" type="打" rank="2" />
+	<card id="131503" name="三色堇" rare="6" type="打" rank="1.5" />
+	<card id="131504" name="三色堇" rare="6" type="打" rank="1.5" />
+	<card id="131901" name="草莓" rare="2" type="突" />
+	<card id="131902" name="草莓" rare="2" type="突" />
+	<card id="131903" name="梅花" rare="6" type="突" rank="2" />
+	<card id="131904" name="梅花" rare="6" type="突" rank="2" />
+	<card id="131905" name="玫瑰" rare="5" type="突" rank="2.5" />
+	<card id="131906" name="玫瑰" rare="5" type="突" rank="2.5" />
+	<card id="131907" name="樱花" rare="6" type="魔" rank="2" />
+	<card id="131908" name="樱花" rare="6" type="魔" rank="2" />
+	<card id="131909" name="珍珠绣线菊" rare="2" type="打" />
+	<card id="131910" name="珍珠绣线菊" rare="2" type="打" />
+	<card id="131911" name="桃花" rare="5" type="打" rank="2.5" />
+	<card id="131912" name="桃花" rare="5" type="打" rank="2.5" />
+	<card id="131913" name="花桃" rare="6" type="打" rank="2" />
+	<card id="131914" name="花桃" rare="6" type="打" rank="2" />
+	<card id="131915" name="樱桃" rare="6" type="打" rank="1.5" />
+	<card id="131916" name="樱桃" rare="6" type="打" rank="1.5" />
+	<card id="131917" name="杏花" rare="6" type="魔" rank="1.5" />
+	<card id="131918" name="杏花" rare="6" type="魔" rank="1.5" />
+	<card id="132001" name="朱顶红" rare="2" type="魔" />
+	<card id="132002" name="朱顶红" rare="2" type="魔" />
+	<card id="132003" name="垂筒花" rare="5" type="打" rank="3" />
+	<card id="132004" name="垂筒花" rare="5" type="打" rank="3" />
+	<card id="132101" name="日本扁柏" rare="4" type="魔" />
+	<card id="132102" name="日本扁柏" rare="4" type="魔" />
+	<card id="132401" name="紫云英" rare="3" type="打" />
+	<card id="132402" name="紫云英" rare="3" type="打" />
+	<card id="132403" name="金合欢" rare="6" type="斩" rank="0" />
+	<card id="132404" name="金合欢" rare="6" type="斩" rank="0" />
+	<card id="132405" name="刺槐" rare="5" type="突" rank="2" />
+	<card id="132406" name="刺槐" rare="5" type="突" rank="2" />
+	<card id="132407" name="羽扇豆" rare="5" type="斩" rank="1" />
+	<card id="132408" name="羽扇豆" rare="5" type="斩" rank="1" />
+	<card id="132501" name="紫玉兰" rare="4" type="斩" />
+	<card id="132502" name="紫玉兰" rare="4" type="斩" />
+	<card id="132801" name="白蝴蝶兰" rare="3" type="斩" />
+	<card id="132802" name="白蝴蝶兰" rare="3" type="斩" />
+	<card id="132901" name="银莲花" rare="6" type="突" rank="2" />
+	<card id="132902" name="银莲花" rare="6" type="突" rank="2" />
+	<card id="132903" name="圣诞玫瑰" rare="6" type="打" rank="1.5" />
+	<card id="132904" name="圣诞玫瑰" rare="6" type="打" rank="1.5" />
+	<card id="132907" name="毛茛" rare="5" type="突" rank="2.5" />
+	<card id="132908" name="毛茛" rare="5" type="突" rank="2.5" />
+	<card id="133501" name="兔尾草" rare="6" type="打" rank="1.5" />
+	<card id="133502" name="兔尾草" rare="6" type="打" rank="1.5" />
+	<card id="134101" name="金鱼草" rare="5" type="打" rank="1.5" />
+	<card id="134102" name="金鱼草" rare="5" type="打" rank="1.5" />
+	<card id="135101" name="勿忘草" rare="4" type="斩" />
+	<card id="135102" name="勿忘草" rare="4" type="斩" />
+	<card id="135801" name="桉树" rare="5" type="打" rank="2.5" />
+	<card id="135802" name="桉树" rare="5" type="打" rank="2.5" />
+	<card id="136101" name="槲寄生" rare="6" type="突" rank="1.5" />
+	<card id="136102" name="槲寄生" rare="6" type="突" rank="1.5" />
+	<card id="136701" name="龙舌兰" rare="5" type="突" rank="2.5" />
+	<card id="136702" name="龙舌兰" rare="5" type="突" rank="2.5" />
+	<card id="136901" name="虞美人" rare="5" type="斩" rank="1" />
+	<card id="136902" name="虞美人" rare="5" type="斩" rank="1" />
+	<card id="140401" name="玉蝉花" rare="5" type="突" rank="1" />
+	<card id="140402" name="玉蝉花" rare="5" type="突" rank="1" />
+	<card id="140701" name="流星花" rare="5" type="突" rank="1" />
+	<card id="140702" name="流星花" rare="5" type="突" rank="1" />
+	<card id="140801" name="大波斯菊" rare="5" type="打" rank="3" />
+	<card id="140802" name="大波斯菊" rare="5" type="打" rank="3" />
+	<card id="140803" name="万寿菊" rare="3" type="突" />
+	<card id="140804" name="万寿菊" rare="3" type="突" />
+	<card id="140805" name="非洲菊" rare="5" type="斩" rank="3" />
+	<card id="140806" name="非洲菊" rare="5" type="斩" rank="3" />
+	<card id="140807" name="巧克力波斯菊" rare="5" type="突" rank="1" />
+	<card id="140808" name="巧克力波斯菊" rare="5" type="突" rank="1" />
+	<card id="140809" name="紫锥菊" rare="5" type="突" rank="2" />
+	<card id="140810" name="紫锥菊" rare="5" type="突" rank="2" />
+	<card id="140811" name="五月艾" rare="5" type="突" rank="2" />
+	<card id="140812" name="五月艾" rare="5" type="突" rank="2" />
+	<card id="140813" name="紫菀" rare="5" type="突" rank="1.5" />
+	<card id="140814" name="紫菀" rare="5" type="突" rank="1.5" />
+	<card id="140901" name="仙客来" rare="2" type="魔" />
+	<card id="140902" name="仙客来" rare="2" type="魔" />
+	<card id="141001" name="昙花" rare="5" type="魔" rank="1" />
+	<card id="141002" name="昙花" rare="5" type="魔" rank="1" />
+	<card id="141003" name="量天尺" rare="5" type="突" rank="1" />
+	<card id="141004" name="量天尺" rare="5" type="突" rank="1" />
+	<card id="141101" name="薄荷" rare="2" type="斩" />
+	<card id="141102" name="薄荷" rare="2" type="斩" />
+	<card id="141103" name="薰衣草" rare="5" type="魔" rank="1" />
+	<card id="141104" name="薰衣草" rare="5" type="魔" rank="1" />
+	<card id="141301" name="蓝莲花" rare="3" type="斩" />
+	<card id="141302" name="蓝莲花" rare="3" type="斩" />
+	<card id="141303" name="茶梅" rare="3" type="斩" />
+	<card id="141304" name="茶梅" rare="3" type="斩" />
+	<card id="141701" name="地榆" rare="4" type="魔" />
+	<card id="141702" name="地榆" rare="4" type="魔" />
+	<card id="141801" name="石竹花" rare="6" type="斩" rank="1" />
+	<card id="141802" name="石竹花" rare="6" type="斩" rank="1" />
+	<card id="141901" name="千日红" rare="3" type="突" />
+	<card id="141902" name="千日红" rare="3" type="突" />
+	<card id="142001" name="娜丽花" rare="6" type="魔" rank="1.5" />
+	<card id="142002" name="娜丽花" rare="6" type="魔" rank="1.5" />
+	<card id="142003" name="彼岸花" rare="6" type="魔" rank="1" />
+	<card id="142004" name="彼岸花" rare="6" type="魔" rank="1" />
+	<card id="142201" name="白三叶草" rare="2" type="斩" />
+	<card id="142202" name="白三叶草" rare="2" type="斩" />
+	<card id="142401" name="金桂" rare="3" type="打" />
+	<card id="142402" name="金桂" rare="3" type="打" />
+	<card id="142403" name="红花诘草" rare="5" type="魔" rank="3" />
+	<card id="142404" name="红花诘草" rare="5" type="魔" rank="3" />
+	<card id="142501" name="茉莉" rare="3" type="魔" />
+	<card id="142502" name="茉莉" rare="3" type="魔" />
+	<card id="142503" name="杜鹃花" rare="5" type="突" rank="1.5" />
+	<card id="142504" name="杜鹃花" rare="5" type="突" rank="1.5" />
+	<card id="142701" name="山麦冬" rare="5" type="突" rank="2" />
+	<card id="142702" name="山麦冬" rare="5" type="突" rank="2" />
+	<card id="143501" name="日本芒草" rare="5" type="斩" rank="1" />
+	<card id="143502" name="日本芒草" rare="5" type="斩" rank="1" />
+	<card id="143801" name="小连翘" rare="5" type="斩" rank="1" />
+	<card id="143802" name="小连翘" rare="5" type="斩" rank="1" />
+	<card id="144401" name="婆婆纳" rare="5" type="魔" rank="2" />
+	<card id="144402" name="婆婆纳" rare="5" type="魔" rank="2" />
+	<card id="144403" name="花丁子" rare="5" type="打" rank="2.5" />
+	<card id="144404" name="花丁子" rare="5" type="打" rank="2.5" />
+	<card id="144803" name="常春藤" rare="5" type="打" rank="1.5" />
+	<card id="144804" name="常春藤" rare="5" type="打" rank="1.5" />
+	<card id="145101" name="香水草" rare="5" type="突" rank="1" />
+	<card id="145102" name="香水草" rare="5" type="突" rank="1" />
+	<card id="145701" name="旱金莲" rare="5" type="斩" rank="2" />
+	<card id="145702" name="旱金莲" rare="5" type="斩" rank="2" />
+	<card id="147501" name="倒地铃" rare="5" type="魔" rank="1" />
+	<card id="147502" name="倒地铃" rare="5" type="魔" rank="1" />
+	<card id="150301" name="羽衣甘蓝" rare="5" type="突" rank="1.5" />
+	<card id="150302" name="羽衣甘蓝" rare="5" type="突" rank="1.5" />
+	<card id="150601" name="雪绒花" rare="5" type="打" rank="1" />
+	<card id="150602" name="雪绒花" rare="5" type="打" rank="1" />
+	<card id="150801" name="蒲公英" rare="4" type="打" />
+	<card id="150802" name="蒲公英" rare="4" type="打" />
+	<card id="150803" name="矢车菊" rare="4" type="魔" />
+	<card id="150804" name="矢车菊" rare="4" type="魔" />
+	<card id="150805" name="翠菊" rare="5" type="打" rank="2" />
+	<card id="150806" name="翠菊" rare="5" type="打" rank="2" />
+	<card id="151801" name="康乃馨" rare="3" type="突" />
+	<card id="151802" name="康乃馨" rare="3" type="突" />
+	<card id="151901" name="七竈" rare="4" type="突" />
+	<card id="151902" name="七竈" rare="4" type="突" />
+	<card id="151903" name="苹果" rare="5" type="魔" rank="1" />
+	<card id="151904" name="苹果" rare="5" type="魔" rank="1" />
+	<card id="152001" name="雪滴花" rare="4" type="斩" />
+	<card id="152002" name="雪滴花" rare="4" type="斩" />
+	<card id="152401" name="香豌豆" rare="4" type="打" />
+	<card id="152402" name="香豌豆" rare="4" type="打" />
+	<card id="152501" name="紫丁香" rare="4" type="突" />
+	<card id="152502" name="紫丁香" rare="4" type="突" />
+	<card id="152701" name="赫蕉属" rare="2" type="打" />
+	<card id="152702" name="赫蕉属" rare="2" type="打" />
+	<card id="152703" name="黑百合" rare="6" type="斩" rank="1.5" />
+	<card id="152704" name="黑百合" rare="6" type="斩" rank="1.5" />
+	<card id="152705" name="红色郁金香" rare="5" type="魔" rank="3" />
+	<card id="152706" name="红色郁金香" rare="5" type="魔" rank="3" />
+	<card id="152707" name="黄色郁金香" rare="4" type="打" />
+	<card id="152708" name="黄色郁金香" rare="4" type="打" />
+	<card id="152709" name="紫色郁金香" rare="4" type="魔" />
+	<card id="152710" name="紫色郁金香" rare="4" type="魔" />
+	<card id="152711" name="白色郁金香" rare="4" type="魔" />
+	<card id="152712" name="白色郁金香" rare="4" type="魔" />
+	<card id="152713" name="阳光百合" rare="5" type="魔" rank="2.5" />
+	<card id="152714" name="阳光百合" rare="5" type="魔" rank="2.5" />
+	<card id="152801" name="银兰" rare="4" type="打" />
+	<card id="152802" name="银兰" rare="4" type="打" />
+	<card id="152803" name="美洲石斛" rare="5" type="魔" rank="2" />
+	<card id="152804" name="美洲石斛" rare="5" type="魔" rank="2" />
+	<card id="152901" name="翠雀" rare="5" type="斩" rank="1.5" />
+	<card id="152902" name="翠雀" rare="5" type="斩" rank="1.5" />
+	<card id="153201" name="大花四照花" rare="6" type="魔" rank="2" />
+	<card id="153202" name="大花四照花" rare="6" type="魔" rank="2" />
+	<card id="153401" name="马蹄莲" rare="5" type="打" rank="3" />
+	<card id="153402" name="马蹄莲" rare="5" type="打" rank="3" />
+	<card id="154203" name="酸模树" rare="5" type="打" rank="1.5" />
+	<card id="154204" name="酸模树" rare="5" type="打" rank="1.5" />
+	<card id="154205" name="皋月杜鹃" rare="5" type="斩" rank="2" />
+	<card id="154206" name="皋月杜鹃" rare="5" type="斩" rank="2" />
+	<card id="154401" name="夜色福禄考" rare="5" type="突" rank="2" />
+	<card id="154402" name="夜色福禄考" rare="5" type="突" rank="2" />
+	<card id="154701" name="繁星花" rare="5" type="斩" rank="1" />
+	<card id="154702" name="繁星花" rare="5" type="斩" rank="1" />
+	<card id="154901" name="珊瑚花" rare="5" type="斩" rank="1" />
+	<card id="154902" name="珊瑚花" rare="5" type="斩" rank="1" />
+	<card id="155301" name="枫树" rare="6" type="斩" rank="0.5" />
+	<card id="155302" name="枫树" rare="6" type="斩" rank="0.5" />
+	<card id="155401" name="银杏树" rare="5" type="魔" rank="2" />
+	<card id="155402" name="银杏树" rare="5" type="魔" rank="2" />
+	<card id="156301" name="日本冷杉" rare="5" type="突" rank="2" />
+	<card id="156302" name="日本冷杉" rare="5" type="突" rank="2" />
+	<card id="156303" name="松树" rare="5" type="突" rank="2" />
+	<card id="156304" name="松树" rare="5" type="突" rank="2" />
+	<card id="156601" name="南天竹" rare="5" type="魔" rank="2" />
+	<card id="156602" name="南天竹" rare="5" type="魔" rank="2" />
+	<card id="156801" name="芍药" rare="6" type="斩" rank="0.8" />
+	<card id="156802" name="芍药" rare="6" type="斩" rank="0.8" />
+	<card id="157301" name="心叶球兰" rare="6" type="斩" rank="2.5" />
+	<card id="157302" name="心叶球兰" rare="6" type="斩" rank="2.5" />
+	<card id="160401" name="鸢尾花" rare="5" type="突" rank="2"/>
+	<card id="160402" name="鸢尾花" rare="5" type="突" rank="2"/>
+	<card id="161901" name="棣棠花" rare="6" type="斩" rank="1" />
+	<card id="161902" name="棣棠花" rare="6" type="斩" rank="1" />
+</cardList>
