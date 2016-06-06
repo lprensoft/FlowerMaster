@@ -11,15 +11,15 @@
                       WindowStartupLocation="CenterScreen"
                       Loaded="MetroWindow_Loaded"
                       Closing="MetroWindow_Closing"
-                      Title="游戏公告" Height="400" Width="650">
+                      Title="游戏公告" Height="500" Width="800">
     <Grid>
         <WebBrowser x:Name="newsWeb"
                     x:FieldModifier="public"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Left"
                     Margin="5,5,5,5"
-                    Width="640"
-                    Height="335"
+                    Width="790"
+                    Height="435"
                     LoadCompleted="newsWeb_LoadCompleted"/>
         <CheckBox x:Name="cbShowNews"
                   VerticalAlignment="Bottom"

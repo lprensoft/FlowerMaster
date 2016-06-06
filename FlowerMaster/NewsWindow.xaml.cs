@@ -65,7 +65,7 @@ namespace FlowerMaster
                 {
                     if (graphics.DpiX > 96)
                     {
-                        object pvaIn = (int)(graphics.DpiX / 96 * 100 * 2) - 100;
+                        object pvaIn = (int)(graphics.DpiX / 96 * 100 * 2) - 50;
                         webBrowser.ExecWB(OLECMDID.OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref pvaIn);
                     }
                 }
