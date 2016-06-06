@@ -168,7 +168,7 @@ namespace FlowerMaster.Models
             _gameUrls.Add((int)ServersList.Japan, "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=738496/");
             _gameUrls.Add((int)ServersList.JapanR18, "http://www.dmm.co.jp/netgame/social/-/gadgets/=/app_id=329993/");
             _gameUrls.Add((int)ServersList.American, "http://www.nutaku.net/games/flower-knight-girl/play/");
-            _gameUrls.Add((int)ServersList.Taiwan, "http://game.samurai-games.net/games/flowerknightgirlx/play/");
+            _gameUrls.Add((int)ServersList.Taiwan, "https://www.samurai-games.net/login/?title_id=flowerknightgirlx&notification=0&token=e7aa0c35c2f81a4b00f0008e2c4df0d5&invite_id=&appParams=");
         }
 
         /// <summary>

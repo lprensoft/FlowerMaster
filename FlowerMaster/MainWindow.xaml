@@ -10,7 +10,6 @@
                       Title="团长助理 1.3"
                       Height="716"
                       Width="1000"
-                      ResizeMode="CanMinimize"
                       Icon="f23.ico"
                       Loaded="MetroWindow_Loaded"
                       Closing="MetroWindow_Closing"
@@ -88,7 +87,7 @@
                             Width="38"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
-                            Margin="0,-150,-2,0"
+                            Margin="0,-100,-2,0"
                             ToolTip="截图"
                             Click="btnCap_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
@@ -124,7 +123,7 @@
                             Width="38"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
-                            Margin="0,150,-2,0"
+                            Margin="0,100,-2,0"
                             ToolTip="静音"
                             Click="btnMute_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
@@ -142,7 +141,7 @@
                             Width="38"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
-                            Margin="0,150,-2,0"
+                            Margin="0,100,-2,0"
                             ToolTip="恢复声音"
                             Visibility="Hidden"
                             Click="btnUnMute_Click"
@@ -230,6 +229,7 @@
                                 <ComboBoxItem Content="日服-通常版"/>
                                 <ComboBoxItem Content="日服-R18版"/>
                                 <ComboBoxItem Content="美服"/>
+                                <ComboBoxItem Content="台服"/>
                             </ComboBox>
                             <Label VerticalAlignment="Top"
                            Margin="25,115,0,0"

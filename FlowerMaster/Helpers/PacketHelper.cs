@@ -80,7 +80,8 @@ namespace FlowerMaster.Helpers
                 pack.funcApi = s.Request.PathAndQuery.Substring(s.Request.PathAndQuery.IndexOf("/social/") + 7);
                 pack.funcApi = pack.funcApi.Substring(0, pack.funcApi.IndexOf("?"));
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American && s.Request.PathAndQuery.IndexOf("/rpc?") != -1)
+            else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+                && s.Request.PathAndQuery.IndexOf("/rpc?") != -1)
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("?"));
                 pack.funcApi = pack.funcUrl;
@@ -134,7 +135,8 @@ namespace FlowerMaster.Helpers
                     }
                 }
                 //处理美服Nutaku用户信息-获取用户昵称
-                else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American && pack.funcUrl.IndexOf("/rpc") != -1)
+                else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan) 
+                    && pack.funcUrl.IndexOf("/rpc") != -1)
                 {
                     return ProcessNutakuUserInfo(pack);
                 }

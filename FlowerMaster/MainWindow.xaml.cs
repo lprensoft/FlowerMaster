@@ -86,8 +86,8 @@ namespace FlowerMaster
         private void SystemInit()
         {
             MiscHelper.main = this;
-            MiscHelper.SetIEConfig();
             PacketHelper.mainWindow = this;
+            MiscHelper.SetIEConfig();
 
             DataUtil.Config = new SysConfig();
             DataUtil.Game = new GameInfo();
@@ -97,9 +97,7 @@ namespace FlowerMaster
 
             if (DataUtil.Config.sysConfig.enableHotKey) EnableHotKey();
 
-            InitProxy();
             InitTrayIcon(DataUtil.Config.sysConfig.alwaysShowTray);
-            SoundHelper.InitSoundAPI();
 
             ShowConfigToSettings();
 
@@ -111,6 +109,9 @@ namespace FlowerMaster
 
             ResizeWeb();
 
+            InitProxy();
+
+            mainWeb.Navigate("about:blank");
             MiscHelper.SuppressScriptErrors(mainWeb, true);
             MiscHelper.AddLog("系统初始化完毕，等待登录游戏...", MiscHelper.LogType.System);
         }
@@ -220,7 +221,18 @@ namespace FlowerMaster
 
             cbCapFormat.SelectedIndex = (int)DataUtil.Config.sysConfig.capFormat;
 
-            tbCssStyle.Text = DataUtil.Config.sysConfig.gameServer == 2 ? DataUtil.Config.sysConfig.userCSSAmerican : DataUtil.Config.sysConfig.userCSS;
+            if (DataUtil.Config.sysConfig.gameServer == 2)
+            {
+                tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSAmerican;
+            }
+            else if (DataUtil.Config.sysConfig.gameServer == 3)
+            {
+                tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSTaiwan;
+            }
+            else
+            {
+                tbCssStyle.Text = DataUtil.Config.sysConfig.userCSS;
+            }
         }
 
         /// <summary>
@@ -346,11 +358,28 @@ namespace FlowerMaster
                     }));
                 }
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American)
+            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
             {
                 if (s.Request.PathAndQuery.IndexOf("/rpc?st=") != -1)
                 {
                     PacketHelper.ProcessPacket(s);
+                }
+                else if (s.Request.PathAndQuery.IndexOf("/news/news_") != -1 && s.Request.PathAndQuery.IndexOf(".html?") != -1)
+                {
+                    DataUtil.Game.lastNewsUrl = s.Request.RequestLine.URI;
+                    if (DataUtil.Config.sysConfig.showLoginNews && !newsHadShown)
+                    {
+                        newsHadShown = true;
+                        this.Dispatcher.Invoke(new Action(() =>
+                        {
+                            NewsWindow news = new NewsWindow();
+                            news.Show();
+                        }));
+                    }
+                    this.Dispatcher.Invoke(new Action(() =>
+                    {
+                        btnNews.Visibility = Visibility.Visible;
+                    }));
                 }
             }
         }
@@ -435,6 +464,10 @@ namespace FlowerMaster
             if (cbGameServer.SelectedIndex == 2)
             {
                 DataUtil.Config.sysConfig.userCSSAmerican = tbCssStyle.Text;
+            }
+            else if (cbGameServer.SelectedIndex == 3)
+            {
+                DataUtil.Config.sysConfig.userCSSTaiwan = tbCssStyle.Text;
             }
             else
             {
@@ -594,7 +627,7 @@ namespace FlowerMaster
 
             //抽取Flash，应用CSS样式
             IHTMLElement gameFrame = null;
-            if (DataUtil.Game.gameServer == 2)
+            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
             {
                 gameFrame = document.getElementById("game_frame");
                 if (gameFrame != null)
@@ -627,7 +660,7 @@ namespace FlowerMaster
             {
                 IHTMLElement username = null;
                 IHTMLElement password = null;
-                if (DataUtil.Config.sysConfig.gameServer == 2)
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
                 {
                     username = document.getElementById("s-email");
                     password = document.getElementById("s-password");
@@ -652,7 +685,7 @@ namespace FlowerMaster
                 }
 
                 //点击登录按钮
-                if (DataUtil.Game.gameServer == 2)
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
                 {
                     IHTMLElement autoLogin = document.getElementById("autoLogin");
                     IHTMLElement login = document.getElementById("login-button");
@@ -696,7 +729,15 @@ namespace FlowerMaster
 
         private async void btnReset_Click(object sender, RoutedEventArgs e)
         {
-            tbCssStyle.Text = cbGameServer.SelectedIndex == 2 ? SysConfig.DefaultCSSAmerican : SysConfig.DefaultCSSJapan;
+            tbCssStyle.Text = SysConfig.DefaultCSSJapan;
+            if (cbGameServer.SelectedIndex == 2)
+            {
+                tbCssStyle.Text = SysConfig.DefaultCSSAmerican;
+            }
+            else if (cbGameServer.SelectedIndex == 3)
+            {
+                tbCssStyle.Text = SysConfig.DefaultCSSTaiwan;
+            }
             await this.ShowMessageAsync("提示", "已经重置为默认抽取样式！");
         }
 
@@ -773,6 +814,10 @@ namespace FlowerMaster
             if (cbGameServer.SelectedIndex == 2)
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSAmerican;
+            }
+            else if (cbGameServer.SelectedIndex == 3)
+            {
+                tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSTaiwan;
             }
             else
             {

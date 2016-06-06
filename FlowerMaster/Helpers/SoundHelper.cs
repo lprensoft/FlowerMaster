@@ -17,6 +17,10 @@ namespace FlowerMaster.Helpers
         /// </summary>
         public static bool userMute = false;
         /// <summary>
+        /// 是否已经初始化过
+        /// </summary>
+        private static bool _isInited = false;
+        /// <summary>
         /// 音频管理变量
         /// </summary>
         private static ISimpleAudioVolume simpleAudioVolume;
@@ -53,6 +57,8 @@ namespace FlowerMaster.Helpers
         /// <param name="user">是否为用户操作</param>
         public static void Mute(bool user = false)
         {
+            if (!_isInited) InitSoundAPI();
+
             if (user) userMute = !userMute;
 
             bool newValue = !isMute;
