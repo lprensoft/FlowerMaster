@@ -98,7 +98,7 @@ namespace FlowerMaster
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             gacha = new Random();
-            fRare6 = gacha.Next(200);
+            fRare6 = gacha.Next(20, 200);
             stone = 1000;
             lbStone.Content = "华灵石：" + stone.ToString();
         }
