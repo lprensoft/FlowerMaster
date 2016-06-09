@@ -16,15 +16,16 @@
 * 一键清理缓存、Cookies功能。
 * 多个游戏服务器支持，通吃日服、台服、美服。
 * 多开支持。
+* 更多功能正在不断开发中……
 
 ### 运行环境
 
 * Windows 7/8/10
 
-* [.NET Framework 4.5.2]（https://www.microsoft.com/zh-CN/download/details.aspx?id=42642）以上版本
+* [.NET Framework 4.5.2](https://www.microsoft.com/zh-CN/download/details.aspx?id=42642)以上版本
 
-Windows 8以上系统已经自带
-Windows 7系统需要下载安装
+Windows 8以上系统已经自带。
+Windows 7系统需要自行下载安装。
 
 ### 开发语言和环境
 
