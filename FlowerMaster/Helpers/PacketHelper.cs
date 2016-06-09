@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
-using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace FlowerMaster.Helpers
 {
@@ -109,6 +107,9 @@ namespace FlowerMaster.Helpers
                 return false;
             }
 
+#if DEBUG
+            MiscHelper.AddLog(pack.requestUrl + "\r\n" + pack.rawData);
+#endif
             return true;
         }
 
