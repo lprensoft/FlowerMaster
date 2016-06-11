@@ -49,6 +49,8 @@ namespace FlowerMaster.Helpers
             simpleAudioVolume = ts;
 
             ts.GetMute(out isMute);
+
+            _isInited = true;
         }
 
         /// <summary>

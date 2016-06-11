@@ -108,7 +108,7 @@ namespace FlowerMaster.Helpers
             }
 
 #if DEBUG
-            MiscHelper.AddLog(pack.requestUrl + "\r\n" + pack.rawData);
+            MiscHelper.AddLog(pack.requestUrl + "\r\n" + pack.rawData, MiscHelper.LogType.Debug);
 #endif
             return true;
         }
