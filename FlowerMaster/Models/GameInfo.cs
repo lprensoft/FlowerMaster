@@ -11,6 +11,9 @@ namespace FlowerMaster.Models
     /// </summary>
     class GameInfo : IGameInfo
     {
+        /// <summary>
+        /// 玩家信息结构体
+        /// </summary>
         public struct PlayerInfo
         {
             public string name;
@@ -33,18 +36,27 @@ namespace FlowerMaster.Models
             public string friendId;
             public DateTime spTime;
         }
+        /// <summary>
+        /// 玩家信息
+        /// </summary>
         public PlayerInfo player;
 
+        /// <summary>
+        /// 提醒信息结构体
+        /// </summary>
         public struct NotifyInfo
         {
             public int lastAP;
             public int lastBP;
             public int lastSP;
         }
+        /// <summary>
+        /// 提醒信息
+        /// </summary>
         public NotifyInfo notifyRecord;
 
         /// <summary>
-        /// 好友信息结构体
+        /// 好友信息类
         /// </summary>
         public class FriendInfo
         {
@@ -60,10 +72,13 @@ namespace FlowerMaster.Models
             public string card4 { get; set; }
             public string card5 { get; set; }
         }
+        /// <summary>
+        /// 好友列表集合
+        /// </summary>
         public ObservableCollection<FriendInfo> friendList = null;
 
         /// <summary>
-        /// 怪物信息结构体
+        /// 怪物信息类
         /// </summary>
         public class BossInfo
         {
@@ -76,8 +91,14 @@ namespace FlowerMaster.Models
             public int money { get; set; }
             public int gp { get; set; }
         }
+        /// <summary>
+        /// 怪物列表集合
+        /// </summary>
         public ObservableCollection<BossInfo> bossList = null;
 
+        /// <summary>
+        /// 每日副本类
+        /// </summary>
         public class DaliyInfo
         {
             public string day { get; set; }
@@ -284,7 +305,7 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 用户点数变更处理
+        /// 计算玩家当前点数值
         /// </summary>
         public void CalcPlayerGamePoint()
         {
