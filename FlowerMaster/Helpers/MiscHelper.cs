@@ -70,20 +70,25 @@ namespace FlowerMaster.Helpers
         /// </summary>
         public enum LogType
         {
-            Default,
-            System,
-            Search,
-            Stage,
-            Boss,
-            Gacha,
-            Sell,
-            Mailbox,
-            Levelup,
-            Debug = 99,
+            Default, //默认
+            System, //系统
+            Search, //探索
+            Stage, //副本
+            Boss, //BOSS战
+            Gacha, //扭蛋
+            Sell, //贩卖
+            Mailbox, //礼品箱
+            Levelup, //升级
+            Debug = 99, //调试
         }
 
         public static MainWindow main;
 
+        /// <summary>
+        /// 添加游戏日志
+        /// </summary>
+        /// <param name="log">日志内容</param>
+        /// <param name="type">日志类型</param>
         public static void AddLog(string log, LogType type=LogType.Default)
         {
             System.Windows.Media.Color typeColor = Colors.White;
@@ -144,6 +149,10 @@ namespace FlowerMaster.Helpers
             if (type != LogType.System && type != LogType.Debug) LogsHelper.LogGame(log);
         }
 
+        /// <summary>
+        /// 添加扭蛋日志
+        /// </summary>
+        /// <param name="cards">角色信息</param>
         public static void AddGachaLog(JArray cards)
         {
             if (!main.gameLog.Dispatcher.CheckAccess())
@@ -263,6 +272,11 @@ namespace FlowerMaster.Helpers
             }
         }
 
+        /// <summary>
+        /// 设置IE组件屏蔽错误
+        /// </summary>
+        /// <param name="webBrowser">IE组件</param>
+        /// <param name="hide">是否屏蔽</param>
         public static void SuppressScriptErrors(System.Windows.Controls.WebBrowser webBrowser, bool hide)
         {
             webBrowser.Navigating += (s, e) =>
@@ -279,6 +293,9 @@ namespace FlowerMaster.Helpers
             };
         }
 
+        /// <summary>
+        /// 更改IE组件模拟版本
+        /// </summary>
         public static void SetIEConfig()
         {
             string exeName = Process.GetCurrentProcess().ProcessName + ".exe";
