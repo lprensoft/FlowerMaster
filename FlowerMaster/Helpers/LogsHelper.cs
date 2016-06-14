@@ -42,7 +42,7 @@ namespace FlowerMaster.Helpers
         /// 获得服务器中文名字归类
         /// </summary>
         /// <returns>服务器中文归类名</returns>
-        private static string _getServerName()
+        public static string GetServerName()
         {
             switch (DataUtil.Game.gameServer)
             {
@@ -67,7 +67,7 @@ namespace FlowerMaster.Helpers
         private static string _getFileName(string type, bool hasTime = true)
         {
             string fileName = @"log\";
-            fileName += _getServerName();
+            fileName += GetServerName();
             fileName += "_" + GetFilePlayerName();
             fileName += "_" + type;
             fileName += hasTime ? "_" + DateTime.Now.ToString("yyyy-MM-dd") : "";

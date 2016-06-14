@@ -320,7 +320,7 @@ namespace FlowerMaster.Helpers
             {
                 Directory.CreateDirectory("screenshot");
             }
-            string path = @"screenshot\" + LogsHelper.GetFilePlayerName() + "_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff") + "." + DataUtil.Config.sysConfig.capFormat.ToString().ToLower();
+            string path = @"screenshot\" + LogsHelper.GetServerName() + "_" + LogsHelper.GetFilePlayerName() + "_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff") + "." + DataUtil.Config.sysConfig.capFormat.ToString().ToLower();
 
             var document = main.mainWeb.Document as HTMLDocument;
             if (document == null)
@@ -393,23 +393,30 @@ namespace FlowerMaster.Helpers
         /// <param name="path">截图文件名</param>
         private static void TakeScreenshot(int width, int height, IViewObject viewObject, string path)
         {
-            var image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            var rect = new RECT { left = 0, top = 0, width = width, height = height, };
-            var tdevice = new DVTARGETDEVICE { tdSize = 0, };
-
-            using (var graphics = Graphics.FromImage(image))
+            try
             {
-                var hdc = graphics.GetHdc();
-                viewObject.Draw(1, 0, IntPtr.Zero, tdevice, IntPtr.Zero, hdc, rect, null, IntPtr.Zero, IntPtr.Zero);
-                graphics.ReleaseHdc(hdc);
+                var image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                var rect = new RECT { left = 0, top = 0, width = width, height = height, };
+                var tdevice = new DVTARGETDEVICE { tdSize = 0, };
+
+                using (var graphics = Graphics.FromImage(image))
+                {
+                    var hdc = graphics.GetHdc();
+                    viewObject.Draw(1, 0, IntPtr.Zero, tdevice, IntPtr.Zero, hdc, rect, null, IntPtr.Zero, IntPtr.Zero);
+                    graphics.ReleaseHdc(hdc);
+                }
+
+                var format = Path.GetExtension(path) == ".jpg"
+                    ? ImageFormat.Jpeg
+                    : ImageFormat.Png;
+
+                image.Save(path, format);
+                AddLog("截图已经保存到文件" + path, LogType.System);
             }
-
-            var format = Path.GetExtension(path) == ".jpg"
-                ? ImageFormat.Jpeg
-                : ImageFormat.Png;
-
-            image.Save(path, format);
-            AddLog("截图已经保存到文件" + path, LogType.System);
+            catch
+            {
+                AddLog("截图保存失败！", LogType.System);
+            }
         }
 
         /// <summary>
