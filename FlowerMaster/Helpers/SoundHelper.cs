@@ -59,17 +59,24 @@ namespace FlowerMaster.Helpers
         /// <param name="user">是否为用户操作</param>
         public static void Mute(bool user = false)
         {
-            if (!_isInited) InitSoundAPI();
+            try
+            {
+                if (!_isInited) InitSoundAPI();
 
-            if (user) userMute = !userMute;
+                if (user) userMute = !userMute;
 
-            bool newValue = !isMute;
-            simpleAudioVolume.SetMute(newValue, Guid.NewGuid());
+                bool newValue = !isMute;
+                simpleAudioVolume.SetMute(newValue, Guid.NewGuid());
 
-            bool resultValue;
-            simpleAudioVolume.GetMute(out resultValue);
+                bool resultValue;
+                simpleAudioVolume.GetMute(out resultValue);
 
-            isMute = resultValue;
+                isMute = resultValue;
+            }
+            catch
+            {
+                isMute = false;
+            }
         }
 
     }
