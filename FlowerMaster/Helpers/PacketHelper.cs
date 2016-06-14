@@ -680,6 +680,7 @@ namespace FlowerMaster.Helpers
                 DataUtil.Game.isAuto = false;
                 mainWindow.timerAuto.Change(Timeout.Infinite, SysConfig.AUTO_GO_TIMEOUT);
             }
+            DataUtil.Game.canAuto = false;
             return E_SUCCESS;
         }
 
