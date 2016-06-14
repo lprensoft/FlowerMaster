@@ -649,7 +649,18 @@ namespace FlowerMaster
                 var target = gameFrame?.document as HTMLDocument;
                 if (target != null)
                 {
-                    target.createStyleSheet().cssText = DataUtil.Game.gameServer == 2 ? DataUtil.Config.sysConfig.userCSSAmerican : DataUtil.Config.sysConfig.userCSS;
+                    if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American)
+                    {
+                        target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSSAmerican;
+                    }
+                    else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+                    {
+                        target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSSTaiwan;
+                    }
+                    else
+                    {
+                        target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSS;
+                    }
                     styleSheetApplied = true;
                     MiscHelper.AddLog("抽取Flash样式应用成功！", MiscHelper.LogType.System);
                 }
