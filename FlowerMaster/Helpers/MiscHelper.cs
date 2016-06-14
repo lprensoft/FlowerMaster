@@ -359,30 +359,18 @@ namespace FlowerMaster.Helpers
             }
             else
             {
-                var gameFrame = document.getElementById("game_frame").document as HTMLDocument;
-                if (gameFrame == null)
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
                 {
-                    return;
-                }
-
-                var frames = document.frames;
-                for (var i = 0; i < frames.length; i++)
-                {
-                    var item = frames.item(i);
-                    var provider = item as IServiceProvider;
-                    if (provider == null) continue;
-
-                    object ppvObject;
-                    provider.QueryService(typeof(IWebBrowserApp).GUID, typeof(IWebBrowser2).GUID, out ppvObject);
-                    var webBrowser = ppvObject as IWebBrowser2;
-
-                    var iframeDocument = webBrowser?.Document as HTMLDocument;
-                    if (iframeDocument == null) continue;
+                    var gameFrame = document.getElementById("externalContainer").document as HTMLDocument;
+                    if (gameFrame == null)
+                    {
+                        return;
+                    }
 
                     IViewObject viewObject = null;
                     int width = 0, height = 0;
-                    var swf = iframeDocument.getElementById("externalswf");
-                    if (swf == null) continue;
+                    var swf = gameFrame.getElementById("externalswf");
+                    if (swf == null) return;
                     Func<dynamic, bool> function = target =>
                     {
                         if (target == null) return false;
@@ -392,11 +380,51 @@ namespace FlowerMaster.Helpers
                         height = int.Parse(target.height);
                         return true;
                     };
-                    if (!function(swf as HTMLEmbed) && !function(swf as HTMLObjectElement)) continue;
+                    if (!function(swf as HTMLEmbed) && !function(swf as HTMLObjectElement)) return;
 
                     TakeScreenshot(width, height, viewObject, path);
+                }
+                else
+                {
+                    var gameFrame = document.getElementById("game_frame").document as HTMLDocument;
+                    if (gameFrame == null)
+                    {
+                        return;
+                    }
 
-                    break;
+                    var frames = document.frames;
+                    for (var i = 0; i < frames.length; i++)
+                    {
+                        var item = frames.item(i);
+                        var provider = item as IServiceProvider;
+                        if (provider == null) continue;
+
+                        object ppvObject;
+                        provider.QueryService(typeof(IWebBrowserApp).GUID, typeof(IWebBrowser2).GUID, out ppvObject);
+                        var webBrowser = ppvObject as IWebBrowser2;
+
+                        var iframeDocument = webBrowser?.Document as HTMLDocument;
+                        if (iframeDocument == null) continue;
+
+                        IViewObject viewObject = null;
+                        int width = 0, height = 0;
+                        var swf = iframeDocument.getElementById("externalswf");
+                        if (swf == null) continue;
+                        Func<dynamic, bool> function = target =>
+                        {
+                            if (target == null) return false;
+                            viewObject = target as IViewObject;
+                            if (viewObject == null) return false;
+                            width = int.Parse(target.width);
+                            height = int.Parse(target.height);
+                            return true;
+                        };
+                        if (!function(swf as HTMLEmbed) && !function(swf as HTMLObjectElement)) continue;
+
+                        TakeScreenshot(width, height, viewObject, path);
+
+                        break;
+                    }
                 }
             }
         }
@@ -410,30 +438,23 @@ namespace FlowerMaster.Helpers
         /// <param name="path">截图文件名</param>
         private static void TakeScreenshot(int width, int height, IViewObject viewObject, string path)
         {
-            try
+            var image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            var rect = new RECT { left = 0, top = 0, width = width, height = height, };
+            var tdevice = new DVTARGETDEVICE { tdSize = 0, };
+
+            using (var graphics = Graphics.FromImage(image))
             {
-                var image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                var rect = new RECT { left = 0, top = 0, width = width, height = height, };
-                var tdevice = new DVTARGETDEVICE { tdSize = 0, };
-
-                using (var graphics = Graphics.FromImage(image))
-                {
-                    var hdc = graphics.GetHdc();
-                    viewObject.Draw(1, 0, IntPtr.Zero, tdevice, IntPtr.Zero, hdc, rect, null, IntPtr.Zero, IntPtr.Zero);
-                    graphics.ReleaseHdc(hdc);
-                }
-
-                var format = Path.GetExtension(path) == ".jpg"
-                    ? ImageFormat.Jpeg
-                    : ImageFormat.Png;
-
-                image.Save(path, format);
-                AddLog("截图已经保存到文件" + path, LogType.System);
+                var hdc = graphics.GetHdc();
+                viewObject.Draw(1, 0, IntPtr.Zero, tdevice, IntPtr.Zero, hdc, rect, null, IntPtr.Zero, IntPtr.Zero);
+                graphics.ReleaseHdc(hdc);
             }
-            catch
-            {
-                AddLog("截图保存失败！", LogType.System);
-            }
+
+            var format = Path.GetExtension(path) == ".jpg"
+                ? ImageFormat.Jpeg
+                : ImageFormat.Png;
+
+            image.Save(path, format);
+            AddLog("截图已经保存到文件" + path, LogType.System);
         }
 
         /// <summary>
