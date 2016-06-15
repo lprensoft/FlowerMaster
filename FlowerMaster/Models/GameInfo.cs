@@ -233,7 +233,7 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 计算玩家数据值
+        /// 计算玩家最大体力和经验值
         /// </summary>
         public void CalcPlayerMaxAPExp()
         {

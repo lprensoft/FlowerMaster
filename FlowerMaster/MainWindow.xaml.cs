@@ -47,6 +47,9 @@ namespace FlowerMaster
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 启用老板键
+        /// </summary>
         private void EnableHotKey()
         {
             System.Windows.Forms.Keys k = (System.Windows.Forms.Keys)Enum.Parse(typeof(System.Windows.Forms.Keys), DataUtil.Config.sysConfig.hotKey.ToString().ToUpper());
