@@ -120,8 +120,8 @@ namespace FlowerMaster.Helpers
         /// <returns>解析结果</returns>
         private static int Process(PacketInfo pack)
         {
-            //try
-            //{
+            try
+            {
                 //处理日服DMM用户信息-获取用户昵称
                 if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18)
                     && pack.funcUrl.IndexOf("/social/") != -1)
@@ -135,7 +135,7 @@ namespace FlowerMaster.Helpers
                         return E_FAILED;
                     }
                 }
-                //处理美服Nutaku用户信息-获取用户昵称
+                //处理美服/台服用户信息-获取用户昵称
                 else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan) 
                     && pack.funcUrl.IndexOf("/rpc") != -1)
                 {
@@ -249,11 +249,11 @@ namespace FlowerMaster.Helpers
                 {
                     return E_FAILED;
                 }
-            //}
-            //catch
-            //{
-            //    return E_FALT_ERROR;
-            //}
+            }
+            catch
+            {
+                return E_FALT_ERROR;
+            }
         }
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 处理美服Nutaku登录封包
+        /// 处理美服/台服登录封包
         /// </summary>
         /// <param name="pack"></param>
         /// <returns></returns>
@@ -325,7 +325,15 @@ namespace FlowerMaster.Helpers
             DataUtil.Game.player.lv = json["user"]["levelId"].ToString() != null ? int.Parse(json["user"]["levelId"].ToString()) : 0;
             DataUtil.Game.player.friendId = json["user"]["searchUserId"] != null ? json["user"]["searchUserId"].ToString() : "-";
             DataUtil.Game.CalcPlayerMaxAPExp();
-            DataUtil.Game.player.maxBP = DataUtil.Game.gameServer == 2 ? GameInfo.PLAYER_MAX_BP_A : GameInfo.PLAYER_MAX_BP;
+            DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP;
+            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American)
+            {
+                DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_A;
+            }
+            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+            {
+                DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_T;
+            }
             DataUtil.Game.player.maxSP = GameInfo.PLAYER_MAX_SP;
             DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["user"]["stamina"], json["user"]["staminaTime"]);
             DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.BP, json["user"]["battlePoint"], json["user"]["battlePointTime"]);
