@@ -552,13 +552,16 @@ namespace FlowerMaster
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
-            styleSheetApplied = false;
-            loginSubmitted = false;
-            newsHadShown = false;
-            DataUtil.Game.isOnline = false;
-            DataUtil.Game.canAuto = false;
-            mainWeb.Navigate(DataUtil.Game.gameUrl);
+            if (MessageBox.Show("确实要重新载入页面吗？", "操作确认", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
+            {
+                MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
+                styleSheetApplied = false;
+                loginSubmitted = false;
+                newsHadShown = false;
+                DataUtil.Game.isOnline = false;
+                DataUtil.Game.canAuto = false;
+                mainWeb.Navigate(DataUtil.Game.gameUrl);
+            }
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
