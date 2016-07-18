@@ -830,12 +830,10 @@ namespace FlowerMaster
             if (DataUtil.Game.isAuto)
             {
                 MiscHelper.SetAutoGo(false);
-                btnAuto.Background = System.Windows.Media.Brushes.Black;
             }
             else if (DataUtil.Game.canAuto)
             {
                 MiscHelper.SetAutoGo(true);
-                btnAuto.Background = System.Windows.Media.Brushes.Yellow;
             }
         }
 

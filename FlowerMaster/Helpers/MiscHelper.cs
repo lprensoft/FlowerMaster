@@ -488,12 +488,14 @@ namespace FlowerMaster.Helpers
                 DataUtil.Game.isAuto = true;
                 main.timerAuto.Change(0, DataUtil.Config.sysConfig.autoGoTimeout);
                 MiscHelper.AddLog("开始自动推图...", MiscHelper.LogType.System);
+                main.btnAuto.Background = System.Windows.Media.Brushes.Red;
             }
             else if (!modeSwitch && DataUtil.Game.isAuto)
             {
                 DataUtil.Game.isAuto = false;
                 main.timerAuto.Change(Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
                 MiscHelper.AddLog("自动推图已停止！", MiscHelper.LogType.System);
+                main.btnAuto.Background = System.Windows.Media.Brushes.Black;
             }
         }
     }
