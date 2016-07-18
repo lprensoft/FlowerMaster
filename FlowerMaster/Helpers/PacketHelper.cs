@@ -285,6 +285,10 @@ namespace FlowerMaster.Helpers
             {
                 DataUtil.Game.player.name = json["data"]["nickname"].ToString();
                 mainWindow.notifyIcon.Text = "团长助理 - " + DataUtil.Game.player.name;
+                if (mainWindow.Title.IndexOf("-") == -1 && DataUtil.Config.sysConfig.changeTitle)
+                {
+                    mainWindow.Title += " - " + DataUtil.Game.player.name;
+                }
                 return E_SUCCESS;
             }
             else
@@ -305,6 +309,10 @@ namespace FlowerMaster.Helpers
             {
                 DataUtil.Game.player.name = json["result"]["nickname"].ToString();
                 mainWindow.notifyIcon.Text = "团长助理 - " + DataUtil.Game.player.name;
+                if (mainWindow.Title.IndexOf("-") == -1 && DataUtil.Config.sysConfig.changeTitle)
+                {
+                    mainWindow.Title += " - " + DataUtil.Game.player.name;
+                }
                 return E_SUCCESS;
             }
             else

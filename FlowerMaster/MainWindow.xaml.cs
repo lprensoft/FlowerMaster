@@ -771,10 +771,16 @@ namespace FlowerMaster
             bool result = await SaveSettingsToConfig();
             if (result)
             {
-                DataUtil.Config.SaveConfig();
-                DataUtil.Game.gameServer = DataUtil.Config.sysConfig.gameServer;
-                await this.ShowMessageAsync("提示", "已成功保存设置！");
-                mainTab.SelectedIndex = 0;
+                if (DataUtil.Config.SaveConfig())
+                {
+                    DataUtil.Game.gameServer = DataUtil.Config.sysConfig.gameServer;
+                    await this.ShowMessageAsync("提示", "已成功保存设置！");
+                    mainTab.SelectedIndex = 0;
+                }
+                else
+                {
+                    await this.ShowMessageAsync("错误", "设置保存失败！");
+                }
             }
         }
 
