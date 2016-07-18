@@ -205,12 +205,16 @@ namespace FlowerMaster
             chkBPFull.IsChecked = DataUtil.Config.sysConfig.bpFullNotify;
             chkSPEvery.IsChecked = DataUtil.Config.sysConfig.spEveryNotify;
             chkSPFull.IsChecked = DataUtil.Config.sysConfig.spFullNotify;
+            chkFoundStage.IsChecked = DataUtil.Config.sysConfig.foundStageNotify;
+            chkFoundBoss.IsChecked = DataUtil.Config.sysConfig.foundBossNotify;
 
             chkGameLog.IsChecked = DataUtil.Config.sysConfig.logGame;
             chkGachaLog.IsChecked = DataUtil.Config.sysConfig.logGacha;
 
             chkAutoGo.IsChecked = DataUtil.Config.sysConfig.autoGoInMaps;
+            slAutoRate.Value = DataUtil.Config.sysConfig.autoGoTimeout;
 
+            chkTitleChange.IsChecked = DataUtil.Config.sysConfig.changeTitle;
             chkAlwaysTray.IsChecked = DataUtil.Config.sysConfig.alwaysShowTray;
             chkMiniToTray.IsChecked = DataUtil.Config.sysConfig.miniToTray;
             chkAutoMute.IsChecked = DataUtil.Config.sysConfig.miniToMute;
@@ -445,12 +449,16 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.bpFullNotify = chkBPFull.IsChecked.HasValue ? (bool)chkBPFull.IsChecked : false;
             DataUtil.Config.sysConfig.spEveryNotify = chkSPEvery.IsChecked.HasValue ? (bool)chkSPEvery.IsChecked : false;
             DataUtil.Config.sysConfig.spFullNotify = chkSPFull.IsChecked.HasValue ? (bool)chkSPFull.IsChecked : false;
+            DataUtil.Config.sysConfig.foundStageNotify = chkFoundStage.IsChecked.HasValue ? (bool)chkFoundStage.IsChecked : false;
+            DataUtil.Config.sysConfig.foundBossNotify = chkFoundBoss.IsChecked.HasValue ? (bool)chkFoundBoss.IsChecked : false;
 
             DataUtil.Config.sysConfig.logGame = chkGameLog.IsChecked.HasValue ? (bool)chkGameLog.IsChecked : false;
             DataUtil.Config.sysConfig.logGacha = chkGachaLog.IsChecked.HasValue ? (bool)chkGachaLog.IsChecked : false;
 
             DataUtil.Config.sysConfig.autoGoInMaps = chkAutoGo.IsChecked.HasValue ? (bool)chkAutoGo.IsChecked : false;
+            DataUtil.Config.sysConfig.autoGoTimeout = (int)slAutoRate.Value;
 
+            DataUtil.Config.sysConfig.changeTitle = chkTitleChange.IsChecked.HasValue ? (bool)chkTitleChange.IsChecked : false;
             DataUtil.Config.sysConfig.alwaysShowTray = chkAlwaysTray.IsChecked.HasValue ? (bool)chkAlwaysTray.IsChecked : false;
             DataUtil.Config.sysConfig.miniToTray = chkMiniToTray.IsChecked.HasValue ? (bool)chkMiniToTray.IsChecked : false;
             DataUtil.Config.sysConfig.miniToMute = chkAutoMute.IsChecked.HasValue ? (bool)chkAutoMute.IsChecked : false;

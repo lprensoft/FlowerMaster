@@ -78,6 +78,14 @@ namespace FlowerMaster.Models
             /// 探索点回复满提醒
             /// </summary>
             public bool spFullNotify;
+            /// <summary>
+            /// 发现隐藏副本提醒
+            /// </summary>
+            public bool foundStageNotify;
+            /// <summary>
+            /// 发现主页BOSS提醒
+            /// </summary>
+            public bool foundBossNotify;
 
             /// <summary>
             /// 记录游戏日志
@@ -92,7 +100,36 @@ namespace FlowerMaster.Models
             /// 进图后自动推图
             /// </summary>
             public bool autoGoInMaps;
+            /// <summary>
+            /// 自动推图间隔时间
+            /// </summary>
+            private int _autoGoTimeout;
+            /// <summary>
+            /// 自动推图间隔时间
+            /// </summary>
+            public int autoGoTimeout
+            {
+                get
+                {
+                    return _autoGoTimeout;
+                }
+                set
+                {
+                    if (value < 150 || value > 500)
+                    {
+                        _autoGoTimeout = AUTO_GO_TIMEOUT;
+                    }
+                    else
+                    {
+                        _autoGoTimeout = value;
+                    }
+                }
+            }
 
+            /// <summary>
+            /// 登录后标题栏显示角色名
+            /// </summary>
+            public bool changeTitle;
             /// <summary>
             /// 始终显示托盘图标
             /// </summary>
@@ -278,12 +315,16 @@ namespace FlowerMaster.Models
             sysConfig.bpFullNotify = false;
             sysConfig.spEveryNotify = false;
             sysConfig.spFullNotify = false;
+            sysConfig.foundStageNotify = false;
+            sysConfig.foundBossNotify = false;
 
             sysConfig.logGame = true;
             sysConfig.logGacha = true;
 
             sysConfig.autoGoInMaps = false;
+            sysConfig.autoGoTimeout = AUTO_GO_TIMEOUT;
 
+            sysConfig.changeTitle = false;
             sysConfig.alwaysShowTray = false;
             sysConfig.miniToTray = false;
             sysConfig.miniToMute = false;
@@ -376,6 +417,8 @@ namespace FlowerMaster.Models
                     sysConfig.bpFullNotify = xe.GetAttribute("BPFull") != "" ? bool.Parse(xe.GetAttribute("BPFull")) : sysConfig.bpFullNotify;
                     sysConfig.spEveryNotify = xe.GetAttribute("SPEvery") != "" ? bool.Parse(xe.GetAttribute("SPEvery")) : sysConfig.spEveryNotify;
                     sysConfig.spFullNotify = xe.GetAttribute("SPFull") != "" ? bool.Parse(xe.GetAttribute("SPFull")) : sysConfig.spFullNotify;
+                    sysConfig.foundStageNotify = xe.GetAttribute("FoundStage") != "" ? bool.Parse(xe.GetAttribute("FoundStage")) : sysConfig.foundStageNotify;
+                    sysConfig.foundBossNotify = xe.GetAttribute("FoundBoss") != "" ? bool.Parse(xe.GetAttribute("FoundBoss")) : sysConfig.foundBossNotify;
                 }
 
                 xn = xmlDoc.SelectSingleNode("/Config/Logs");
@@ -391,12 +434,14 @@ namespace FlowerMaster.Models
                 if (xe != null)
                 {
                     sysConfig.autoGoInMaps = xe.GetAttribute("AutoGoInMaps") != "" ? bool.Parse(xe.GetAttribute("AutoGoInMaps")) : sysConfig.autoGoInMaps;
+                    sysConfig.autoGoTimeout = xe.GetAttribute("AutoGoTimeout") != "" ? int.Parse(xe.GetAttribute("AutoGoTimeout")) : sysConfig.autoGoTimeout;
                 }
 
                 xn = xmlDoc.SelectSingleNode("/Config/System");
                 xe = (XmlElement)xn;
                 if (xe != null)
                 {
+                    sysConfig.changeTitle = xe.GetAttribute("ChangeTitle") != "" ? bool.Parse(xe.GetAttribute("ChangeTitle")) : sysConfig.changeTitle;
                     sysConfig.alwaysShowTray = xe.GetAttribute("AlwaysShowTrayIcon") != "" ? bool.Parse(xe.GetAttribute("AlwaysShowTrayIcon")) : sysConfig.alwaysShowTray;
                     sysConfig.miniToTray = xe.GetAttribute("MinimizeToTray") != "" ? bool.Parse(xe.GetAttribute("MinimizeToTray")) : sysConfig.miniToTray;
                     sysConfig.miniToMute = xe.GetAttribute("MinimizeToMute") != "" ? bool.Parse(xe.GetAttribute("MinimizeToMute")) : sysConfig.miniToMute;
@@ -446,205 +491,222 @@ namespace FlowerMaster.Models
         /// <summary>
         /// 保存系统配置
         /// </summary>
-        public void SaveConfig()
+        /// <returns>返回保存成功与否结果</returns>
+        public bool SaveConfig()
         {
             XmlDocument xmlDoc = new XmlDocument();
-            if (!File.Exists("config.xml"))
+            try
             {
-                XmlDeclaration Declaration = xmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);
-                xmlDoc.AppendChild(Declaration);
-                XmlNode rootNode = xmlDoc.CreateElement("Config");
-                xmlDoc.AppendChild(rootNode);
+                if (!File.Exists("config.xml"))
+                {
+                    XmlDeclaration Declaration = xmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);
+                    xmlDoc.AppendChild(Declaration);
+                    XmlNode rootNode = xmlDoc.CreateElement("Config");
+                    xmlDoc.AppendChild(rootNode);
 
-                XmlElement accounts = xmlDoc.CreateElement("Accounts");
-                rootNode.AppendChild(accounts);
+                    XmlElement accounts = xmlDoc.CreateElement("Accounts");
+                    rootNode.AppendChild(accounts);
 
-                XmlElement login = xmlDoc.CreateElement("Login");
-                login.SetAttribute("ShowLoginDialog", sysConfig.showLoginDialog.ToString());
-                login.SetAttribute("ShowNewsDialog", sysConfig.showLoginNews.ToString());
-                login.SetAttribute("GameServer", sysConfig.gameServer.ToString());
-                login.SetAttribute("GameHomePage", sysConfig.gameHomePage.ToString());
-                rootNode.AppendChild(login);
+                    XmlElement login = xmlDoc.CreateElement("Login");
+                    login.SetAttribute("ShowLoginDialog", sysConfig.showLoginDialog.ToString());
+                    login.SetAttribute("ShowNewsDialog", sysConfig.showLoginNews.ToString());
+                    login.SetAttribute("GameServer", sysConfig.gameServer.ToString());
+                    login.SetAttribute("GameHomePage", sysConfig.gameHomePage.ToString());
+                    rootNode.AppendChild(login);
 
-                XmlElement proxy = xmlDoc.CreateElement("Proxy");
-                proxy.SetAttribute("ProxyType", sysConfig.proxyType.ToString());
-                proxy.SetAttribute("ProxyServer", sysConfig.proxyServer);
-                proxy.SetAttribute("ProxyPort", sysConfig.proxyPort.ToString());
-                rootNode.AppendChild(proxy);
+                    XmlElement proxy = xmlDoc.CreateElement("Proxy");
+                    proxy.SetAttribute("ProxyType", sysConfig.proxyType.ToString());
+                    proxy.SetAttribute("ProxyServer", sysConfig.proxyServer);
+                    proxy.SetAttribute("ProxyPort", sysConfig.proxyPort.ToString());
+                    rootNode.AppendChild(proxy);
 
-                XmlElement notify = xmlDoc.CreateElement("Notify");
-                notify.SetAttribute("APTarget", sysConfig.apTargetNotify.ToString());
-                notify.SetAttribute("APFull", sysConfig.apFullNotify.ToString());
-                notify.SetAttribute("BPTarget", sysConfig.bpTargetNotify.ToString());
-                notify.SetAttribute("BPFull", sysConfig.bpFullNotify.ToString());
-                notify.SetAttribute("SPEvery", sysConfig.spEveryNotify.ToString());
-                notify.SetAttribute("SPFull", sysConfig.spFullNotify.ToString());
-                rootNode.AppendChild(notify);
+                    XmlElement notify = xmlDoc.CreateElement("Notify");
+                    notify.SetAttribute("APTarget", sysConfig.apTargetNotify.ToString());
+                    notify.SetAttribute("APFull", sysConfig.apFullNotify.ToString());
+                    notify.SetAttribute("BPTarget", sysConfig.bpTargetNotify.ToString());
+                    notify.SetAttribute("BPFull", sysConfig.bpFullNotify.ToString());
+                    notify.SetAttribute("SPEvery", sysConfig.spEveryNotify.ToString());
+                    notify.SetAttribute("SPFull", sysConfig.spFullNotify.ToString());
+                    notify.SetAttribute("FoundStage", sysConfig.foundStageNotify.ToString());
+                    notify.SetAttribute("FoundBoss", sysConfig.foundBossNotify.ToString());
+                    rootNode.AppendChild(notify);
 
-                XmlElement logs = xmlDoc.CreateElement("Logs");
-                logs.SetAttribute("GameLog", sysConfig.logGame.ToString());
-                logs.SetAttribute("GachaLog", sysConfig.logGacha.ToString());
-                rootNode.AppendChild(logs);
+                    XmlElement logs = xmlDoc.CreateElement("Logs");
+                    logs.SetAttribute("GameLog", sysConfig.logGame.ToString());
+                    logs.SetAttribute("GachaLog", sysConfig.logGacha.ToString());
+                    rootNode.AppendChild(logs);
 
-                XmlElement assist = xmlDoc.CreateElement("Assist");
-                assist.SetAttribute("AutoGoInMaps", sysConfig.autoGoInMaps.ToString());
-                rootNode.AppendChild(assist);
+                    XmlElement assist = xmlDoc.CreateElement("Assist");
+                    assist.SetAttribute("AutoGoInMaps", sysConfig.autoGoInMaps.ToString());
+                    assist.SetAttribute("AutoGoTimeout", sysConfig.autoGoTimeout.ToString());
+                    rootNode.AppendChild(assist);
 
-                XmlElement system = xmlDoc.CreateElement("System");
-                system.SetAttribute("AlwaysShowTrayIcon", sysConfig.alwaysShowTray.ToString());
-                system.SetAttribute("MinimizeToTray", sysConfig.miniToTray.ToString());
-                system.SetAttribute("MinimizeToMute", sysConfig.miniToMute.ToString());
-                system.SetAttribute("ExitConfirm", sysConfig.exitConfirm.ToString());
-                rootNode.AppendChild(system);
+                    XmlElement system = xmlDoc.CreateElement("System");
+                    system.SetAttribute("ChangeTitle", sysConfig.changeTitle.ToString());
+                    system.SetAttribute("AlwaysShowTrayIcon", sysConfig.alwaysShowTray.ToString());
+                    system.SetAttribute("MinimizeToTray", sysConfig.miniToTray.ToString());
+                    system.SetAttribute("MinimizeToMute", sysConfig.miniToMute.ToString());
+                    system.SetAttribute("ExitConfirm", sysConfig.exitConfirm.ToString());
+                    rootNode.AppendChild(system);
 
-                XmlElement hotKey = xmlDoc.CreateElement("HotKey");
-                hotKey.SetAttribute("Enabled", sysConfig.enableHotKey.ToString());
-                hotKey.SetAttribute("Ctrl", sysConfig.hotKeyCtrl.ToString());
-                hotKey.SetAttribute("Alt", sysConfig.hotKeyAlt.ToString());
-                hotKey.SetAttribute("Shift", sysConfig.hotKeyShift.ToString());
-                hotKey.SetAttribute("Key", sysConfig.hotKey.ToString());
-                rootNode.AppendChild(hotKey);
+                    XmlElement hotKey = xmlDoc.CreateElement("HotKey");
+                    hotKey.SetAttribute("Enabled", sysConfig.enableHotKey.ToString());
+                    hotKey.SetAttribute("Ctrl", sysConfig.hotKeyCtrl.ToString());
+                    hotKey.SetAttribute("Alt", sysConfig.hotKeyAlt.ToString());
+                    hotKey.SetAttribute("Shift", sysConfig.hotKeyShift.ToString());
+                    hotKey.SetAttribute("Key", sysConfig.hotKey.ToString());
+                    rootNode.AppendChild(hotKey);
 
-                XmlElement screenShot = xmlDoc.CreateElement("ScreenShot");
-                screenShot.SetAttribute("FileFormat", sysConfig.capFormat.ToString());
-                rootNode.AppendChild(screenShot);
+                    XmlElement screenShot = xmlDoc.CreateElement("ScreenShot");
+                    screenShot.SetAttribute("FileFormat", sysConfig.capFormat.ToString());
+                    rootNode.AppendChild(screenShot);
 
-                XmlElement css = xmlDoc.CreateElement("UserCssStyle");
-                css.SetAttribute("CssStyle", sysConfig.userCSS);
-                rootNode.AppendChild(css);
-                XmlElement cssA = xmlDoc.CreateElement("UserCssStyleAmerican");
-                css.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
-                rootNode.AppendChild(cssA);
-                XmlElement cssT = xmlDoc.CreateElement("UserCssStyleTaiwan");
-                css.SetAttribute("CssStyle", sysConfig.userCSSTaiwan);
-                rootNode.AppendChild(cssT);
+                    XmlElement css = xmlDoc.CreateElement("UserCssStyle");
+                    css.SetAttribute("CssStyle", sysConfig.userCSS);
+                    rootNode.AppendChild(css);
+                    XmlElement cssA = xmlDoc.CreateElement("UserCssStyleAmerican");
+                    css.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
+                    rootNode.AppendChild(cssA);
+                    XmlElement cssT = xmlDoc.CreateElement("UserCssStyleTaiwan");
+                    css.SetAttribute("CssStyle", sysConfig.userCSSTaiwan);
+                    rootNode.AppendChild(cssT);
 
-                xmlDoc.Save("config.xml");
+                    xmlDoc.Save("config.xml");
+                }
+                else
+                {
+                    xmlDoc.Load("config.xml");
+                    XmlNode rootNode = xmlDoc.SelectSingleNode("Config");
+
+                    XmlNode xn = xmlDoc.SelectSingleNode("/Config/Login");
+                    XmlElement xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("Login");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("ShowLoginDialog", sysConfig.showLoginDialog.ToString());
+                    xe.SetAttribute("ShowNewsDialog", sysConfig.showLoginNews.ToString());
+                    xe.SetAttribute("GameServer", sysConfig.gameServer.ToString());
+                    xe.SetAttribute("GameHomePage", sysConfig.gameHomePage.ToString());
+
+                    xn = xmlDoc.SelectSingleNode("/Config/Proxy");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("Proxy");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("ProxyType", sysConfig.proxyType.ToString());
+                    xe.SetAttribute("ProxyServer", sysConfig.proxyServer);
+                    xe.SetAttribute("ProxyPort", sysConfig.proxyPort.ToString());
+
+                    xn = xmlDoc.SelectSingleNode("/Config/Notify");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("Notify");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("APTarget", sysConfig.apTargetNotify.ToString());
+                    xe.SetAttribute("APFull", sysConfig.apFullNotify.ToString());
+                    xe.SetAttribute("BPTarget", sysConfig.bpTargetNotify.ToString());
+                    xe.SetAttribute("BPFull", sysConfig.bpFullNotify.ToString());
+                    xe.SetAttribute("SPEvery", sysConfig.spEveryNotify.ToString());
+                    xe.SetAttribute("SPFull", sysConfig.spFullNotify.ToString());
+                    xe.SetAttribute("FoundStage", sysConfig.foundStageNotify.ToString());
+                    xe.SetAttribute("FoundBoss", sysConfig.foundBossNotify.ToString());
+
+                    xn = xmlDoc.SelectSingleNode("/Config/Logs");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("Logs");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("GameLog", sysConfig.logGame.ToString());
+                    xe.SetAttribute("GachaLog", sysConfig.logGacha.ToString());
+
+                    xn = xmlDoc.SelectSingleNode("/Config/Assist");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("Assist");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("AutoGoInMaps", sysConfig.autoGoInMaps.ToString());
+                    xe.SetAttribute("AutoGoTimeout", sysConfig.autoGoTimeout.ToString());
+
+                    xn = xmlDoc.SelectSingleNode("/Config/System");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("System");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("ChangeTitle", sysConfig.changeTitle.ToString());
+                    xe.SetAttribute("AlwaysShowTrayIcon", sysConfig.alwaysShowTray.ToString());
+                    xe.SetAttribute("MinimizeToTray", sysConfig.miniToTray.ToString());
+                    xe.SetAttribute("MinimizeToMute", sysConfig.miniToMute.ToString());
+                    xe.SetAttribute("ExitConfirm", sysConfig.exitConfirm.ToString());
+
+                    xn = xmlDoc.SelectSingleNode("/Config/HotKey");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("HotKey");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("Enabled", sysConfig.enableHotKey.ToString());
+                    xe.SetAttribute("Ctrl", sysConfig.hotKeyCtrl.ToString());
+                    xe.SetAttribute("Alt", sysConfig.hotKeyAlt.ToString());
+                    xe.SetAttribute("Shift", sysConfig.hotKeyShift.ToString());
+                    xe.SetAttribute("Key", sysConfig.hotKey.ToString());
+
+                    xn = xmlDoc.SelectSingleNode("/Config/ScreenShot");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("ScreenShot");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("FileFormat", sysConfig.capFormat.ToString());
+
+                    xn = xmlDoc.SelectSingleNode("/Config/UserCssStyle");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("UserCssStyle");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("CssStyle", sysConfig.userCSS);
+
+                    xn = xmlDoc.SelectSingleNode("/Config/UserCssStyleAmerican");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("UserCssStyleAmerican");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
+
+                    xn = xmlDoc.SelectSingleNode("/Config/UserCssStyleTaiwan");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("UserCssStyleTaiwan");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("CssStyle", sysConfig.userCSSTaiwan);
+
+                    xmlDoc.Save("config.xml");
+                }
             }
-            else
+            catch
             {
-                xmlDoc.Load("config.xml");
-                XmlNode rootNode = xmlDoc.SelectSingleNode("Config");
-
-                XmlNode xn = xmlDoc.SelectSingleNode("/Config/Login");
-                XmlElement xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("Login");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("ShowLoginDialog", sysConfig.showLoginDialog.ToString());
-                xe.SetAttribute("ShowNewsDialog", sysConfig.showLoginNews.ToString());
-                xe.SetAttribute("GameServer", sysConfig.gameServer.ToString());
-                xe.SetAttribute("GameHomePage", sysConfig.gameHomePage.ToString());
-
-                xn = xmlDoc.SelectSingleNode("/Config/Proxy");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("Proxy");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("ProxyType", sysConfig.proxyType.ToString());
-                xe.SetAttribute("ProxyServer", sysConfig.proxyServer);
-                xe.SetAttribute("ProxyPort", sysConfig.proxyPort.ToString());
-
-                xn = xmlDoc.SelectSingleNode("/Config/Notify");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("Notify");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("APTarget", sysConfig.apTargetNotify.ToString());
-                xe.SetAttribute("APFull", sysConfig.apFullNotify.ToString());
-                xe.SetAttribute("BPTarget", sysConfig.bpTargetNotify.ToString());
-                xe.SetAttribute("BPFull", sysConfig.bpFullNotify.ToString());
-                xe.SetAttribute("SPEvery", sysConfig.spEveryNotify.ToString());
-                xe.SetAttribute("SPFull", sysConfig.spFullNotify.ToString());
-
-                xn = xmlDoc.SelectSingleNode("/Config/Logs");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("Logs");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("GameLog", sysConfig.logGame.ToString());
-                xe.SetAttribute("GachaLog", sysConfig.logGacha.ToString());
-
-                xn = xmlDoc.SelectSingleNode("/Config/Assist");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("Assist");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("AutoGoInMaps", sysConfig.autoGoInMaps.ToString());
-
-                xn = xmlDoc.SelectSingleNode("/Config/System");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("System");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("AlwaysShowTrayIcon", sysConfig.alwaysShowTray.ToString());
-                xe.SetAttribute("MinimizeToTray", sysConfig.miniToTray.ToString());
-                xe.SetAttribute("MinimizeToMute", sysConfig.miniToMute.ToString());
-                xe.SetAttribute("ExitConfirm", sysConfig.exitConfirm.ToString());
-
-                xn = xmlDoc.SelectSingleNode("/Config/HotKey");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("HotKey");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("Enabled", sysConfig.enableHotKey.ToString());
-                xe.SetAttribute("Ctrl", sysConfig.hotKeyCtrl.ToString());
-                xe.SetAttribute("Alt", sysConfig.hotKeyAlt.ToString());
-                xe.SetAttribute("Shift", sysConfig.hotKeyShift.ToString());
-                xe.SetAttribute("Key", sysConfig.hotKey.ToString());
-
-                xn = xmlDoc.SelectSingleNode("/Config/ScreenShot");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("ScreenShot");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("FileFormat", sysConfig.capFormat.ToString());
-
-                xn = xmlDoc.SelectSingleNode("/Config/UserCssStyle");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("UserCssStyle");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("CssStyle", sysConfig.userCSS);
-
-                xn = xmlDoc.SelectSingleNode("/Config/UserCssStyleAmerican");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("UserCssStyleAmerican");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
-
-                xn = xmlDoc.SelectSingleNode("/Config/UserCssStyleTaiwan");
-                xe = (XmlElement)xn;
-                if (xe == null)
-                {
-                    xe = xmlDoc.CreateElement("UserCssStyleTaiwan");
-                    rootNode.AppendChild(xe);
-                }
-                xe.SetAttribute("CssStyle", sysConfig.userCSSTaiwan);
-
-                xmlDoc.Save("config.xml");
+                return false;
             }
+            return true;
         }
 
         /// <summary>

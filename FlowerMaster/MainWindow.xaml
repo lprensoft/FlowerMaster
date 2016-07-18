@@ -361,7 +361,7 @@
                                  VerticalAlignment="Top"
                                  Margin="165,425,0,0"
                                  Height="25"
-                                 Content="副本BOSS"/>
+                                 Content="主页BOSS"/>
                             <Label FontWeight="Bold"
                            FontSize="16px"
                            Height="30"
