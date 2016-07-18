@@ -603,11 +603,23 @@ namespace FlowerMaster.Helpers
                 itemAmount += int.Parse(item["amount"].ToString());
             }
             if (itemAmount > 0) log += "活动物品" + itemAmount.ToString() + "，";
-            log += json["encounterStageName"] != null && json["encounterStageName"].ToString() != "" ? "出现隐藏副本：" + json["encounterStageName"].ToString() +
-                "（需要体力：" + json["encounterStageUseStamina"].ToString() + "），" : "";
+            if (json["encounterStageName"] != null && json["encounterStageName"].ToString() != "")
+            {
+                log += "出现隐藏副本：" + json["encounterStageName"].ToString() + "（需要体力：" + json["encounterStageUseStamina"].ToString() + "），";
+                if (DataUtil.Config.sysConfig.foundStageNotify)
+                {
+                    MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 隐藏副本出现通知", "出现隐藏副本：" + json["encounterStageName"].ToString()
+                            + "，需要体力：" + json["encounterStageUseStamina"].ToString(), System.Windows.Forms.ToolTipIcon.Info);
+                }
+            }
             if (json["masterRaidBoss"] != null && json["masterRaidBoss"].ToString() != "")
             {
                 log += "出现主页BOSS：" + json["masterRaidBoss"]["name"].ToString() + "（Lv：" + json["masterRaidBoss"]["raidBossLevelNum"].ToString() + "），";
+                if (DataUtil.Config.sysConfig.foundBossNotify)
+                {
+                    MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 主页BOSS出现通知", "出现主页BOSS：" + json["masterRaidBoss"]["name"].ToString()
+                            + "，Lv：" + json["masterRaidBoss"]["raidBossLevelNum"].ToString(), System.Windows.Forms.ToolTipIcon.Info);
+                }
             }
             MiscHelper.AddLog(log.Substring(0, log.Length - 1), MiscHelper.LogType.Stage);
             DataUtil.Game.canAuto = false;

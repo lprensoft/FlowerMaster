@@ -488,14 +488,66 @@ namespace FlowerMaster.Helpers
                 DataUtil.Game.isAuto = true;
                 main.timerAuto.Change(0, DataUtil.Config.sysConfig.autoGoTimeout);
                 MiscHelper.AddLog("开始自动推图...", MiscHelper.LogType.System);
-                main.btnAuto.Background = System.Windows.Media.Brushes.Red;
+                if (!main.Dispatcher.CheckAccess())
+                {
+                    main.Dispatcher.Invoke(new Action(() =>
+                    {
+                        main.btnAuto.Background = System.Windows.Media.Brushes.Red;
+                    }));
+                }
+                else
+                {
+                    main.btnAuto.Background = System.Windows.Media.Brushes.Red;
+                }
             }
             else if (!modeSwitch && DataUtil.Game.isAuto)
             {
                 DataUtil.Game.isAuto = false;
                 main.timerAuto.Change(Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
                 MiscHelper.AddLog("自动推图已停止！", MiscHelper.LogType.System);
-                main.btnAuto.Background = System.Windows.Media.Brushes.Black;
+                if (!main.Dispatcher.CheckAccess())
+                {
+                    main.Dispatcher.Invoke(new Action(() =>
+                    {
+                        main.btnAuto.Background = System.Windows.Media.Brushes.Black;
+                    }));
+                }
+                else
+                {
+                    main.btnAuto.Background = System.Windows.Media.Brushes.Black;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 显示提醒信息
+        /// </summary>
+        /// <param name="timeout">提醒超时时间</param>
+        /// <param name="title">提醒的标题</param>
+        /// <param name="content">提醒的内容</param>
+        /// <param name="tipIcon">提醒的图标</param>
+        public static void ShowRemind(int timeout, string title, string content, System.Windows.Forms.ToolTipIcon tipIcon)
+        {
+            if (!main.Dispatcher.CheckAccess())
+            {
+                if (!main.notifyIcon.Visible)
+                {
+                    main.notifyIcon.Visible = true;
+                    main.timerNotify.Change(1000, 10000);
+                }
+                main.Dispatcher.Invoke(new Action(() =>
+                {
+                    main.notifyIcon.ShowBalloonTip(timeout, title, content, tipIcon);
+                }));
+            }
+            else
+            {
+                if (!main.notifyIcon.Visible)
+                {
+                    main.notifyIcon.Visible = true;
+                    main.timerNotify.Change(1000, 10000);
+                }
+                main.notifyIcon.ShowBalloonTip(timeout, title, content, tipIcon);
             }
         }
     }

@@ -28,9 +28,10 @@ namespace FlowerMaster
         private bool loginSubmitted = false;
         private bool newsHadShown = false;
 
-        private Timer timerCheck = null;
-        private Timer timerClock = null;
-        public Timer timerAuto = null;
+        private Timer timerCheck = null; //提醒检查计时器
+        private Timer timerClock = null; //时钟计时器
+        public Timer timerAuto = null; //自动推图定时器
+        public Timer timerNotify = null; //提醒计时器
 
         private IntPtr webHandle = IntPtr.Zero;
 
@@ -107,6 +108,7 @@ namespace FlowerMaster
             timerCheck = new Timer(new TimerCallback(checkTimeLeft), this, 0, 1000);
             timerClock = new Timer(new TimerCallback(tickServerTime), this, 0, 1000);
             timerAuto = new Timer(new TimerCallback(AutoClickMouse), this, Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
+            timerNotify = new Timer(new TimerCallback(closeNotify), this, Timeout.Infinite, 10000);
 
             dgDaliy.ItemsSource = DataUtil.Game.daliyInfo;
 
@@ -128,27 +130,27 @@ namespace FlowerMaster
             if (!DataUtil.Game.isOnline || notifyIcon == null || !notifyIcon.Visible) return;
             if (DataUtil.Config.sysConfig.apTargetNotify > 0 && DataUtil.Game.player.AP == DataUtil.Config.sysConfig.apTargetNotify && DataUtil.Game.notifyRecord.lastAP < DataUtil.Game.player.AP)
             {
-                notifyIcon.ShowBalloonTip(10, DataUtil.Game.player.name + " - 体力回复通知", "当前体力已经达到" + DataUtil.Config.sysConfig.apTargetNotify.ToString(), System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 体力回复通知", "当前体力已经达到" + DataUtil.Config.sysConfig.apTargetNotify.ToString(), System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.bpTargetNotify > 0 && DataUtil.Game.player.BP == DataUtil.Config.sysConfig.bpTargetNotify && DataUtil.Game.notifyRecord.lastBP < DataUtil.Game.player.BP)
             {
-                notifyIcon.ShowBalloonTip(10, DataUtil.Game.player.name + " - 战点回复通知", "当前战点已经达到" + DataUtil.Config.sysConfig.bpTargetNotify.ToString(), System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 战点回复通知", "当前战点已经达到" + DataUtil.Config.sysConfig.bpTargetNotify.ToString(), System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.apFullNotify && DataUtil.Game.player.AP == DataUtil.Game.player.maxAP && DataUtil.Game.notifyRecord.lastAP < DataUtil.Game.player.maxAP)
             {
-                notifyIcon.ShowBalloonTip(10, DataUtil.Game.player.name + " - 体力回复通知", "当前体力已经回复满了！", System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 体力回复通知", "当前体力已经回复满了！", System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.bpFullNotify && DataUtil.Game.player.BP == DataUtil.Game.player.maxBP && DataUtil.Game.notifyRecord.lastBP < DataUtil.Game.player.maxBP)
             {
-                notifyIcon.ShowBalloonTip(10, DataUtil.Game.player.name + " - 战点回复通知", "当前战点已经回复满了！", System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 战点回复通知", "当前战点已经回复满了！", System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.spEveryNotify && DataUtil.Game.notifyRecord.lastSP < DataUtil.Game.player.SP && DataUtil.Game.notifyRecord.lastSP < DataUtil.Game.player.maxSP)
             {
-                notifyIcon.ShowBalloonTip(10, DataUtil.Game.player.name + " - 探索回复通知", "当前探索点数回复了1点！", System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 探索回复通知", "当前探索点数回复了1点！", System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.spFullNotify && DataUtil.Game.player.SP == DataUtil.Game.player.maxSP && DataUtil.Game.notifyRecord.lastSP < DataUtil.Game.player.maxSP)
             {
-                notifyIcon.ShowBalloonTip(10, DataUtil.Game.player.name + " - 探索回复通知", "当前探索已经回复满了！", System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 探索回复通知", "当前探索已经回复满了！", System.Windows.Forms.ToolTipIcon.Info);
             }
             DataUtil.Game.notifyRecord.lastAP = DataUtil.Game.player.AP;
             DataUtil.Game.notifyRecord.lastBP = DataUtil.Game.player.BP;
@@ -170,6 +172,15 @@ namespace FlowerMaster
             {
                 lbServerTime.Content = "服务器时间：" + DataUtil.Game.serverTime.ToString("yyyy-MM-dd HH:mm:ss");
             }));
+        }
+
+        /// <summary>
+        /// 取消提醒定时器
+        /// </summary>
+        /// <param name="obj">对象参数</param>
+        private void closeNotify(object obj)
+        {
+            notifyIcon.Visible = false;
         }
 
         /// <summary>
