@@ -492,12 +492,12 @@ namespace FlowerMaster.Helpers
                 {
                     main.Dispatcher.Invoke(new Action(() =>
                     {
-                        main.btnAuto.Background = System.Windows.Media.Brushes.Red;
+                        main.btnAuto.Background = System.Windows.Media.Brushes.Green;
                     }));
                 }
                 else
                 {
-                    main.btnAuto.Background = System.Windows.Media.Brushes.Red;
+                    main.btnAuto.Background = System.Windows.Media.Brushes.Green;
                 }
             }
             else if (!modeSwitch && DataUtil.Game.isAuto)
@@ -530,13 +530,13 @@ namespace FlowerMaster.Helpers
         {
             if (!main.Dispatcher.CheckAccess())
             {
-                if (!main.notifyIcon.Visible)
-                {
-                    main.notifyIcon.Visible = true;
-                    main.timerNotify.Change(1000, 10000);
-                }
                 main.Dispatcher.Invoke(new Action(() =>
                 {
+                    if (!main.notifyIcon.Visible)
+                    {
+                        main.notifyIcon.Visible = true;
+                        main.timerNotify.Change(10000, 10000);
+                    }
                     main.notifyIcon.ShowBalloonTip(timeout, title, content, tipIcon);
                 }));
             }
@@ -545,7 +545,7 @@ namespace FlowerMaster.Helpers
                 if (!main.notifyIcon.Visible)
                 {
                     main.notifyIcon.Visible = true;
-                    main.timerNotify.Change(1000, 10000);
+                    main.timerNotify.Change(10000, 10000);
                 }
                 main.notifyIcon.ShowBalloonTip(timeout, title, content, tipIcon);
             }

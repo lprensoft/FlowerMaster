@@ -180,6 +180,7 @@ namespace FlowerMaster
         /// <param name="obj">对象参数</param>
         private void closeNotify(object obj)
         {
+            timerNotify.Change(Timeout.Infinite, 10000);
             notifyIcon.Visible = false;
         }
 
