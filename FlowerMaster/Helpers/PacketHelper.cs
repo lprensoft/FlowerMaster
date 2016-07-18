@@ -610,13 +610,9 @@ namespace FlowerMaster.Helpers
                 log += "出现主页BOSS：" + json["masterRaidBoss"]["name"].ToString() + "（Lv：" + json["masterRaidBoss"]["raidBossLevelNum"].ToString() + "），";
             }
             MiscHelper.AddLog(log.Substring(0, log.Length - 1), MiscHelper.LogType.Stage);
-            if (DataUtil.Game.isAuto)
-            {
-                DataUtil.Game.isAuto = false;
-                mainWindow.timerAuto.Change(Timeout.Infinite, SysConfig.AUTO_GO_TIMEOUT);
-            }
             DataUtil.Game.canAuto = false;
             MiscHelper.ShowMapInfoButton(false);
+            MiscHelper.SetAutoGo(false);
             UpdateTimeLeft();
             return E_SUCCESS;
         }
@@ -671,13 +667,9 @@ namespace FlowerMaster.Helpers
                 log += "活动物品" + item["amount"].ToString() + "，";
             }
             MiscHelper.AddLog(log.Substring(0, log.Length - 1), MiscHelper.LogType.Stage);
-            if (DataUtil.Game.isAuto)
-            {
-                DataUtil.Game.isAuto = false;
-                mainWindow.timerAuto.Change(Timeout.Infinite, SysConfig.AUTO_GO_TIMEOUT);
-            }
             DataUtil.Game.canAuto = false;
             MiscHelper.ShowMapInfoButton(false);
+            MiscHelper.SetAutoGo(false);
             UpdateTimeLeft();
             return E_SUCCESS;
         }
@@ -691,12 +683,8 @@ namespace FlowerMaster.Helpers
         {
             DataUtil.Game.canAuto = false;
             MiscHelper.ShowMapInfoButton(false);
-            if (DataUtil.Game.isAuto)
-            {
-                DataUtil.Game.isAuto = false;
-                mainWindow.timerAuto.Change(Timeout.Infinite, SysConfig.AUTO_GO_TIMEOUT);
-            }
             DataUtil.Game.canAuto = false;
+            MiscHelper.SetAutoGo(false);
             return E_SUCCESS;
         }
 

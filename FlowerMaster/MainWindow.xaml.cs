@@ -106,7 +106,7 @@ namespace FlowerMaster
 
             timerCheck = new Timer(new TimerCallback(checkTimeLeft), this, 0, 1000);
             timerClock = new Timer(new TimerCallback(tickServerTime), this, 0, 1000);
-            timerAuto = new Timer(new TimerCallback(AutoClickMouse), this, Timeout.Infinite, SysConfig.AUTO_GO_TIMEOUT);
+            timerAuto = new Timer(new TimerCallback(AutoClickMouse), this, Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
 
             dgDaliy.ItemsSource = DataUtil.Game.daliyInfo;
 
@@ -517,7 +517,7 @@ namespace FlowerMaster
         {
             if (!DataUtil.Game.isOnline || !DataUtil.Game.canAuto || webHandle == IntPtr.Zero)
             {
-                timerAuto.Change(Timeout.Infinite, SysConfig.AUTO_GO_TIMEOUT);
+                timerAuto.Change(Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
                 return;
             }
             int x = 855, y = 545;
@@ -829,13 +829,13 @@ namespace FlowerMaster
             }
             if (DataUtil.Game.isAuto)
             {
-                timerAuto.Change(Timeout.Infinite, SysConfig.AUTO_GO_TIMEOUT);
-                DataUtil.Game.isAuto = false;
+                MiscHelper.SetAutoGo(false);
+                btnAuto.Background = System.Windows.Media.Brushes.Black;
             }
             else if (DataUtil.Game.canAuto)
             {
-                timerAuto.Change(0, SysConfig.AUTO_GO_TIMEOUT);
-                DataUtil.Game.isAuto = true;
+                MiscHelper.SetAutoGo(true);
+                btnAuto.Background = System.Windows.Media.Brushes.Yellow;
             }
         }
 

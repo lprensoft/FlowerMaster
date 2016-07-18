@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using FlowerMaster.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace FlowerMaster.Helpers
 {
@@ -473,6 +474,26 @@ namespace FlowerMaster.Helpers
             else
             {
                 main.btnMapInfo.Visibility = show ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            }
+        }
+
+        /// <summary>
+        /// 设置自动推图模式
+        /// </summary>
+        /// <param name="modeSwitch">开关</param>
+        public static void SetAutoGo(bool modeSwitch)
+        {
+            if (modeSwitch && !DataUtil.Game.isAuto && DataUtil.Game.canAuto)
+            {
+                DataUtil.Game.isAuto = true;
+                main.timerAuto.Change(0, DataUtil.Config.sysConfig.autoGoTimeout);
+                MiscHelper.AddLog("开始自动推图...", MiscHelper.LogType.System);
+            }
+            else if (!modeSwitch && DataUtil.Game.isAuto)
+            {
+                DataUtil.Game.isAuto = false;
+                main.timerAuto.Change(Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
+                MiscHelper.AddLog("自动推图已停止！", MiscHelper.LogType.System);
             }
         }
     }
