@@ -67,7 +67,11 @@ namespace FlowerMaster
                     while (line != null)
                     {
                         string[] txt = line.Split('|');
-                        if (txt.Count() != 2) continue;
+                        if (txt.Count() != 2)
+                        {
+                            line = sr.ReadLine();
+                            continue;
+                        }
                         Paragraph p = new Paragraph();
                         Run timeText = new Run() { Text = txt[0] + " ", Foreground = new SolidColorBrush(Colors.Gray) };
                         p.Inlines.Add(timeText);
@@ -76,7 +80,11 @@ namespace FlowerMaster
                         if (txt[1].IndexOf(",") != -1)
                         {
                             string[] cards = txt[1].Split(',');
-                            if (chkFilter.IsChecked.HasValue && (bool)chkFilter.IsChecked && cards.Count() != 11) continue;
+                            if (chkFilter.IsChecked.HasValue && (bool)chkFilter.IsChecked && cards.Count() != 11)
+                            {
+                                line = sr.ReadLine();
+                                continue;
+                            }
                             for (int i=0; i<cards.Count(); i++)
                             {
                                 string cardStr = DataUtil.Cards.GetName(int.Parse(cards[i]));
