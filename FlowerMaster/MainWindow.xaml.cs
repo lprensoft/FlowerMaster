@@ -383,7 +383,7 @@ namespace FlowerMaster
                 {
                     PacketHelper.ProcessPacket(s);
                 }
-                else if (s.Request.PathAndQuery.IndexOf("/news/news_") != -1 && s.Request.PathAndQuery.IndexOf(".html?") != -1)
+                else if (s.Request.PathAndQuery.IndexOf("/news/news_") != -1 && s.Request.PathAndQuery.IndexOf(".html?") != -1 && s.Request.RequestLine.URI.IndexOf("http") != -1)
                 {
                     DataUtil.Game.lastNewsUrl = s.Request.RequestLine.URI;
                     if (DataUtil.Config.sysConfig.showLoginNews && !newsHadShown)
