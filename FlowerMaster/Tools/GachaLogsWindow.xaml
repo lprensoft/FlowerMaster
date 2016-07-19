@@ -28,6 +28,12 @@
                   Margin="75,5,0,0"
                   Height="30"
                   Width="150"></ComboBox>
+        <CheckBox x:Name="chkFilter"
+                  Grid.Row="0"
+                  Height="30"
+                  Margin="235,5,0,0"
+                  Click="chkFilter_Click"
+                  Content="不显示种子连扭结果"/>
         <RichTextBox x:Name="rtLog"
                      Grid.Row="1"
                      VerticalScrollBarVisibility="Visible"

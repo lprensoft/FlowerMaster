@@ -76,6 +76,7 @@ namespace FlowerMaster
                         if (txt[1].IndexOf(",") != -1)
                         {
                             string[] cards = txt[1].Split(',');
+                            if (chkFilter.IsChecked.HasValue && (bool)chkFilter.IsChecked && cards.Count() != 11) continue;
                             for (int i=0; i<cards.Count(); i++)
                             {
                                 string cardStr = DataUtil.Cards.GetName(int.Parse(cards[i]));
@@ -161,6 +162,12 @@ namespace FlowerMaster
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             LoadAccounts();
+        }
+
+        private void chkFilter_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbAccount.SelectedIndex < 0) return;
+            LoadLog(cbAccount.Items[cbAccount.SelectedIndex].ToString());
         }
     }
 }
