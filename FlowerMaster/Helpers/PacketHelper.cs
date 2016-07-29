@@ -141,6 +141,7 @@ namespace FlowerMaster.Helpers
                 {
                     return ProcessNutakuUserInfo(pack);
                 }
+                //判断是否为游戏接口封包
                 else if (pack.funcUrl.IndexOf("/api/v1/") != -1)
                 {
                     //更新服务器时间
@@ -158,6 +159,16 @@ namespace FlowerMaster.Helpers
                     else if (pack.funcApi == "/friend/getFriendList")
                     {
                         return ProcessFriendList(pack);
+                    }
+                    //花盆开花时间信息
+                    else if (pack.funcApi == "/garden/getUserGardenPlant")
+                    {
+                        return ProcessUserGardenPlant(pack);
+                    }
+                    //收获花盆
+                    else if (pack.funcApi == "/garden/saveGardenPlantHarvest")
+                    {
+                        return ProcessGardenPlantHarvest(pack);
                     }
                     //游戏探索
                     else if (pack.funcApi == "/searchQuest/saveSearchQuest")
@@ -245,11 +256,13 @@ namespace FlowerMaster.Helpers
                         return E_FAILED;
                     }
                 }
+                //非游戏接口的封包，只返回E_FAILED结果
                 else
                 {
                     return E_FAILED;
                 }
             }
+            //解析失败或者解析过程发生错误，返回E_FALT_ERROR
             catch
             {
                 return E_FALT_ERROR;
@@ -270,6 +283,7 @@ namespace FlowerMaster.Helpers
                 mainWindow.lbAPTime.Content = "体力回满时间：" + apTime.ToString("MM-dd HH:mm:ss");
                 mainWindow.lbBPTime.Content = "战点回满时间：" + bpTime.ToString("MM-dd HH:mm:ss");
                 mainWindow.lbSPTime.Content = "探索回满时间：" + spTime.ToString("MM-dd HH:mm:ss");
+                mainWindow.lbPlantTime.Content = DataUtil.Game.player.plantTime.Year == 1 ? "花盆全满时间：暂无" : "花盆全满时间：" + DataUtil.Game.player.plantTime.ToString("MM-dd HH:mm:ss");
             }));
         }
 
@@ -303,8 +317,8 @@ namespace FlowerMaster.Helpers
         /// <summary>
         /// 处理美服/台服登录封包
         /// </summary>
-        /// <param name="pack"></param>
-        /// <returns></returns>
+        /// <param name="pack">封包数据结构体</param>
+        /// <returns>处理结果标志</returns>
         private static int ProcessNutakuUserInfo(PacketInfo pack)
         {
             JObject json = pack.data;
@@ -397,6 +411,58 @@ namespace FlowerMaster.Helpers
                 f.leader = DataUtil.Cards.GetName(int.Parse(friend["deputyLeaderCharacterId"].ToString()), true, false);
                 DataUtil.Game.friendList.Add(f);
             }
+            return E_SUCCESS;
+        }
+
+        /// <summary>
+        /// 处理游戏花盆开花时间信息封包
+        /// </summary>
+        /// <param name="pack">封包数据结构体</param>
+        /// <returns>处理结果标志</returns>
+        private static int ProcessUserGardenPlant(PacketInfo pack)
+        {
+            JObject json = pack.data;
+            if (json["userGardenPlantPotList"] == null) return E_FAILED;
+            JArray plants = (JArray)json["userGardenPlantPotList"];
+            if (plants.Count <= 0) return E_FAILED;
+            foreach (JObject plant in plants)
+            {
+                if (plant["floweringTime"] != null)
+                {
+                    DateTime pTime = Convert.ToDateTime(plant["floweringTime"].ToString());
+                    if (DataUtil.Game.player.plantTime < pTime) DataUtil.Game.player.plantTime = pTime;
+                }
+            }
+            UpdateTimeLeft();
+            return E_SUCCESS;
+        }
+
+        /// <summary>
+        /// 处理游戏收获花盆封包
+        /// </summary>
+        /// <param name="pack">封包数据结构体</param>
+        /// <returns>处理结果标志</returns>
+        private static int ProcessGardenPlantHarvest(PacketInfo pack)
+        {
+            JObject json = pack.data;
+            string log = "收获花盆，获得：";
+            JArray items = (JArray)json["gardenHarvestItemList"];
+            foreach (JObject item in items)
+            {
+                if (item["itemId"].ToString() == "1")
+                {
+                    log += "金币" + item["amount"].ToString();
+                }
+            }
+            DateTime pTime = Convert.ToDateTime(json["userGardenPlantPotList"]["floweringTime"].ToString());
+            if (DataUtil.Game.player.plantTime < pTime) DataUtil.Game.player.plantTime = pTime;
+            if (json["staminaRevoceryNum"].ToString() != "0")
+            {
+                log += "，体力" + json["staminaRevoceryNum"].ToString();
+                DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["stamina"], json["staminaTime"]);
+            }
+            UpdateTimeLeft();
+            MiscHelper.AddLog(log, MiscHelper.LogType.Search);
             return E_SUCCESS;
         }
 

@@ -31,10 +31,11 @@ namespace FlowerMaster.Models
             public int oldSP;
             public int SP;
             public int maxSP;
+            public DateTime spTime;
             public int money;
             public int stone;
             public string friendId;
-            public DateTime spTime;
+            public DateTime plantTime;
         }
         /// <summary>
         /// 玩家信息
