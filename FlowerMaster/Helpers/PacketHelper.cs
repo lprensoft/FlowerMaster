@@ -454,8 +454,15 @@ namespace FlowerMaster.Helpers
                     log += "金币" + item["amount"].ToString();
                 }
             }
-            DateTime pTime = Convert.ToDateTime(json["userGardenPlantPotList"]["floweringTime"].ToString());
-            if (DataUtil.Game.player.plantTime < pTime) DataUtil.Game.player.plantTime = pTime;
+            JArray plants = (JArray)json["userGardenPlantPotList"];
+            foreach (JObject plant in plants)
+            {
+                if (plant["floweringTime"] != null)
+                {
+                    DateTime pTime = Convert.ToDateTime(plant["floweringTime"].ToString());
+                    if (DataUtil.Game.player.plantTime < pTime) DataUtil.Game.player.plantTime = pTime;
+                }
+            }
             if (json["staminaRevoceryNum"].ToString() != "0")
             {
                 log += "，体力" + json["staminaRevoceryNum"].ToString();
