@@ -674,7 +674,7 @@
                                       Margin="0,35,0,0"
                                       VerticalAlignment="Top"
                                       HorizontalAlignment="Left"
-                                      Width="220"
+                                      Width="230"
                                       Height="220"
                                       AutoGenerateColumns="False"
                                       CanUserAddRows="False"
@@ -682,7 +682,7 @@
                                       SelectedCellsChanged="dgDaliy_SelectedCellsChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="星期" Width="70" CanUserResize="False"  CanUserSort="False" IsReadOnly="True" Binding="{Binding day}"/>
-                                    <DataGridTextColumn Header="活动副本" Width="150" CanUserResize="False" CanUserSort="False" IsReadOnly="True" Binding="{Binding eventStage}"/>
+                                    <DataGridTextColumn Header="活动副本" Width="160" CanUserResize="False" CanUserSort="False" IsReadOnly="True" Binding="{Binding eventStage}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                             <Label FontSize="16px"
@@ -695,16 +695,16 @@
                                       Margin="0,295,0,0"
                                       VerticalAlignment="Top"
                                       HorizontalAlignment="Left"
-                                      Width="220"
+                                      Width="230"
                                       Height="250"
                                       AutoGenerateColumns="False"
                                       CanUserAddRows="False"
                                       SelectionUnit="FullRow"
                                       SelectedCellsChanged="dgDaliy_SelectedCellsChanged">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="关卡" Width="50" IsReadOnly="True" Binding="{Binding stage}"/>
-                                    <DataGridTextColumn Header="体力" Width="45" IsReadOnly="True" Binding="{Binding ap}"/>
-                                    <DataGridTextColumn Header="经验" Width="50" IsReadOnly="True" Binding="{Binding exp}"/>
+                                    <DataGridTextColumn Header="关卡" Width="50" CanUserSort="False" IsReadOnly="True" Binding="{Binding stage}"/>
+                                    <DataGridTextColumn Header="体力" Width="55" IsReadOnly="True" Binding="{Binding ap}"/>
+                                    <DataGridTextColumn Header="经验" Width="55" IsReadOnly="True" Binding="{Binding exp}"/>
                                     <DataGridTextColumn Header="效率" Width="55" IsReadOnly="True" Binding="{Binding effect}"/>
                                 </DataGrid.Columns>
                             </DataGrid>

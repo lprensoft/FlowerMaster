@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace FlowerMaster.Models
 {
@@ -114,7 +115,7 @@ namespace FlowerMaster.Models
             public string stage { get; set; }
             public int ap { get; set; }
             public int exp { get; set; }
-            public float effect { get; set; }
+            public string effect { get; set; }
         }
 
         /// <summary>
@@ -426,6 +427,33 @@ namespace FlowerMaster.Models
         public void InitExpTable()
         {
             _expTable = new ObservableCollection<ExpTable>();
+            if (File.Exists("stages.xml"))
+            {
+                try
+                {
+                    System.Xml.XmlDocument file = new System.Xml.XmlDocument();
+                    file.Load("stages.xml");
+                    System.Xml.XmlNode ixn = file.SelectSingleNode("stageList");
+                    System.Xml.XmlNodeList ixnl = ixn.ChildNodes;
+                    foreach (System.Xml.XmlNode inxf in ixnl)
+                    {
+                        System.Xml.XmlElement ixe = inxf as System.Xml.XmlElement;
+                        if (ixe.Name == "stage" && ixe.GetAttribute("name") != null && ixe.GetAttribute("name") != "")
+                        {
+                            _expTable.Add(new ExpTable() {
+                                stage = ixe.GetAttribute("name"),
+                                ap = int.Parse(ixe.GetAttribute("ap")),
+                                exp = int.Parse(ixe.GetAttribute("exp")),
+                                effect = (float.Parse(ixe.GetAttribute("exp")) / float.Parse(ixe.GetAttribute("ap"))).ToString("#0.00")
+                            });
+                        }
+                    }
+                }
+                catch
+                {
+                    MiscHelper.AddLog("关卡经验信息加载出错，请检查stages.xml文件是否损坏！", MiscHelper.LogType.System);
+                }
+            }
         }
 
         /// <summary>

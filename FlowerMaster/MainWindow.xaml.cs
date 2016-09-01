@@ -111,6 +111,7 @@ namespace FlowerMaster
             timerNotify = new Timer(new TimerCallback(closeNotify), this, Timeout.Infinite, 10000);
 
             dgDaliy.ItemsSource = DataUtil.Game.daliyInfo;
+            dgMainExp.ItemsSource = DataUtil.Game.expTable;
 
             ResizeWeb();
 
