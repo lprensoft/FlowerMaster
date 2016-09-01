@@ -597,7 +597,7 @@ namespace FlowerMaster
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("确实要重新载入页面吗？", "操作确认", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
+            if (MessageBox.Show("确实要重新载入页面吗？", "操作确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
                 styleSheetApplied = false;
