@@ -145,13 +145,14 @@ namespace FlowerMaster.Models
 
         private Dictionary<int, string> _gameServers;
         private Dictionary<int, string> _gameUrls;
+        private Dictionary<int, string> _gameNewsUrls;
         private int _gameServer;
         private string _gameUrl;
+        private string _gameNewsUrl;
         private bool _isOnline;
         private bool _isAuto;
         private bool _canAuto;
         private DateTime _serverTime;
-        private string _lastNewsUrl;
         private ObservableCollection<DaliyInfo> _daliyInfo;
         
         /// <summary>
@@ -161,11 +162,11 @@ namespace FlowerMaster.Models
         {
             InitGameServers();
             InitGameUrls();
+            InitGameNewsUrls();
             InitDaliyInfo();
             this._isOnline = false;
             this._isAuto = false;
             this._canAuto = false;
-            this._lastNewsUrl = "";
             this._serverTime = DateTime.Now;
         }
 
@@ -191,6 +192,18 @@ namespace FlowerMaster.Models
             _gameUrls.Add((int)ServersList.JapanR18, "http://www.dmm.co.jp/netgame/social/-/gadgets/=/app_id=329993/");
             _gameUrls.Add((int)ServersList.American, "http://www.nutaku.net/games/flower-knight-girl/play/");
             _gameUrls.Add((int)ServersList.Taiwan, "https://www.samurai-games.net/login/?title_id=flowerknightgirlx&notification=0&token=e7aa0c35c2f81a4b00f0008e2c4df0d5&invite_id=&appParams=");
+        }
+
+        /// <summary>
+        /// 初始化服务器新闻页面列表
+        /// </summary>
+        private void InitGameNewsUrls()
+        {
+            _gameNewsUrls = new Dictionary<int, string>();
+            _gameNewsUrls.Add((int)ServersList.Japan, "http://s3-ap-northeast-1.amazonaws.com/flower-help/index.html");
+            _gameNewsUrls.Add((int)ServersList.JapanR18, "http://s3-ap-northeast-1.amazonaws.com/flower-help/index.html");
+            _gameNewsUrls.Add((int)ServersList.American, "http://cdn.flowerknight.nutaku.net/index.html");
+            _gameNewsUrls.Add((int)ServersList.Taiwan, "http://web-1699033708.ap-northeast-1.elb.amazonaws.com/flower-help/index.html");
         }
 
         /// <summary>
@@ -408,6 +421,7 @@ namespace FlowerMaster.Models
                 this._gameServer = value;
                 if (this._gameServers == null) InitGameServers();
                 if (this._gameUrls == null) InitGameUrls();
+                if (this._gameNewsUrls == null) InitGameNewsUrls();
                 if (DataUtil.Config.sysConfig.gameHomePage == 0)
                 {
                     this._gameUrl = this._gameServers.ContainsKey(this._gameServer) ? this._gameServers[this._gameServer] : "";
@@ -416,6 +430,7 @@ namespace FlowerMaster.Models
                 {
                     this._gameUrl = this._gameUrls.ContainsKey(this._gameServer) ? this._gameUrls[this._gameServer] : "";
                 }
+                this._gameNewsUrl = this._gameNewsUrls.ContainsKey(this._gameServer) ? this._gameNewsUrls[this._gameServer] : "";
             }
         }
 
@@ -427,6 +442,17 @@ namespace FlowerMaster.Models
             get
             {
                 return this._gameUrl;
+            }
+        }
+
+        /// <summary>
+        /// 游戏新闻URL
+        /// </summary>
+        public string gameNewsUrl
+        {
+            get
+            {
+                return this._gameNewsUrl;
             }
         }
 
@@ -487,21 +513,6 @@ namespace FlowerMaster.Models
             set
             {
                 this._serverTime = value;
-            }
-        }
-
-        /// <summary>
-        /// 最新游戏公告URL
-        /// </summary>
-        public string lastNewsUrl
-        {
-            get
-            {
-                return this._lastNewsUrl;
-            }
-            set
-            {
-                this._lastNewsUrl = value;
             }
         }
 

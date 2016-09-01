@@ -43,10 +43,8 @@ namespace FlowerMaster
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             cbShowNews.IsChecked = DataUtil.Config.sysConfig.showLoginNews;
-            if (DataUtil.Game.lastNewsUrl.Trim() != "" && DataUtil.Game.lastNewsUrl.IndexOf("/news/news_") != -1)
-            {
-                newsWeb.Navigate(DataUtil.Game.lastNewsUrl);
-            }
+            if (DataUtil.Game.gameNewsUrl == "") return;
+            newsWeb.Navigate(DataUtil.Game.gameNewsUrl);
         }
 
         private void newsWeb_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)

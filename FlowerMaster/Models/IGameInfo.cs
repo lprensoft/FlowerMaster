@@ -11,7 +11,7 @@ namespace FlowerMaster.Models
         bool isAuto { get; set; }
         bool canAuto { get; set; }
         DateTime serverTime { get; set; }
-        string lastNewsUrl { get; set; }
+        string gameNewsUrl { get; }
 
         void CalcPlayerMaxAPExp();
         void CalcPlayerGamePoint(GameInfo.PlayerPointType timeType, JToken newVal, JToken newTime);

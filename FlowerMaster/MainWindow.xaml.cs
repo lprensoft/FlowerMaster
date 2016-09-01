@@ -358,10 +358,6 @@ namespace FlowerMaster
                 if (s.Request.PathAndQuery.IndexOf("/social/rpc") != -1)
                 {
                     PacketHelper.ProcessPacket(s);
-                }
-                else if (s.Request.PathAndQuery.IndexOf("/news/news_") != -1 && s.Request.PathAndQuery.IndexOf(".html?") != -1)
-                {
-                    DataUtil.Game.lastNewsUrl = s.Request.RequestLine.URI;
                     if (DataUtil.Config.sysConfig.showLoginNews && !newsHadShown)
                     {
                         newsHadShown = true;
@@ -376,16 +372,28 @@ namespace FlowerMaster
                         btnNews.Visibility = Visibility.Visible;
                     }));
                 }
+                /*else if (s.Request.PathAndQuery.IndexOf("/news/news_") != -1 && s.Request.PathAndQuery.IndexOf(".html?") != -1)
+                {
+                    if (DataUtil.Config.sysConfig.showLoginNews && !newsHadShown)
+                    {
+                        newsHadShown = true;
+                        this.Dispatcher.Invoke(new Action(() =>
+                        {
+                            NewsWindow news = new NewsWindow();
+                            news.Show();
+                        }));
+                    }
+                    this.Dispatcher.Invoke(new Action(() =>
+                    {
+                        btnNews.Visibility = Visibility.Visible;
+                    }));
+                }*/
             }
             else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
             {
                 if (s.Request.PathAndQuery.IndexOf("/rpc?st=") != -1)
                 {
                     PacketHelper.ProcessPacket(s);
-                }
-                else if (s.Request.PathAndQuery.IndexOf("/news/news_") != -1 && s.Request.PathAndQuery.IndexOf(".html?") != -1 && s.Request.RequestLine.URI.IndexOf("http") != -1)
-                {
-                    DataUtil.Game.lastNewsUrl = s.Request.RequestLine.URI;
                     if (DataUtil.Config.sysConfig.showLoginNews && !newsHadShown)
                     {
                         newsHadShown = true;
@@ -400,6 +408,22 @@ namespace FlowerMaster
                         btnNews.Visibility = Visibility.Visible;
                     }));
                 }
+                /*else if (s.Request.PathAndQuery.IndexOf("/news/news_") != -1 && s.Request.PathAndQuery.IndexOf(".html?") != -1 && s.Request.RequestLine.URI.IndexOf("http") != -1)
+                {
+                    if (DataUtil.Config.sysConfig.showLoginNews && !newsHadShown)
+                    {
+                        newsHadShown = true;
+                        this.Dispatcher.Invoke(new Action(() =>
+                        {
+                            NewsWindow news = new NewsWindow();
+                            news.Show();
+                        }));
+                    }
+                    this.Dispatcher.Invoke(new Action(() =>
+                    {
+                        btnNews.Visibility = Visibility.Visible;
+                    }));
+                }*/
             }
         }
 
@@ -868,11 +892,6 @@ namespace FlowerMaster
 
         private void btnNews_Click(object sender, RoutedEventArgs e)
         {
-            if (DataUtil.Game.lastNewsUrl == "")
-            {
-                MessageBox.Show("尚未获取到游戏公告或未有游戏公告！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
             NewsWindow news = new NewsWindow();
             news.Show();
         }

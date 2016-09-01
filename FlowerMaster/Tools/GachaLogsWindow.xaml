@@ -32,6 +32,7 @@
                   Grid.Row="0"
                   Height="30"
                   Margin="235,5,0,0"
+                  IsChecked="True"
                   Click="chkFilter_Click"
                   Content="不显示种子连扭结果"/>
         <RichTextBox x:Name="rtLog"
