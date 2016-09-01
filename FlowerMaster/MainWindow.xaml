@@ -8,8 +8,9 @@
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       GlowBrush="{DynamicResource AccentColorBrush}"
                       Title="团长助理 1.4"
-                      Height="716"
+                      Height="740"
                       Width="1000"
+                      ResizeMode="CanResizeWithGrip"
                       Icon="f23.ico"
                       Loaded="MetroWindow_Loaded"
                       Closing="MetroWindow_Closing"
@@ -21,12 +22,15 @@
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
     <Grid x:Name="grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="24"/>
+        </Grid.RowDefinitions>
         <TabControl x:Name="mainTab"
-                    HorizontalAlignment="Left"
-                    Height="{Binding ActualHeight, ElementName=grid, Mode=OneWay}"
-                    VerticalAlignment="Top"
+                    Grid.Row="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
                     Margin="0,0,0,0"
-                    Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}"
                     SelectionChanged="mainTab_SelectionChanged">
             <TabItem x:Name="tabItemGame" Header="主页">
                 <Grid x:Name="grid1" Background="#FF0F0F0F">
@@ -581,11 +585,6 @@
                            Margin="25,105,0,0"
                            Height="30"
                            Content="花盆全满时间："/>
-                            <Label x:Name="lbServerTime"
-                           VerticalAlignment="Top"
-                           Margin="25,130,0,0"
-                           Height="30"
-                           Content="服务器时间："/>
                             <Label FontSize="16px"
                            FontWeight="Bold"
                            VerticalAlignment="Top"
@@ -691,6 +690,27 @@
                 </Grid>
             </TabItem>
         </TabControl>
-
+        <DockPanel Grid.Row="1"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch">
+            <StatusBar>
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="210" />
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <TextBlock x:Name="stLog">准备就绪。</TextBlock>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="1">
+                    <TextBlock x:Name="stTime"></TextBlock>
+                </StatusBarItem>
+            </StatusBar>
+        </DockPanel>
     </Grid>
 </Controls:MetroWindow>

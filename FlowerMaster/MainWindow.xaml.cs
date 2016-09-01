@@ -170,7 +170,7 @@ namespace FlowerMaster
 
             this.Dispatcher.Invoke(new Action(() =>
             {
-                lbServerTime.Content = "服务器时间：" + DataUtil.Game.serverTime.ToString("yyyy-MM-dd HH:mm:ss");
+                stTime.Text = "服务器时间：" + DataUtil.Game.serverTime.ToString("yyyy-MM-dd HH:mm:ss");
             }));
         }
 

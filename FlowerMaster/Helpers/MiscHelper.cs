@@ -134,6 +134,7 @@ namespace FlowerMaster.Helpers
                     p.LineHeight = 3;
                     main.gameLog.Document.Blocks.Add(p);
                     main.gameLog.ScrollToEnd();
+                    if (type != LogType.System && type != LogType.Debug) main.stLog.Text = log;
                 }));
             }
             else
@@ -146,6 +147,7 @@ namespace FlowerMaster.Helpers
                 p.LineHeight = 3;
                 main.gameLog.Document.Blocks.Add(p);
                 main.gameLog.ScrollToEnd();
+                if (type != LogType.System && type != LogType.Debug) main.stLog.Text = log;
             }
             if (type != LogType.System && type != LogType.Debug) LogsHelper.LogGame(log);
         }
