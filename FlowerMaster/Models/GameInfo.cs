@@ -107,6 +107,17 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
+        /// 主线经验表类
+        /// </summary>
+        public class ExpTable
+        {
+            public string stage { get; set; }
+            public int ap { get; set; }
+            public int exp { get; set; }
+            public float effect { get; set; }
+        }
+
+        /// <summary>
         /// 游戏服务器列表枚举
         /// </summary>
         public enum ServersList
@@ -154,6 +165,7 @@ namespace FlowerMaster.Models
         private bool _canAuto;
         private DateTime _serverTime;
         private ObservableCollection<DaliyInfo> _daliyInfo;
+        private ObservableCollection<ExpTable> _expTable;
         
         /// <summary>
         /// 初始化 FlowerMaster.Models.GameInfo 类的新实例。
@@ -164,6 +176,7 @@ namespace FlowerMaster.Models
             InitGameUrls();
             InitGameNewsUrls();
             InitDaliyInfo();
+            InitExpTable();
             this._isOnline = false;
             this._isAuto = false;
             this._canAuto = false;
@@ -408,6 +421,14 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
+        /// 初始化主线副本经验表集合
+        /// </summary>
+        public void InitExpTable()
+        {
+            _expTable = new ObservableCollection<ExpTable>();
+        }
+
+        /// <summary>
         /// 游戏服务器
         /// </summary>
         public int gameServer
@@ -524,6 +545,17 @@ namespace FlowerMaster.Models
             get
             {
                 return this._daliyInfo;
+            }
+        }
+
+        /// <summary>
+        /// 主线副本经验表集合
+        /// </summary>
+        public ObservableCollection<ExpTable> expTable
+        {
+            get
+            {
+                return this._expTable;
             }
         }
     }

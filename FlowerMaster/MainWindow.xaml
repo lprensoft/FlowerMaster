@@ -584,17 +584,17 @@
                            VerticalAlignment="Top"
                            Margin="25,105,0,0"
                            Height="30"
-                           Content="花盆全满时间："/>
+                           Content="花盆开花时间："/>
                             <Label FontSize="16px"
                            FontWeight="Bold"
                            VerticalAlignment="Top"
-                           Margin="5,165,0,0"
+                           Margin="5,140,0,0"
                            Height="30"
                            Content="缓存清理"/>
                             <Button x:Name="btnClearCache"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"
-                            Margin="25,200,0,0"
+                            Margin="25,175,0,0"
                             Width="75"
                             Height="30"
                             Click="btnClearCache_Click"
@@ -602,7 +602,7 @@
                             <Button x:Name="btnClearCookies"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"
-                            Margin="110,200,0,0"
+                            Margin="110,175,0,0"
                             Width="75"
                             Height="30"
                             Click="btnClearCookies_Click"
@@ -610,13 +610,13 @@
                             <Label FontSize="16px"
                            FontWeight="Bold"
                            VerticalAlignment="Top"
-                           Margin="5,245,0,0"
+                           Margin="5,220,0,0"
                            Height="30"
                            Content="日志查看"/>
                             <Button x:Name="btnGameLogViewer"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"
-                            Margin="25,280,0,0"
+                            Margin="25,255,0,0"
                             Width="75"
                             Height="30"
                                     Click="btnGameLogViewer_Click"
@@ -624,7 +624,7 @@
                             <Button x:Name="btnGachaLogViewer"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"
-                            Margin="110,280,0,0"
+                            Margin="110,255,0,0"
                             Width="75"
                             Height="30"
                                     Click="btnGachaLogViewer_Click"
@@ -632,13 +632,13 @@
                             <Label FontSize="16px"
                            FontWeight="Bold"
                            VerticalAlignment="Top"
-                           Margin="5,325,0,0"
+                           Margin="5,300,0,0"
                            Height="30"
                            Content="游戏工具"/>
                             <Button x:Name="btnFriendViewer"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"
-                            Margin="25,360,0,0"
+                            Margin="25,335,0,0"
                             Width="75"
                             Height="30"
                                     Click="btnFriendViewer_Click"
@@ -646,13 +646,13 @@
                             <Label FontSize="16px"
                            FontWeight="Bold"
                            VerticalAlignment="Top"
-                           Margin="5,405,0,0"
+                           Margin="5,380,0,0"
                            Height="30"
                            Content="娱乐工具"/>
                             <Button x:Name="btnGacha"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"
-                            Margin="25,440,0,0"
+                            Margin="25,415,0,0"
                             Width="75"
                             Height="30"
                                     Click="btnGacha_Click"
@@ -683,6 +683,29 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="星期" Width="70" CanUserResize="False"  CanUserSort="False" IsReadOnly="True" Binding="{Binding day}"/>
                                     <DataGridTextColumn Header="活动副本" Width="150" CanUserResize="False" CanUserSort="False" IsReadOnly="True" Binding="{Binding eventStage}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Label FontSize="16px"
+                           FontWeight="Bold"
+                           VerticalAlignment="Top"
+                           Margin="0,260,0,0"
+                           Height="30"
+                           Content="游戏主线副本经验表"/>
+                            <DataGrid x:Name="dgMainExp"
+                                      Margin="0,295,0,0"
+                                      VerticalAlignment="Top"
+                                      HorizontalAlignment="Left"
+                                      Width="220"
+                                      Height="250"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      SelectionUnit="FullRow"
+                                      SelectedCellsChanged="dgDaliy_SelectedCellsChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="关卡" Width="50" IsReadOnly="True" Binding="{Binding stage}"/>
+                                    <DataGridTextColumn Header="体力" Width="45" IsReadOnly="True" Binding="{Binding ap}"/>
+                                    <DataGridTextColumn Header="经验" Width="50" IsReadOnly="True" Binding="{Binding exp}"/>
+                                    <DataGridTextColumn Header="效率" Width="55" IsReadOnly="True" Binding="{Binding effect}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>
