@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("团长助理")]
 [assembly: AssemblyDescription("美少女花骑士专属浏览器。")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("rensoft")]
 [assembly: AssemblyProduct("FlowerMaster")]
 [assembly: AssemblyCopyright("Copyright © 2016 rensoft")]
 [assembly: AssemblyTrademark("")]
