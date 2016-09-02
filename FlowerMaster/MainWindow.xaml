@@ -643,6 +643,13 @@
                             Height="30"
                                     Click="btnFriendViewer_Click"
                             Content="好友探秘"/>
+                            <Button x:Name="btnLocalCache"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Margin="110,335,0,0"
+                            Width="75"
+                            Height="30"
+                            Content="本地缓存"/>
                             <Label FontSize="16px"
                            FontWeight="Bold"
                            VerticalAlignment="Top"
