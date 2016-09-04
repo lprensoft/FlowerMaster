@@ -61,41 +61,85 @@ namespace FlowerMaster
             if (File.Exists(file))
             {
                 rtLog.Document.Blocks.Clear();
-                using (StreamReader sr = new StreamReader(file))
+                try
                 {
-                    string line = sr.ReadLine();
-                    while (line != null)
+                    using (StreamReader sr = new StreamReader(file))
                     {
-                        string[] txt = line.Split('|');
-                        if (txt.Count() != 2)
+                        string line = sr.ReadLine();
+                        while (line != null)
                         {
-                            line = sr.ReadLine();
-                            continue;
-                        }
-                        Paragraph p = new Paragraph();
-                        Run timeText = new Run() { Text = txt[0] + " ", Foreground = new SolidColorBrush(Colors.Gray) };
-                        p.Inlines.Add(timeText);
-                        Run logText = new Run() { Text = "扭蛋获得：" };
-                        p.Inlines.Add(logText);
-                        if (txt[1].IndexOf(",") != -1)
-                        {
-                            string[] cards = txt[1].Split(',');
-                            if (chkFilter.IsChecked.HasValue && (bool)chkFilter.IsChecked && cards.Count() != 11)
+                            bool foundSeed = false;
+                            string[] txt = line.Split('|');
+                            if (txt.Count() != 2)
                             {
                                 line = sr.ReadLine();
                                 continue;
                             }
-                            for (int i=0; i<cards.Count(); i++)
+                            Paragraph p = new Paragraph();
+                            Run timeText = new Run() { Text = txt[0] + " ", Foreground = new SolidColorBrush(Colors.Gray) };
+                            p.Inlines.Add(timeText);
+                            Run logText = new Run() { Text = "扭蛋获得：" };
+                            p.Inlines.Add(logText);
+                            if (txt[1].IndexOf(",") != -1)
                             {
-                                string cardStr = DataUtil.Cards.GetName(int.Parse(cards[i]));
+                                string[] cards = txt[1].Split(',');
+                                if (chkFilter.IsChecked.HasValue && (bool)chkFilter.IsChecked && cards.Count() != 11)
+                                {
+                                    line = sr.ReadLine();
+                                    continue;
+                                }
+                                for (int i = 0; i < cards.Count(); i++)
+                                {
+                                    string cardStr = DataUtil.Cards.GetName(int.Parse(cards[i]));
+                                    Color color = Colors.White;
+                                    if (cardStr.IndexOf("★1") != -1)
+                                    {
+                                        color = Colors.LightSteelBlue;
+                                        foundSeed = true;
+                                    }
+                                    else if (cardStr.IndexOf("★2") != -1)
+                                    {
+                                        color = Colors.Aquamarine;
+                                        foundSeed = true;
+                                    }
+                                    else if (cardStr.IndexOf("★3") != -1)
+                                    {
+                                        color = Colors.Chocolate;
+                                    }
+                                    else if (cardStr.IndexOf("★4") != -1)
+                                    {
+                                        color = Colors.Silver;
+                                    }
+                                    else if (cardStr.IndexOf("★5") != -1)
+                                    {
+                                        color = Colors.Gold;
+                                    }
+                                    else if (cardStr.IndexOf("★6") != -1)
+                                    {
+                                        color = Colors.Violet;
+                                    }
+                                    Run cardText = new Run() { Text = cardStr, Foreground = new SolidColorBrush(color) };
+                                    p.Inlines.Add(cardText);
+                                    if (i != cards.Count() - 1)
+                                    {
+                                        Run Text = new Run() { Text = "、" };
+                                        p.Inlines.Add(Text);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                string cardStr = DataUtil.Cards.GetName(int.Parse(txt[1]));
                                 Color color = Colors.White;
                                 if (cardStr.IndexOf("★1") != -1)
                                 {
                                     color = Colors.LightSteelBlue;
+                                    foundSeed = true;
                                 }
                                 else if (cardStr.IndexOf("★2") != -1)
                                 {
                                     color = Colors.Aquamarine;
+                                    foundSeed = true;
                                 }
                                 else if (cardStr.IndexOf("★3") != -1)
                                 {
@@ -115,48 +159,21 @@ namespace FlowerMaster
                                 }
                                 Run cardText = new Run() { Text = cardStr, Foreground = new SolidColorBrush(color) };
                                 p.Inlines.Add(cardText);
-                                if (i != cards.Count() - 1)
-                                {
-                                    Run Text = new Run() { Text = "、" };
-                                    p.Inlines.Add(Text);
-                                }
                             }
+                            if (chkFilter.IsChecked.HasValue && (bool)chkFilter.IsChecked && foundSeed)
+                            {
+                                line = sr.ReadLine();
+                                continue;
+                            }
+                            p.LineHeight = 3;
+                            rtLog.Document.Blocks.Add(p);
+                            line = sr.ReadLine();
                         }
-                        else
-                        {
-                            string cardStr = DataUtil.Cards.GetName(int.Parse(txt[1]));
-                            Color color = Colors.White;
-                            if (cardStr.IndexOf("★1") != -1)
-                            {
-                                color = Colors.LightSteelBlue;
-                            }
-                            else if (cardStr.IndexOf("★2") != -1)
-                            {
-                                color = Colors.Aquamarine;
-                            }
-                            else if (cardStr.IndexOf("★3") != -1)
-                            {
-                                color = Colors.Chocolate;
-                            }
-                            else if (cardStr.IndexOf("★4") != -1)
-                            {
-                                color = Colors.Silver;
-                            }
-                            else if (cardStr.IndexOf("★5") != -1)
-                            {
-                                color = Colors.Gold;
-                            }
-                            else if (cardStr.IndexOf("★6") != -1)
-                            {
-                                color = Colors.Violet;
-                            }
-                            Run cardText = new Run() { Text = cardStr, Foreground = new SolidColorBrush(color) };
-                            p.Inlines.Add(cardText);
-                        }
-                        p.LineHeight = 3;
-                        rtLog.Document.Blocks.Add(p);
-                        line = sr.ReadLine();
                     }
+                }
+                catch
+                {
+                    MessageBox.Show("加载扭蛋日志发生错误，请检查文件是否正确或者存在。", "加载失败", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

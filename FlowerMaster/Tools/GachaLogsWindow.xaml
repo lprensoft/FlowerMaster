@@ -34,7 +34,7 @@
                   Margin="235,5,0,0"
                   IsChecked="True"
                   Click="chkFilter_Click"
-                  Content="不显示种子连扭结果"/>
+                  Content="过滤种子扭蛋结果"/>
         <RichTextBox x:Name="rtLog"
                      Grid.Row="1"
                      VerticalScrollBarVisibility="Visible"
