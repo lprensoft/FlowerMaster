@@ -131,7 +131,7 @@ namespace FlowerMaster.Models
                     {
                         if (showRank && c.rare >= 5 && c.rank >= 0)
                         {
-                            return "★" + c.rare.ToString() + c.name + "[" + c.rank.ToString() + "档]";
+                            return c.id > 400000 ? "★" + c.rare.ToString() + c.name + "[" + c.rank.ToString() + "级]" : "★" + c.rare.ToString() + c.name + "[" + c.rank.ToString() + "档]";
                         }
                         else
                         {
