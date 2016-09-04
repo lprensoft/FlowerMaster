@@ -3,6 +3,11 @@
 团长助理（FlowerMaster）是DMM游戏《美少女花骑士》适配的浏览器应用程序。
 在载入游戏的同时，对部分游戏数据情报做出显示，并提供日志记录、提醒设置等一系列辅助功能。
 
+### 下载地址
+
+* [Github](https://github.com/lprensoft/FlowerMaster/releases)
+* [Baidu](http://pan.baidu.com/s/1jIpqEea)
+
 ### 主要功能
 
 * 游戏日志与扭蛋日志记录功能。
