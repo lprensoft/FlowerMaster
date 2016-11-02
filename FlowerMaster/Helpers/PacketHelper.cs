@@ -447,13 +447,20 @@ namespace FlowerMaster.Helpers
             JObject json = pack.data;
             string log = "收获花盆，获得：";
             JArray items = (JArray)json["gardenHarvestItemList"];
+            int gold = 0;
+            int ap = 0;
             foreach (JObject item in items)
             {
                 if (item["itemId"].ToString() == "1")
                 {
-                    log += "金币" + item["amount"].ToString();
+                    gold += int.Parse(item["amount"].ToString());
+                }
+                else if (item["staminaRecoveryNum"] != null)
+                {
+                    ap += int.Parse(item["staminaRecoveryNum"].ToString());
                 }
             }
+            log += "金币" + gold.ToString();
             JArray plants = (JArray)json["userGardenPlantPotList"];
             foreach (JObject plant in plants)
             {
@@ -463,11 +470,15 @@ namespace FlowerMaster.Helpers
                     if (DataUtil.Game.player.plantTime < pTime) DataUtil.Game.player.plantTime = pTime;
                 }
             }
-            if (json["staminaRevoceryNum"].ToString() != "0")
+            if (json["staminaRevoceryNum"] != null && json["staminaRevoceryNum"].ToString() != "0")
             {
                 log += "，体力" + json["staminaRevoceryNum"].ToString();
-                DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["stamina"], json["staminaTime"]);
             }
+            else if (ap > 0)
+            {
+                log += "，体力" + ap.ToString();
+            }
+            DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["stamina"], json["staminaTime"]);
             UpdateTimeLeft();
             MiscHelper.AddLog(log, MiscHelper.LogType.Search);
             return E_SUCCESS;
