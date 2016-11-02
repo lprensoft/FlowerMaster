@@ -456,7 +456,7 @@ namespace FlowerMaster.Helpers
                 {
                     gold += int.Parse(item["amount"].ToString());
                 }
-                else if (item["staminaRecoveryNum"] != null)
+                if (item["staminaRecoveryNum"] != null)
                 {
                     ap += int.Parse(item["staminaRecoveryNum"].ToString());
                 }
