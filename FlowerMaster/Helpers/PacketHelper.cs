@@ -78,8 +78,9 @@ namespace FlowerMaster.Helpers
                 pack.funcApi = s.Request.PathAndQuery.Substring(s.Request.PathAndQuery.IndexOf("/social/") + 7);
                 pack.funcApi = pack.funcApi.Substring(0, pack.funcApi.IndexOf("?"));
             }
-            else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
-                && s.Request.PathAndQuery.IndexOf("/rpc?") != -1)
+            else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
+                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18) 
+                    && s.Request.PathAndQuery.IndexOf("/rpc?") != -1)
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("?"));
                 pack.funcApi = pack.funcUrl;
@@ -136,8 +137,8 @@ namespace FlowerMaster.Helpers
                     }
                 }
                 //处理美服/台服用户信息-获取用户昵称
-                else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan) 
-                    && pack.funcUrl.IndexOf("/rpc") != -1)
+                else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
+                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18) && pack.funcUrl.IndexOf("/rpc") != -1)
                 {
                     return ProcessNutakuUserInfo(pack);
                 }
@@ -354,11 +355,11 @@ namespace FlowerMaster.Helpers
             DataUtil.Game.player.friendId = json["user"]["searchUserId"] != null ? json["user"]["searchUserId"].ToString() : "-";
             DataUtil.Game.CalcPlayerMaxAPExp();
             DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP;
-            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American)
+            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
             {
                 DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_A;
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
             {
                 DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_T;
             }
