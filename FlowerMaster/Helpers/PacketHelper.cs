@@ -251,6 +251,14 @@ namespace FlowerMaster.Helpers
                     {
                         return ProcessGachaResult(pack);
                     }
+                    //----- DEBUG处理包 -----
+#if DEBUG
+                    //处理蛋池卡角色名列表
+                    else if (pack.funcApi == "/gacha/getPremiumGachaLineup")
+                    {
+                        return ProcessGachaLineup(pack);
+                    }
+#endif
                     //其他不须解析的封包，只返回E_FAILED结果
                     else
                     {
@@ -896,6 +904,24 @@ namespace FlowerMaster.Helpers
                 }
                 MiscHelper.AddGachaLog(cards);
                 LogsHelper.LogGacha(list);
+            }
+            return E_SUCCESS;
+        }
+
+        /// <summary>
+        /// 处理扭蛋角色列表信息
+        /// </summary>
+        /// <param name="pack">封包数据结构体</param>
+        /// <returns>处理结果标志</returns>
+        private static int ProcessGachaLineup(PacketInfo pack)
+        {
+            JArray cards = (JArray)pack.data["masterGachaItemList"];
+            if (cards.Count > 0)
+            {
+                foreach (JObject card in cards)
+                {
+                    MiscHelper.AddLog(card["itemId"].ToString() + "=" + card["name"].ToString(), MiscHelper.LogType.Debug);
+                }
             }
             return E_SUCCESS;
         }
