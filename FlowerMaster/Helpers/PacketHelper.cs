@@ -920,7 +920,7 @@ namespace FlowerMaster.Helpers
             {
                 foreach (JObject card in cards)
                 {
-                    MiscHelper.AddLog(card["itemId"].ToString() + "=" + card["name"].ToString(), MiscHelper.LogType.Debug);
+                    LogsHelper.LogDebug(card["itemId"].ToString() + "=" + card["name"].ToString());
                 }
             }
             return E_SUCCESS;
