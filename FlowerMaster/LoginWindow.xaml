@@ -41,8 +41,10 @@
                   SelectionChanged="cbGameServer_SelectionChanged">
             <ComboBoxItem Content="日服-通常版"/>
             <ComboBoxItem Content="日服-R18版"/>
-            <ComboBoxItem Content="美服"/>
-            <ComboBoxItem Content="台服"/>
+            <ComboBoxItem Content="美服-通常版"/>
+            <ComboBoxItem Content="美服-R18版"/>
+            <ComboBoxItem Content="台服-通常版"/>
+            <ComboBoxItem Content="台服-R18版"/>
         </ComboBox>
         <Label Grid.Column="0"
                Grid.Row="0"

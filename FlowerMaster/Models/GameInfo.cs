@@ -126,7 +126,9 @@ namespace FlowerMaster.Models
             Japan = 0,
             JapanR18 = 1,
             American = 2,
-            Taiwan = 3,
+            AmericanR18 = 3,
+            Taiwan = 4,
+            TaiwanR18 = 5,
         };
 
         /// <summary>
@@ -192,8 +194,10 @@ namespace FlowerMaster.Models
             _gameServers = new Dictionary<int, string>();
             _gameServers.Add((int)ServersList.Japan, "http://www.dmm.com/netgame_s/flower/");
             _gameServers.Add((int)ServersList.JapanR18, "http://www.dmm.co.jp/netgame_s/flower-x/");
-            _gameServers.Add((int)ServersList.American, "http://www.nutaku.net/games/flower-knight-girl/");
-            _gameServers.Add((int)ServersList.Taiwan, "http://www.samurai-games.net/games/flowerknightgirlx/");
+            _gameServers.Add((int)ServersList.American, "http://www.nutaku.com/games/flower-knight-girl-online/");
+            _gameServers.Add((int)ServersList.AmericanR18, "http://www.nutaku.net/games/flower-knight-girl/");
+            _gameServers.Add((int)ServersList.Taiwan, "http://www.samurai-games.com/games/flowerknightgirl/");
+            _gameServers.Add((int)ServersList.TaiwanR18, "http://www.samurai-games.net/games/flowerknightgirlx/");
         }
 
         /// <summary>
@@ -204,8 +208,10 @@ namespace FlowerMaster.Models
             _gameUrls = new Dictionary<int, string>();
             _gameUrls.Add((int)ServersList.Japan, "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=738496/");
             _gameUrls.Add((int)ServersList.JapanR18, "http://www.dmm.co.jp/netgame/social/-/gadgets/=/app_id=329993/");
-            _gameUrls.Add((int)ServersList.American, "http://www.nutaku.net/games/flower-knight-girl/play/");
-            _gameUrls.Add((int)ServersList.Taiwan, "https://www.samurai-games.net/login/?title_id=flowerknightgirlx&notification=0&token=e7aa0c35c2f81a4b00f0008e2c4df0d5&invite_id=&appParams=");
+            _gameUrls.Add((int)ServersList.American, "http://www.nutaku.com/games/flower-knight-girl-online/play/");
+            _gameUrls.Add((int)ServersList.AmericanR18, "http://www.nutaku.net/games/flower-knight-girl/play/");
+            _gameUrls.Add((int)ServersList.Taiwan, "https://www.samurai-games.com/login/?title_id=flowerknightgirl&notification=0&notification=0&token=0dab7827bc21fa7714c07a78826292e8&invite_id=&appParams=");
+            _gameUrls.Add((int)ServersList.TaiwanR18, "https://www.samurai-games.net/login/?title_id=flowerknightgirlx&notification=0&notification=0&token=ad4671217ec9d4ece7ff9fcec1d47bf8&invite_id=&appParams=");
         }
 
         /// <summary>
@@ -217,7 +223,9 @@ namespace FlowerMaster.Models
             _gameNewsUrls.Add((int)ServersList.Japan, "http://s3-ap-northeast-1.amazonaws.com/flower-help/index.html");
             _gameNewsUrls.Add((int)ServersList.JapanR18, "http://s3-ap-northeast-1.amazonaws.com/flower-help/index.html");
             _gameNewsUrls.Add((int)ServersList.American, "http://cdn.flowerknight.nutaku.net/index.html");
+            _gameNewsUrls.Add((int)ServersList.AmericanR18, "http://cdn.flowerknight.nutaku.net/index.html");
             _gameNewsUrls.Add((int)ServersList.Taiwan, "http://web-1699033708.ap-northeast-1.elb.amazonaws.com/flower-help/index.html");
+            _gameNewsUrls.Add((int)ServersList.TaiwanR18, "http://web-1699033708.ap-northeast-1.elb.amazonaws.com/flower-help/index.html");
         }
 
         /// <summary>

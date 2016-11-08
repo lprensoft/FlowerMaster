@@ -241,11 +241,11 @@ namespace FlowerMaster
 
             cbCapFormat.SelectedIndex = (int)DataUtil.Config.sysConfig.capFormat;
 
-            if (DataUtil.Config.sysConfig.gameServer == 2)
+            if (DataUtil.Config.sysConfig.gameServer == (int)GameInfo.ServersList.American || DataUtil.Config.sysConfig.gameServer == (int)GameInfo.ServersList.AmericanR18)
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSAmerican;
             }
-            else if (DataUtil.Config.sysConfig.gameServer == 3)
+            else if (DataUtil.Config.sysConfig.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Config.sysConfig.gameServer == (int)GameInfo.ServersList.TaiwanR18)
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSTaiwan;
             }
@@ -390,7 +390,8 @@ namespace FlowerMaster
                     }));
                 }*/
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
+                || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
             {
                 if (s.Request.PathAndQuery.IndexOf("/rpc?st=") != -1)
                 {
@@ -509,11 +510,11 @@ namespace FlowerMaster
 
             DataUtil.Config.sysConfig.capFormat = (SysConfig.ScreenShotFormat)cbCapFormat.SelectedIndex;
 
-            if (cbGameServer.SelectedIndex == 2)
+            if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.American || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.AmericanR18)
             {
                 DataUtil.Config.sysConfig.userCSSAmerican = tbCssStyle.Text;
             }
-            else if (cbGameServer.SelectedIndex == 3)
+            else if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.Taiwan || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.TaiwanR18)
             {
                 DataUtil.Config.sysConfig.userCSSTaiwan = tbCssStyle.Text;
             }
@@ -678,7 +679,8 @@ namespace FlowerMaster
 
             //抽取Flash，应用CSS样式
             IHTMLElement gameFrame = null;
-            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
+                || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
             {
                 gameFrame = document.getElementById("game_frame");
                 if (gameFrame != null)
@@ -700,11 +702,11 @@ namespace FlowerMaster
                 var target = gameFrame?.document as HTMLDocument;
                 if (target != null)
                 {
-                    if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American)
+                    if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
                     {
                         target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSSAmerican;
                     }
-                    else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+                    else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
                     {
                         target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSSTaiwan;
                     }
@@ -722,7 +724,8 @@ namespace FlowerMaster
             {
                 IHTMLElement username = null;
                 IHTMLElement password = null;
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18 
+                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
                 {
                     username = document.getElementById("s-email");
                     password = document.getElementById("s-password");
@@ -747,7 +750,8 @@ namespace FlowerMaster
                 }
 
                 //点击登录按钮
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18 
+                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
                 {
                     IHTMLElement autoLogin = document.getElementById("autoLogin");
                     IHTMLElement login = document.getElementById("login-button");
@@ -792,11 +796,11 @@ namespace FlowerMaster
         private async void btnReset_Click(object sender, RoutedEventArgs e)
         {
             tbCssStyle.Text = SysConfig.DefaultCSSJapan;
-            if (cbGameServer.SelectedIndex == 2)
+            if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.American || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.AmericanR18)
             {
                 tbCssStyle.Text = SysConfig.DefaultCSSAmerican;
             }
-            else if (cbGameServer.SelectedIndex == 3)
+            else if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.Taiwan || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.TaiwanR18)
             {
                 tbCssStyle.Text = SysConfig.DefaultCSSTaiwan;
             }
@@ -877,11 +881,11 @@ namespace FlowerMaster
         private void cbGameServer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!IsLoaded) return;
-            if (cbGameServer.SelectedIndex == 2)
+            if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.American || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.AmericanR18)
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSAmerican;
             }
-            else if (cbGameServer.SelectedIndex == 3)
+            else if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.Taiwan || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.TaiwanR18)
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSTaiwan;
             }

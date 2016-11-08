@@ -78,8 +78,9 @@ namespace FlowerMaster.Helpers
                 pack.funcApi = s.Request.PathAndQuery.Substring(s.Request.PathAndQuery.IndexOf("/social/") + 7);
                 pack.funcApi = pack.funcApi.Substring(0, pack.funcApi.IndexOf("?"));
             }
-            else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
-                && s.Request.PathAndQuery.IndexOf("/rpc?") != -1)
+            else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
+                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18) 
+                    && s.Request.PathAndQuery.IndexOf("/rpc?") != -1)
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("?"));
                 pack.funcApi = pack.funcUrl;
@@ -136,8 +137,8 @@ namespace FlowerMaster.Helpers
                     }
                 }
                 //处理美服/台服用户信息-获取用户昵称
-                else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan) 
-                    && pack.funcUrl.IndexOf("/rpc") != -1)
+                else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
+                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18) && pack.funcUrl.IndexOf("/rpc") != -1)
                 {
                     return ProcessNutakuUserInfo(pack);
                 }
@@ -250,6 +251,14 @@ namespace FlowerMaster.Helpers
                     {
                         return ProcessGachaResult(pack);
                     }
+                    //----- DEBUG处理包 -----
+#if DEBUG
+                    //处理蛋池卡角色名列表
+                    else if (pack.funcApi == "/gacha/getPremiumGachaLineup")
+                    {
+                        return ProcessGachaLineup(pack);
+                    }
+#endif
                     //其他不须解析的封包，只返回E_FAILED结果
                     else
                     {
@@ -354,11 +363,11 @@ namespace FlowerMaster.Helpers
             DataUtil.Game.player.friendId = json["user"]["searchUserId"] != null ? json["user"]["searchUserId"].ToString() : "-";
             DataUtil.Game.CalcPlayerMaxAPExp();
             DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP;
-            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American)
+            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
             {
                 DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_A;
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan)
+            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
             {
                 DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_T;
             }
@@ -447,13 +456,20 @@ namespace FlowerMaster.Helpers
             JObject json = pack.data;
             string log = "收获花盆，获得：";
             JArray items = (JArray)json["gardenHarvestItemList"];
+            int gold = 0;
+            int ap = 0;
             foreach (JObject item in items)
             {
                 if (item["itemId"].ToString() == "1")
                 {
-                    log += "金币" + item["amount"].ToString();
+                    gold += int.Parse(item["amount"].ToString());
+                }
+                if (item["staminaRecoveryNum"] != null)
+                {
+                    ap += int.Parse(item["staminaRecoveryNum"].ToString());
                 }
             }
+            log += "金币" + gold.ToString();
             JArray plants = (JArray)json["userGardenPlantPotList"];
             foreach (JObject plant in plants)
             {
@@ -463,11 +479,15 @@ namespace FlowerMaster.Helpers
                     if (DataUtil.Game.player.plantTime < pTime) DataUtil.Game.player.plantTime = pTime;
                 }
             }
-            if (json["staminaRevoceryNum"].ToString() != "0")
+            if (json["staminaRevoceryNum"] != null && json["staminaRevoceryNum"].ToString() != "0")
             {
                 log += "，体力" + json["staminaRevoceryNum"].ToString();
-                DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["stamina"], json["staminaTime"]);
             }
+            else if (ap > 0)
+            {
+                log += "，体力" + ap.ToString();
+            }
+            DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["stamina"], json["staminaTime"]);
             UpdateTimeLeft();
             MiscHelper.AddLog(log, MiscHelper.LogType.Search);
             return E_SUCCESS;
@@ -884,6 +904,24 @@ namespace FlowerMaster.Helpers
                 }
                 MiscHelper.AddGachaLog(cards);
                 LogsHelper.LogGacha(list);
+            }
+            return E_SUCCESS;
+        }
+
+        /// <summary>
+        /// 处理扭蛋角色列表信息
+        /// </summary>
+        /// <param name="pack">封包数据结构体</param>
+        /// <returns>处理结果标志</returns>
+        private static int ProcessGachaLineup(PacketInfo pack)
+        {
+            JArray cards = (JArray)pack.data["masterGachaItemList"];
+            if (cards.Count > 0)
+            {
+                foreach (JObject card in cards)
+                {
+                    MiscHelper.AddLog(card["itemId"].ToString() + "=" + card["name"].ToString(), MiscHelper.LogType.Debug);
+                }
             }
             return E_SUCCESS;
         }
