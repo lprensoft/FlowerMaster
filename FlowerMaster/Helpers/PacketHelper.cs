@@ -316,6 +316,8 @@ namespace FlowerMaster.Helpers
             if (json["data"]["nickname"] != null)
             {
                 DataUtil.Game.player.name = json["data"]["nickname"].ToString();
+                DataUtil.Game.isOnline = true; //TODO: 临时增加
+                DataUtil.Game.canAuto = true; //TODO: 临时增加
                 mainWindow.Dispatcher.Invoke(new Action(() =>
                 {
                     mainWindow.notifyIcon.Text = "团长助理 - " + DataUtil.Game.player.name;
@@ -323,7 +325,6 @@ namespace FlowerMaster.Helpers
                     {
                         mainWindow.Title += " - " + DataUtil.Game.player.name;
                     }
-                    DataUtil.Game.isOnline = true; //TODO: 临时增加
                 }));
                 return E_SUCCESS;
             }
