@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text;
 using System.Threading;
 
 namespace FlowerMaster.Helpers
@@ -66,6 +67,17 @@ namespace FlowerMaster.Helpers
             pack.requestUrl = s.Request.PathAndQuery;
             pack.rawData = s.Response.BodyAsString;
 
+#if DEBUG
+            if (pack.rawData.Substring(0, 1) != "[" && pack.rawData.Substring(0, 1) != "{")
+            {
+                string compressString = "";
+                byte[] compressBeforeByte = Encoding.Default.GetBytes(s.Response.BodyAsString);
+                byte[] compressAfterByte = MiscHelper.Decompress(compressBeforeByte);
+                compressString = Encoding.GetEncoding("UTF-8").GetString(compressAfterByte);
+                MiscHelper.AddLog(s.Request.PathAndQuery + "\r\n" + compressString, MiscHelper.LogType.Debug);
+            }
+#endif
+
             if (s.Request.PathAndQuery.IndexOf("/api/v1/") != -1)
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("/api/") + 8);
@@ -108,9 +120,6 @@ namespace FlowerMaster.Helpers
                 return false;
             }
 
-#if DEBUG
-            MiscHelper.AddLog(pack.requestUrl + "\r\n" + pack.rawData, MiscHelper.LogType.Debug);
-#endif
             return true;
         }
 
@@ -314,6 +323,7 @@ namespace FlowerMaster.Helpers
                     {
                         mainWindow.Title += " - " + DataUtil.Game.player.name;
                     }
+                    DataUtil.Game.isOnline = true; //TODO: 临时增加
                 }));
                 return E_SUCCESS;
             }
