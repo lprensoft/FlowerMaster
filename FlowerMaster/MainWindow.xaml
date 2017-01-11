@@ -7,7 +7,7 @@
                       mc:Ignorable="d"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       GlowBrush="{DynamicResource AccentColorBrush}"
-                      Title="团长助理 1.42"
+                      Title="团长助理 1.43"
                       Height="740"
                       Width="1000"
                       ResizeMode="CanResizeWithGrip"
