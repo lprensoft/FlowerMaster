@@ -5,8 +5,10 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using System.Threading;
+using zlib;
 
 namespace FlowerMaster.Helpers
 {
@@ -68,13 +70,40 @@ namespace FlowerMaster.Helpers
             pack.rawData = s.Response.BodyAsString;
 
 #if DEBUG
-            if (pack.rawData.Substring(0, 1) != "[" && pack.rawData.Substring(0, 1) != "{")
+            if (pack.rawData.Substring(0, 1) != "[" && pack.rawData.Substring(0, 1) != "{" && pack.rawData.Substring(0, 1) == "x")
             {
-                string compressString = "";
-                byte[] compressBeforeByte = Encoding.Default.GetBytes(s.Response.BodyAsString);
-                byte[] compressAfterByte = MiscHelper.Decompress(compressBeforeByte);
-                compressString = Encoding.GetEncoding("UTF-8").GetString(compressAfterByte);
-                MiscHelper.AddLog(s.Request.PathAndQuery + "\r\n" + compressString, MiscHelper.LogType.Debug);
+                byte[] byteData = Encoding.Default.GetBytes(pack.rawData);
+                //string compressString = "";
+                //MemoryStream ms = new MemoryStream();
+                //ZOutputStream s1 = new ZOutputStream(ms);
+                //s1.Write(byteData, 0, byteData.Length);
+                //s1.Close();
+                //string compressString = Encoding.UTF8.GetString(ms.ToArray());
+
+                /*using (MemoryStream dms = new MemoryStream())
+                {
+                    using (MemoryStream cms = new MemoryStream(byteData))
+                    {
+                        using (System.IO.Compression.DeflateStream gzip = new System.IO.Compression.DeflateStream(cms, System.IO.Compression.CompressionMode.Decompress))
+                        {
+                            byte[] bytes = new byte[1024];
+                            int len = 0;
+                            //读取压缩流，同时会被解压
+                            while ((len = gzip.Read(bytes, 0, bytes.Length)) > 0)
+                            {
+                                dms.Write(bytes, 0, len);
+                            }
+                        }
+                    }
+                    compressString = Encoding.UTF8.GetString(dms.ToArray());
+                }*/
+
+                //string compressString = "";
+                //byte[] compressBeforeByte = Encoding.Default.GetBytes(s.Response.BodyAsString);
+                //byte[] compressAfterByte = MiscHelper.Decompress(compressBeforeByte);
+                //compressString = Encoding.GetEncoding("UTF-8").GetString(compressAfterByte);
+                MiscHelper.AddLog(s.Request.RequestLine + "\r\n" + pack.rawData, MiscHelper.LogType.Debug);
+                //MiscHelper.AddLog(compressString, MiscHelper.LogType.Debug);
             }
 #endif
 
@@ -316,8 +345,6 @@ namespace FlowerMaster.Helpers
             if (json["data"]["nickname"] != null)
             {
                 DataUtil.Game.player.name = json["data"]["nickname"].ToString();
-                DataUtil.Game.isOnline = true; //TODO: 临时增加
-                DataUtil.Game.canAuto = true; //TODO: 临时增加
                 mainWindow.Dispatcher.Invoke(new Action(() =>
                 {
                     mainWindow.notifyIcon.Text = "团长助理 - " + DataUtil.Game.player.name;
