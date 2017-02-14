@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
-using System.Threading;
 using zlib;
 
 namespace FlowerMaster.Helpers
@@ -56,7 +55,28 @@ namespace FlowerMaster.Helpers
                 return E_FALT_ERROR;
             }
         }
-        
+
+        /// <summary>
+        /// 对日服数据包的内容进行解压以及转码
+        /// <para>源数据→zlib解压→base64转码→json数据</para>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        private static string DecryptData(byte[] source)
+        {
+            MemoryStream resultStream = new MemoryStream();
+            ZOutputStream outStream = new ZOutputStream(resultStream);
+            outStream.Write(source, 0, source.Length);
+            outStream.Flush();
+            outStream.finish();
+            byte[] buffer = new byte[resultStream.Length];
+            resultStream.Position = 0;
+            resultStream.Read(buffer, 0, buffer.Length);
+            resultStream.Close();
+            outStream.Close();
+            return Encoding.UTF8.GetString(Convert.FromBase64String(Encoding.UTF8.GetString(buffer)));
+        }
+
         /// <summary>
         /// 将Nekoxy数据包打包成封包结构体
         /// </summary>
@@ -69,48 +89,14 @@ namespace FlowerMaster.Helpers
             pack.requestUrl = s.Request.PathAndQuery;
             pack.rawData = s.Response.BodyAsString;
 
-#if DEBUG
-            if (pack.rawData.Substring(0, 1) != "[" && pack.rawData.Substring(0, 1) != "{" && pack.rawData.Substring(0, 1) == "x")
-            {
-                byte[] byteData = Encoding.Default.GetBytes(pack.rawData);
-                //string compressString = "";
-                //MemoryStream ms = new MemoryStream();
-                //ZOutputStream s1 = new ZOutputStream(ms);
-                //s1.Write(byteData, 0, byteData.Length);
-                //s1.Close();
-                //string compressString = Encoding.UTF8.GetString(ms.ToArray());
-
-                /*using (MemoryStream dms = new MemoryStream())
-                {
-                    using (MemoryStream cms = new MemoryStream(byteData))
-                    {
-                        using (System.IO.Compression.DeflateStream gzip = new System.IO.Compression.DeflateStream(cms, System.IO.Compression.CompressionMode.Decompress))
-                        {
-                            byte[] bytes = new byte[1024];
-                            int len = 0;
-                            //读取压缩流，同时会被解压
-                            while ((len = gzip.Read(bytes, 0, bytes.Length)) > 0)
-                            {
-                                dms.Write(bytes, 0, len);
-                            }
-                        }
-                    }
-                    compressString = Encoding.UTF8.GetString(dms.ToArray());
-                }*/
-
-                //string compressString = "";
-                //byte[] compressBeforeByte = Encoding.Default.GetBytes(s.Response.BodyAsString);
-                //byte[] compressAfterByte = MiscHelper.Decompress(compressBeforeByte);
-                //compressString = Encoding.GetEncoding("UTF-8").GetString(compressAfterByte);
-                MiscHelper.AddLog(s.Request.RequestLine + "\r\n" + pack.rawData, MiscHelper.LogType.Debug);
-                //MiscHelper.AddLog(compressString, MiscHelper.LogType.Debug);
-            }
-#endif
-
             if (s.Request.PathAndQuery.IndexOf("/api/v1/") != -1)
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("/api/") + 8);
                 pack.funcApi = s.Request.PathAndQuery.Substring(s.Request.PathAndQuery.IndexOf("/api/") + 7);
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18)
+                {
+                    pack.rawData = DecryptData(s.Response.Body);
+                }
             }
             else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18)
                 && s.Request.PathAndQuery.IndexOf("/social/") != -1)
