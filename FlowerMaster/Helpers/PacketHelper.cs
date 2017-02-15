@@ -93,7 +93,8 @@ namespace FlowerMaster.Helpers
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("/api/") + 8);
                 pack.funcApi = s.Request.PathAndQuery.Substring(s.Request.PathAndQuery.IndexOf("/api/") + 7);
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18)
+                if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18) &&
+                    pack.rawData.Substring(0, 1) != "[" && pack.rawData.Substring(0, 1) != "{")
                 {
                     pack.rawData = DecryptData(s.Response.Body);
                 }
