@@ -31,6 +31,7 @@ namespace FlowerMaster
         private Timer timerCheck = null; //提醒检查计时器
         private Timer timerClock = null; //时钟计时器
         public Timer timerAuto = null; //自动推图定时器
+        public int autoGoLastConf = 0; //自动推图点击上次配置计数器
         public Timer timerNotify = null; //提醒计时器
 
         private IntPtr webHandle = IntPtr.Zero;
@@ -559,6 +560,12 @@ namespace FlowerMaster
                 return;
             }
             int x = 855, y = 545;
+            if (autoGoLastConf > 0)
+            {
+                x = 765;
+                y = 475;
+                autoGoLastConf--;
+            }
             IntPtr lParam = (IntPtr)((y << 16) | x); //坐标信息
             IntPtr wParam = IntPtr.Zero; // 附加的按键信息（如：Ctrl）
             const uint downCode = 0x201; // 鼠标左键按下

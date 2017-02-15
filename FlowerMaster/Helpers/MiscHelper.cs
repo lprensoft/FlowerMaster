@@ -14,6 +14,7 @@ using FlowerMaster.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using System.IO.Compression;
 
 namespace FlowerMaster.Helpers
 {
@@ -489,8 +490,9 @@ namespace FlowerMaster.Helpers
             if (modeSwitch && !DataUtil.Game.isAuto && DataUtil.Game.canAuto)
             {
                 DataUtil.Game.isAuto = true;
+                main.autoGoLastConf = 1 + 2000 / DataUtil.Config.sysConfig.autoGoTimeout;
                 main.timerAuto.Change(0, DataUtil.Config.sysConfig.autoGoTimeout);
-                MiscHelper.AddLog("开始自动推图...", MiscHelper.LogType.System);
+                AddLog("开始自动推图...", LogType.System);
                 if (!main.Dispatcher.CheckAccess())
                 {
                     main.Dispatcher.Invoke(new Action(() =>
@@ -507,7 +509,7 @@ namespace FlowerMaster.Helpers
             {
                 DataUtil.Game.isAuto = false;
                 main.timerAuto.Change(Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
-                MiscHelper.AddLog("自动推图已停止！", MiscHelper.LogType.System);
+                AddLog("自动推图已停止！", LogType.System);
                 if (!main.Dispatcher.CheckAccess())
                 {
                     main.Dispatcher.Invoke(new Action(() =>
@@ -551,6 +553,36 @@ namespace FlowerMaster.Helpers
                     main.timerNotify.Change(10000, 10000);
                 }
                 main.notifyIcon.ShowBalloonTip(timeout, title, content, tipIcon);
+            }
+        }
+
+        public static byte[] Decompress(byte[] data)
+        {
+            try
+            {
+                MemoryStream ms = new MemoryStream(data);
+                GZipStream zip = new GZipStream(ms, CompressionMode.Decompress, true);
+                MemoryStream msreader = new MemoryStream();
+                byte[] buffer = new byte[0x1000];
+                while (true)
+                {
+                    int reader = zip.Read(buffer, 0, buffer.Length);
+                    if (reader <= 0)
+                    {
+                        break;
+                    }
+                    msreader.Write(buffer, 0, reader);
+                }
+                zip.Close();
+                ms.Close();
+                msreader.Position = 0;
+                buffer = msreader.ToArray();
+                msreader.Close();
+                return buffer;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
         }
     }
