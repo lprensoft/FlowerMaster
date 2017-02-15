@@ -560,7 +560,7 @@ namespace FlowerMaster
                 return;
             }
             int x = 855, y = 545;
-            if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18) && autoGoLastConf > 0)
+            if (autoGoLastConf > 0)
             {
                 x = 765;
                 y = 475;
