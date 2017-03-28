@@ -490,7 +490,7 @@ namespace FlowerMaster.Helpers
             if (modeSwitch && !DataUtil.Game.isAuto && DataUtil.Game.canAuto)
             {
                 DataUtil.Game.isAuto = true;
-                main.autoGoLastConf = 1 + 2000 / DataUtil.Config.sysConfig.autoGoTimeout;
+                //main.autoGoLastConf = 1 + 2000 / DataUtil.Config.sysConfig.autoGoTimeout;
                 main.timerAuto.Change(0, DataUtil.Config.sysConfig.autoGoTimeout);
                 AddLog("开始自动推图...", LogType.System);
                 if (!main.Dispatcher.CheckAccess())

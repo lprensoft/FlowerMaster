@@ -384,7 +384,8 @@ namespace FlowerMaster.Helpers
         {
             JObject json = pack.data;
             if (json["user"] == null) return E_FAILED;
-            DataUtil.Game.player.lv = json["user"]["levelId"].ToString() != null ? int.Parse(json["user"]["levelId"].ToString()) : 0;
+            DataUtil.Game.isOnline = true;
+            DataUtil.Game.player.lv = json["user"]["levelId"].ToString() != null ? int.Parse(json["user"]["levelId"].ToString()) : 1;
             DataUtil.Game.player.friendId = json["user"]["searchUserId"] != null ? json["user"]["searchUserId"].ToString() : "-";
             DataUtil.Game.CalcPlayerMaxAPExp();
             DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP;
@@ -403,7 +404,6 @@ namespace FlowerMaster.Helpers
             DataUtil.Game.player.money = json["user"]["gameMoney"] != null ? int.Parse(json["user"]["gameMoney"].ToString()) : 0;
             DataUtil.Game.player.stone = json["user"]["chargeMoney"] != null ? int.Parse(json["user"]["chargeMoney"].ToString()) : 0;
             DataUtil.Game.player.exp = json["user"]["levelExperience"] != null ? int.Parse(json["user"]["levelExperience"].ToString()) : 0;
-            DataUtil.Game.isOnline = true;
             DataUtil.Game.notifyRecord.lastAP = DataUtil.Game.player.AP;
             DataUtil.Game.notifyRecord.lastBP = DataUtil.Game.player.BP;
             DataUtil.Game.notifyRecord.lastSP = DataUtil.Game.player.SP;
