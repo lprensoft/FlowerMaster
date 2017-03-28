@@ -716,11 +716,19 @@ namespace FlowerMaster.Helpers
             {
                 if (item["itemId"].ToString() == "10")
                 {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
+                    log += "中级装备种子×" + item["point"].ToString() + "，";
                 }
                 else if (item["itemId"].ToString() == "101")
                 {
-                    log += "生命结晶" + item["point"].ToString() + "，";
+                    log += "生命结晶×" + item["point"].ToString() + "，";
+                }
+                else if (item["itemId"].ToString() == "205")
+                {
+                    log += "特务勋章×" + item["point"].ToString() + "，";
+                }
+                else
+                {
+                    log += "未知物品[" + item["itemId"].ToString() + "]×" + item["point"].ToString() + "，";
                 }
             }
             items = (JArray)json["givingUserEventItemList"];
@@ -793,11 +801,19 @@ namespace FlowerMaster.Helpers
             {
                 if (item["itemId"].ToString() == "10")
                 {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
+                    log += "中级装备种子×" + item["point"].ToString() + "，";
                 }
                 else if (item["itemId"].ToString() == "101")
                 {
-                    log += "生命结晶" + item["point"].ToString() + "，";
+                    log += "生命结晶×" + item["point"].ToString() + "，";
+                }
+                else if (item["itemId"].ToString() == "205")
+                {
+                    log += "特务勋章×" + item["point"].ToString() + "，";
+                }
+                else
+                {
+                    log += "未知物品[" + item["itemId"].ToString() + "]×" + item["point"].ToString() + "，";
                 }
             }
             items = (JArray)json["givingUserEventItemList"];
@@ -886,11 +902,19 @@ namespace FlowerMaster.Helpers
             {
                 if (item["itemId"].ToString() == "10")
                 {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
+                    log += "中级装备种子×" + item["point"].ToString() + "，";
                 }
                 else if (item["itemId"].ToString() == "101")
                 {
-                    log += "生命结晶" + item["point"].ToString() + "，";
+                    log += "生命结晶×" + item["point"].ToString() + "，";
+                }
+                else if (item["itemId"].ToString() == "205")
+                {
+                    log += "特务勋章×" + item["point"].ToString() + "，";
+                }
+                else
+                {
+                    log += "未知物品[" + item["itemId"].ToString() + "]×" + item["point"].ToString() + "，";
                 }
             }
             log += (json["givingUserEventItemList"] as JArray).Count > 0 ? "活动物品" + (json["givingUserEventItemList"] as JArray).Count.ToString() + "，" : "";
