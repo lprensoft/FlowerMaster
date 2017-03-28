@@ -350,7 +350,6 @@ namespace FlowerMaster
         private void ProcessData(object data)
         {
             Session s = data as Session;
-            //LogsHelper.LogDebug("【请求】" + s.Request.RequestLine.URI + "\r\n【响应】" + s.Response.BodyAsString + "\r\n================================================================");
             if (s.Request.PathAndQuery.IndexOf("/api/v1/") != -1)
             {
                 PacketHelper.ProcessPacket(s);

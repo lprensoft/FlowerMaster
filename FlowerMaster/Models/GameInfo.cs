@@ -184,6 +184,8 @@ namespace FlowerMaster.Models
             this._isAuto = false;
             this._canAuto = false;
             this._serverTime = DateTime.Now;
+            player.spTime = this._serverTime;
+            player.oldSP = 3;
         }
 
         /// <summary>

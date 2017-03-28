@@ -275,8 +275,8 @@ namespace FlowerMaster.Models
         /// <summary>
         /// 默认抽取美服Flash的CSS样式
         /// </summary>
-        public const string DefaultCSSAmerican = "body {\r\n    margin:0;\r\n    overflow:hidden;\r\n}\r\n\r\n#externalContainer {\r\n    position:fixe" +
-                    "d;\r\n    left:50%;\r\n    top:0px;\r\n    margin-left:-480px;\r\n    z-index:1;\r\n}\r\n\r\n" +
+        public const string DefaultCSSAmerican = "body {\r\n    margin:0;\r\n    overflow:hidden;\r\n}\r\n\r\n#externalContainer {\r\n    position:rela" +
+                    "tive;\r\n    left:50%;\r\n    top:0px;\r\n    left:0px;\r\n    z-index:1;\r\n}\r\n\r\n" +
                     ".area-pickupgame,\r\n.area-menu\r\n{\r\n    display:none!important;\r\n}";
         /// <summary>
         /// 默认抽取台服Flash的CSS样式
