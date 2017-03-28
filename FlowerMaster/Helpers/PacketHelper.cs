@@ -170,6 +170,9 @@ namespace FlowerMaster.Helpers
                 //判断是否为游戏接口封包
                 else if (pack.funcUrl.IndexOf("/api/v1/") != -1)
                 {
+#if DEBUG
+                    LogsHelper.LogDebug("【请求】" + pack.funcApi + "\r\n【响应】" + pack.rawData + "\r\n================================================================");
+#endif
                     //更新服务器时间
                     if (pack.data["serverTime"] != null)
                     {
