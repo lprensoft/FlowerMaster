@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Controls;
 using System.Diagnostics;
 using Microsoft.Win32;
 using System.IO;
@@ -11,7 +10,6 @@ using SHDocVw;
 using System.Drawing;
 using System.Drawing.Imaging;
 using FlowerMaster.Models;
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.IO.Compression;
@@ -274,6 +272,52 @@ namespace FlowerMaster.Helpers
                 main.gameLog.ScrollToEnd();
                 LogsHelper.LogGame(logs.Substring(0, logs.Length - 1));
             }
+        }
+
+        /// <summary>
+        /// 解析处理用户点数物品日志信息
+        /// </summary>
+        /// <param name="items">物品Json数组</param>
+        /// <returns>返回解析日志文本</returns>
+        public static string ProcessUserPointItem(JArray items)
+        {
+            string log = "";
+            foreach (JObject item in items)
+            {
+                if (item["itemId"].ToString() == "10")
+                {
+                    log += "中级装备种子" + item["point"].ToString() + "，";
+                }
+                else if (item["itemId"].ToString() == "11")
+                {
+                    log += "上级装备种子" + item["point"].ToString() + "，";
+                }
+                else if (item["itemId"].ToString() == "89")
+                {
+                    log += "50%体力药" + item["point"].ToString() + "，";
+                }
+                else if (item["itemId"].ToString() == "101")
+                {
+                    log += "生命结晶" + item["point"].ToString() + "，";
+                }
+                else if (item["itemId"].ToString() == "144")
+                {
+                    log += "绊水晶" + item["point"].ToString() + "，";
+                }
+                else if (item["itemId"].ToString() == "171")
+                {
+                    log += "团长币" + item["point"].ToString() + "，";
+                }
+                else if (item["itemId"].ToString() == "205")
+                {
+                    log += "特务勋章" + item["point"].ToString() + "，";
+                }
+                else
+                {
+                    log += "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
+                }
+            }
+            return log;
         }
 
         /// <summary>

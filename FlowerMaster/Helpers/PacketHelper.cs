@@ -712,29 +712,7 @@ namespace FlowerMaster.Helpers
             log += (json["givingUserCharacterList"] as JArray).Count > 0 ? "角色" + (json["givingUserCharacterList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "装备" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
             JArray items = (JArray)json["givingUserPointItemList"];
-            foreach (JObject item in items)
-            {
-                if (item["itemId"].ToString() == "10")
-                {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "11")
-                {
-                    log += "上级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "101")
-                {
-                    log += "生命结晶" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "205")
-                {
-                    log += "特务勋章" + item["point"].ToString() + "，";
-                }
-                else
-                {
-                    log += "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
-                }
-            }
+            log += MiscHelper.ProcessUserPointItem(items);
             items = (JArray)json["givingUserEventItemList"];
             int itemAmount = 0;
             foreach (JObject item in items)
@@ -801,29 +779,7 @@ namespace FlowerMaster.Helpers
             log += (json["givingUserCharacterList"] as JArray).Count > 0 ? "角色" + (json["givingUserCharacterList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "装备" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
             JArray items = (JArray)json["givingUserPointItemList"];
-            foreach (JObject item in items)
-            {
-                if (item["itemId"].ToString() == "10")
-                {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "11")
-                {
-                    log += "上级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "101")
-                {
-                    log += "生命结晶" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "205")
-                {
-                    log += "特务勋章" + item["point"].ToString() + "，";
-                }
-                else
-                {
-                    log += "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
-                }
-            }
+            log += MiscHelper.ProcessUserPointItem(items);
             items = (JArray)json["givingUserEventItemList"];
             foreach (JObject item in items)
             {
@@ -906,29 +862,7 @@ namespace FlowerMaster.Helpers
             log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "装备" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserGiftList"] as JArray).Count > 0 ? "赠物" + (json["givingUserGiftList"] as JArray).Count.ToString() + "，" : "";
             JArray items = (JArray)json["givingUserPointItemList"];
-            foreach (JObject item in items)
-            {
-                if (item["itemId"].ToString() == "10")
-                {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "11")
-                {
-                    log += "上级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "101")
-                {
-                    log += "生命结晶" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "205")
-                {
-                    log += "特务勋章" + item["point"].ToString() + "，";
-                }
-                else
-                {
-                    log += "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
-                }
-            }
+            log += MiscHelper.ProcessUserPointItem(items);
             log += (json["givingUserEventItemList"] as JArray).Count > 0 ? "活动物品" + (json["givingUserEventItemList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserGachaTicketList"] as JArray).Count > 0 ? "扭蛋券" + (json["givingUserGachaTicketList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserGardenMakeoverItemList"] as JArray).Count > 0 ? "庭院物品" + (json["givingUserGardenMakeoverItemList"] as JArray).Count.ToString() + "，" : "";
