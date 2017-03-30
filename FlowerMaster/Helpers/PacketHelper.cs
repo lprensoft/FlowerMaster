@@ -803,13 +803,13 @@ namespace FlowerMaster.Helpers
             string dungeonType = "普通";
             switch (pack.funcApi)
             {
-                case "/dungeon/saveEventStageFailed":
+                case "/dungeon/saveEventStageDestroyed":
                     dungeonType = "活动";
                     break;
-                case "/dungeon/saveEncounterStageFailed":
+                case "/dungeon/saveEncounterStageDestroyed":
                     dungeonType = "隐藏";
                     break;
-                case "/dungeon/saveWhaleStageFailed":
+                case "/dungeon/saveWhaleStageDestroyed":
                     dungeonType = "鲸鱼";
                     break;
             }
