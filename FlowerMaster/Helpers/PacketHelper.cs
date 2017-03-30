@@ -234,10 +234,15 @@ namespace FlowerMaster.Helpers
                     {
                         return ProcessDungeonStageSuccess(pack);
                     }
-                    //副本失败信息
+                    //副本放弃信息
                     else if (pack.funcApi == "/dungeon/saveStageFailed" || pack.funcApi == "/dungeon/saveEventStageFailed" || pack.funcApi == "/dungeon/saveEncounterStageFailed" || pack.funcApi == "/dungeon/saveWhaleStageFailed")
                     {
                         return ProcessDungeonStageFailed(pack);
+                    }
+                    //副本失败信息
+                    else if (pack.funcApi == "/dungeon/saveStageDestroyed" || pack.funcApi == "/dungeon/saveEventStageDestroyed" || pack.funcApi == "/dungeon/saveEncounterStageDestroyed" || pack.funcApi == "/dungeon/saveWhaleStageDestroyed")
+                    {
+                        return ProcessDungeonStageDestroyed(pack);
                     }
                     //获取主页BOSS列表（副本失败检查）
                     else if (pack.funcApi == "/raidBoss/getRaidBossList")
@@ -747,7 +752,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 处理副本退出封包
+        /// 处理副本放弃封包
         /// </summary>
         /// <param name="pack">封包数据结构体</param>
         /// <returns>处理结果标志</returns>
@@ -790,6 +795,26 @@ namespace FlowerMaster.Helpers
             MiscHelper.ShowMapInfoButton(false);
             MiscHelper.SetAutoGo(false);
             UpdateTimeLeft();
+            return E_SUCCESS;
+        }
+
+        private static int ProcessDungeonStageDestroyed(PacketInfo pack)
+        {
+            string dungeonType = "普通";
+            switch (pack.funcApi)
+            {
+                case "/dungeon/saveEventStageFailed":
+                    dungeonType = "活动";
+                    break;
+                case "/dungeon/saveEncounterStageFailed":
+                    dungeonType = "隐藏";
+                    break;
+                case "/dungeon/saveWhaleStageFailed":
+                    dungeonType = "鲸鱼";
+                    break;
+            }
+            MiscHelper.AddLog("很遗憾，" + dungeonType + "副本进击失败了！", MiscHelper.LogType.Stage);
+            DataUtil.Game.canAuto = false;
             return E_SUCCESS;
         }
 
