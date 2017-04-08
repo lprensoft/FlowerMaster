@@ -277,47 +277,42 @@ namespace FlowerMaster.Helpers
         /// <summary>
         /// 解析处理用户点数物品日志信息
         /// </summary>
-        /// <param name="items">物品Json数组</param>
+        /// <param name="item">单个物品JSON数据</param>
         /// <returns>返回解析日志文本</returns>
-        public static string ProcessUserPointItem(JArray items)
+        public static string ProcessUserPointItem(JObject item)
         {
-            string log = "";
-            foreach (JObject item in items)
+            if (item["itemId"].ToString() == "10")
             {
-                if (item["itemId"].ToString() == "10")
-                {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "11")
-                {
-                    log += "上级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "89")
-                {
-                    log += "50%体力药" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "101")
-                {
-                    log += "生命结晶" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "144")
-                {
-                    log += "绊水晶" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "171")
-                {
-                    log += "团长币" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "205")
-                {
-                    log += "特务勋章" + item["point"].ToString() + "，";
-                }
-                else
-                {
-                    log += "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
-                }
+                return "中级装备种子" + item["point"].ToString() + "，";
             }
-            return log;
+            else if (item["itemId"].ToString() == "11")
+            {
+                return "上级装备种子" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "89")
+            {
+                return "50%体力药" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "101")
+            {
+                return "生命结晶" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "144")
+            {
+                return "绊水晶" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "171")
+            {
+                return "团长币" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "205")
+            {
+                return "特务勋章" + item["point"].ToString() + "，";
+            }
+            else
+            {
+                return "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
+            }
         }
 
         /// <summary>
