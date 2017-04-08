@@ -827,7 +827,6 @@ namespace FlowerMaster.Helpers
         {
             DataUtil.Game.canAuto = false;
             MiscHelper.ShowMapInfoButton(false);
-            DataUtil.Game.canAuto = false;
             MiscHelper.SetAutoGo(false);
             return E_SUCCESS;
         }
