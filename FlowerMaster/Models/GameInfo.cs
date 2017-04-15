@@ -142,8 +142,6 @@ namespace FlowerMaster.Models
         };
 
         public const int PLAYER_MAX_BP = 6; //玩家最大BP点数
-        public const int PLAYER_MAX_BP_A = 3; //玩家最大BP点数（美服）
-        public const int PLAYER_MAX_BP_T = 3; //玩家最大BP点数（台服）
         public const int PLAYER_MAX_SP = 3; //玩家最大探索点数
 
         public const int TIMEOUT_AP = 180; //AP回复时间，3分钟
