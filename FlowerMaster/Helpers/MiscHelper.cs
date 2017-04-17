@@ -309,6 +309,26 @@ namespace FlowerMaster.Helpers
             {
                 return "特务勋章" + item["point"].ToString() + "，";
             }
+            else if (item["itemId"].ToString() == "206")
+            {
+                return "★2水影秘石碎片" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "207")
+            {
+                return "★3水影秘石碎片" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "208")
+            {
+                return "★4水影秘石碎片" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "209")
+            {
+                return "★5水影秘石碎片" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "210")
+            {
+                return "★6水影秘石碎片" + item["point"].ToString() + "，";
+            }
             else
             {
                 return "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
