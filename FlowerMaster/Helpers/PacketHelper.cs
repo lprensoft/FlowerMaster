@@ -234,10 +234,15 @@ namespace FlowerMaster.Helpers
                     {
                         return ProcessDungeonStageSuccess(pack);
                     }
-                    //副本失败信息
+                    //副本放弃信息
                     else if (pack.funcApi == "/dungeon/saveStageFailed" || pack.funcApi == "/dungeon/saveEventStageFailed" || pack.funcApi == "/dungeon/saveEncounterStageFailed" || pack.funcApi == "/dungeon/saveWhaleStageFailed")
                     {
                         return ProcessDungeonStageFailed(pack);
+                    }
+                    //副本失败信息
+                    else if (pack.funcApi == "/dungeon/saveStageDestroyed" || pack.funcApi == "/dungeon/saveEventStageDestroyed" || pack.funcApi == "/dungeon/saveEncounterStageDestroyed" || pack.funcApi == "/dungeon/saveWhaleStageDestroyed")
+                    {
+                        return ProcessDungeonStageDestroyed(pack);
                     }
                     //获取主页BOSS列表（副本失败检查）
                     else if (pack.funcApi == "/raidBoss/getRaidBossList")
@@ -392,14 +397,6 @@ namespace FlowerMaster.Helpers
             DataUtil.Game.player.friendId = json["user"]["searchUserId"] != null ? json["user"]["searchUserId"].ToString() : "-";
             DataUtil.Game.CalcPlayerMaxAPExp();
             DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP;
-            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
-            {
-                DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_A;
-            }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
-            {
-                DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_T;
-            }
             DataUtil.Game.player.maxSP = GameInfo.PLAYER_MAX_SP;
             DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["user"]["stamina"], json["user"]["staminaTime"]);
             DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.BP, json["user"]["battlePoint"], json["user"]["battlePointTime"]);
@@ -714,26 +711,7 @@ namespace FlowerMaster.Helpers
             JArray items = (JArray)json["givingUserPointItemList"];
             foreach (JObject item in items)
             {
-                if (item["itemId"].ToString() == "10")
-                {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "11")
-                {
-                    log += "上级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "101")
-                {
-                    log += "生命结晶" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "205")
-                {
-                    log += "特务勋章" + item["point"].ToString() + "，";
-                }
-                else
-                {
-                    log += "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
-                }
+                log += MiscHelper.ProcessUserPointItem(item);
             }
             items = (JArray)json["givingUserEventItemList"];
             int itemAmount = 0;
@@ -769,7 +747,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 处理副本退出封包
+        /// 处理副本放弃封包
         /// </summary>
         /// <param name="pack">封包数据结构体</param>
         /// <returns>处理结果标志</returns>
@@ -803,26 +781,7 @@ namespace FlowerMaster.Helpers
             JArray items = (JArray)json["givingUserPointItemList"];
             foreach (JObject item in items)
             {
-                if (item["itemId"].ToString() == "10")
-                {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "11")
-                {
-                    log += "上级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "101")
-                {
-                    log += "生命结晶" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "205")
-                {
-                    log += "特务勋章" + item["point"].ToString() + "，";
-                }
-                else
-                {
-                    log += "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
-                }
+                log += MiscHelper.ProcessUserPointItem(item);
             }
             items = (JArray)json["givingUserEventItemList"];
             foreach (JObject item in items)
@@ -837,6 +796,26 @@ namespace FlowerMaster.Helpers
             return E_SUCCESS;
         }
 
+        private static int ProcessDungeonStageDestroyed(PacketInfo pack)
+        {
+            string dungeonType = "普通";
+            switch (pack.funcApi)
+            {
+                case "/dungeon/saveEventStageDestroyed":
+                    dungeonType = "活动";
+                    break;
+                case "/dungeon/saveEncounterStageDestroyed":
+                    dungeonType = "隐藏";
+                    break;
+                case "/dungeon/saveWhaleStageDestroyed":
+                    dungeonType = "鲸鱼";
+                    break;
+            }
+            MiscHelper.AddLog("很遗憾，" + dungeonType + "副本进击失败了！", MiscHelper.LogType.Stage);
+            DataUtil.Game.canAuto = false;
+            return E_SUCCESS;
+        }
+
         /// <summary>
         /// 处理主页BOSS列表封包
         /// </summary>
@@ -846,7 +825,6 @@ namespace FlowerMaster.Helpers
         {
             DataUtil.Game.canAuto = false;
             MiscHelper.ShowMapInfoButton(false);
-            DataUtil.Game.canAuto = false;
             MiscHelper.SetAutoGo(false);
             return E_SUCCESS;
         }
@@ -871,14 +849,7 @@ namespace FlowerMaster.Helpers
             log += json["givingUserGift"].ToString() != "" ? "赠物1，" : "";
             if (json["givingUserPointItem"].ToString() != "")
             {
-                if (json["givingUserPointItem"]["itemId"].ToString() == "10")
-                {
-                    log += "中级装备种子" + json["givingUserPointItem"]["point"].ToString() + "，";
-                }
-                else if (json["givingUserPointItem"]["itemId"].ToString() == "101")
-                {
-                    log += "生命结晶" + json["givingUserPointItem"]["point"].ToString() + "，";
-                }
+                log += MiscHelper.ProcessUserPointItem((JObject)json["givingUserPointItem"]);
             }
             log += json["givingUserEventItem"].ToString() != "" ? "活动物品1，" : "";
             log += json["givingUserGachaTicket"].ToString() != "" ? "扭蛋券1，" : "";
@@ -908,26 +879,7 @@ namespace FlowerMaster.Helpers
             JArray items = (JArray)json["givingUserPointItemList"];
             foreach (JObject item in items)
             {
-                if (item["itemId"].ToString() == "10")
-                {
-                    log += "中级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "11")
-                {
-                    log += "上级装备种子" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "101")
-                {
-                    log += "生命结晶" + item["point"].ToString() + "，";
-                }
-                else if (item["itemId"].ToString() == "205")
-                {
-                    log += "特务勋章" + item["point"].ToString() + "，";
-                }
-                else
-                {
-                    log += "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
-                }
+                log += MiscHelper.ProcessUserPointItem(item);
             }
             log += (json["givingUserEventItemList"] as JArray).Count > 0 ? "活动物品" + (json["givingUserEventItemList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserGachaTicketList"] as JArray).Count > 0 ? "扭蛋券" + (json["givingUserGachaTicketList"] as JArray).Count.ToString() + "，" : "";
