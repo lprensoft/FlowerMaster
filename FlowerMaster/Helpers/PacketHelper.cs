@@ -706,7 +706,10 @@ namespace FlowerMaster.Helpers
             log += (json["givingUserCharacterList"] as JArray).Count > 0 ? "角色" + (json["givingUserCharacterList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "装备" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
             JArray items = (JArray)json["givingUserPointItemList"];
-            log += MiscHelper.ProcessUserPointItem(items);
+            foreach (JObject item in items)
+            {
+                log += MiscHelper.ProcessUserPointItem(item);
+            }
             items = (JArray)json["givingUserEventItemList"];
             int itemAmount = 0;
             foreach (JObject item in items)
@@ -773,7 +776,10 @@ namespace FlowerMaster.Helpers
             log += (json["givingUserCharacterList"] as JArray).Count > 0 ? "角色" + (json["givingUserCharacterList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "装备" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
             JArray items = (JArray)json["givingUserPointItemList"];
-            log += MiscHelper.ProcessUserPointItem(items);
+            foreach (JObject item in items)
+            {
+                log += MiscHelper.ProcessUserPointItem(item);
+            }
             items = (JArray)json["givingUserEventItemList"];
             foreach (JObject item in items)
             {
@@ -816,7 +822,6 @@ namespace FlowerMaster.Helpers
         {
             DataUtil.Game.canAuto = false;
             MiscHelper.ShowMapInfoButton(false);
-            DataUtil.Game.canAuto = false;
             MiscHelper.SetAutoGo(false);
             return E_SUCCESS;
         }
@@ -841,14 +846,7 @@ namespace FlowerMaster.Helpers
             log += json["givingUserGift"].ToString() != "" ? "赠物1，" : "";
             if (json["givingUserPointItem"].ToString() != "")
             {
-                if (json["givingUserPointItem"]["itemId"].ToString() == "10")
-                {
-                    log += "中级装备种子" + json["givingUserPointItem"]["point"].ToString() + "，";
-                }
-                else if (json["givingUserPointItem"]["itemId"].ToString() == "101")
-                {
-                    log += "生命结晶" + json["givingUserPointItem"]["point"].ToString() + "，";
-                }
+                log += MiscHelper.ProcessUserPointItem((JObject)json["givingUserPointItem"]);
             }
             log += json["givingUserEventItem"].ToString() != "" ? "活动物品1，" : "";
             log += json["givingUserGachaTicket"].ToString() != "" ? "扭蛋券1，" : "";
@@ -876,7 +874,10 @@ namespace FlowerMaster.Helpers
             log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "装备" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserGiftList"] as JArray).Count > 0 ? "赠物" + (json["givingUserGiftList"] as JArray).Count.ToString() + "，" : "";
             JArray items = (JArray)json["givingUserPointItemList"];
-            log += MiscHelper.ProcessUserPointItem(items);
+            foreach (JObject item in items)
+            {
+                log += MiscHelper.ProcessUserPointItem(item);
+            }
             log += (json["givingUserEventItemList"] as JArray).Count > 0 ? "活动物品" + (json["givingUserEventItemList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserGachaTicketList"] as JArray).Count > 0 ? "扭蛋券" + (json["givingUserGachaTicketList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserGardenMakeoverItemList"] as JArray).Count > 0 ? "庭院物品" + (json["givingUserGardenMakeoverItemList"] as JArray).Count.ToString() + "，" : "";
