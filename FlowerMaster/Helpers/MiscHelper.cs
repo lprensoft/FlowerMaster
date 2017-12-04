@@ -329,6 +329,10 @@ namespace FlowerMaster.Helpers
             {
                 return "★6水影秘石碎片" + item["point"].ToString() + "，";
             }
+            else if (item["itemId"].ToString() == "274")
+            {
+                return "庭院币" + item["point"].ToString() + "，";
+            }
             else
             {
                 return "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";

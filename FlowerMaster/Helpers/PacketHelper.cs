@@ -479,6 +479,7 @@ namespace FlowerMaster.Helpers
             string log = "收获花盆，获得：";
             JArray items = (JArray)json["gardenHarvestItemList"];
             int gold = 0;
+            int coin = 0;
             int ap = 0;
             foreach (JObject item in items)
             {
@@ -486,12 +487,16 @@ namespace FlowerMaster.Helpers
                 {
                     gold += int.Parse(item["amount"].ToString());
                 }
+                if (item["itemId2"].ToString() == "274")
+                {
+                    coin += int.Parse(item["amount2"].ToString());
+                }
                 if (item["staminaRecoveryNum"] != null)
                 {
                     ap += int.Parse(item["staminaRecoveryNum"].ToString());
                 }
             }
-            log += "金币" + gold.ToString();
+            log += "金币" + gold.ToString() + "，庭院币" + coin.ToString();
             JArray plants = (JArray)json["userGardenPlantPotList"];
             foreach (JObject plant in plants)
             {
