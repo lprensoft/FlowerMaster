@@ -407,8 +407,7 @@ namespace FlowerMaster.Helpers
             }
             else
             {
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
-                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
                 {
                     var gameFrame = document.getElementById("externalContainer").document as HTMLDocument;
                     if (gameFrame == null)

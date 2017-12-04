@@ -106,8 +106,7 @@ namespace FlowerMaster.Helpers
                 pack.funcApi = s.Request.PathAndQuery.Substring(s.Request.PathAndQuery.IndexOf("/social/") + 7);
                 pack.funcApi = pack.funcApi.Substring(0, pack.funcApi.IndexOf("?"));
             }
-            else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
-                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18) 
+            else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18) 
                     && s.Request.PathAndQuery.IndexOf("/rpc?") != -1)
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("?"));
@@ -149,8 +148,7 @@ namespace FlowerMaster.Helpers
             try
             {
                 //处理日服DMM用户信息-获取用户昵称
-                if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18)
-                    && pack.funcUrl.IndexOf("/social/") != -1)
+                if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18) && pack.funcUrl.IndexOf("/social/") != -1)
                 {
                     if (pack.funcApi == "/rpc")
                     {
@@ -161,9 +159,8 @@ namespace FlowerMaster.Helpers
                         return E_FAILED;
                     }
                 }
-                //处理美服/台服用户信息-获取用户昵称
-                else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
-                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18) && pack.funcUrl.IndexOf("/rpc") != -1)
+                //处理美服用户信息-获取用户昵称
+                else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18) && pack.funcUrl.IndexOf("/rpc") != -1)
                 {
                     return ProcessNutakuUserInfo(pack);
                 }
@@ -357,7 +354,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 处理美服/台服登录封包
+        /// 处理美服登录封包
         /// </summary>
         /// <param name="pack">封包数据结构体</param>
         /// <returns>处理结果标志</returns>
@@ -397,14 +394,6 @@ namespace FlowerMaster.Helpers
             DataUtil.Game.player.friendId = json["user"]["searchUserId"] != null ? json["user"]["searchUserId"].ToString() : "-";
             DataUtil.Game.CalcPlayerMaxAPExp();
             DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP;
-            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
-            {
-                DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_A;
-            }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
-            {
-                DataUtil.Game.player.maxBP = GameInfo.PLAYER_MAX_BP_T;
-            }
             DataUtil.Game.player.maxSP = GameInfo.PLAYER_MAX_SP;
             DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["user"]["stamina"], json["user"]["staminaTime"]);
             DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.BP, json["user"]["battlePoint"], json["user"]["battlePointTime"]);
