@@ -181,10 +181,6 @@ namespace FlowerMaster.Models
             /// 用户抽取美服Flash样式
             /// </summary>
             public string userCSSAmerican;
-            /// <summary>
-            /// 用户抽取台服Flash样式
-            /// </summary>
-            public string userCSSTaiwan;
         }
         /// <summary>
         /// 系统配置结构体
@@ -278,12 +274,6 @@ namespace FlowerMaster.Models
         public const string DefaultCSSAmerican = "body {\r\n    margin:0;\r\n    overflow:hidden;\r\n}\r\n\r\n#externalContainer {\r\n    position:rela" +
                     "tive;\r\n    left:50%;\r\n    top:0px;\r\n    left:0px;\r\n    z-index:1;\r\n}\r\n\r\n" +
                     ".area-pickupgame,\r\n.area-menu\r\n{\r\n    display:none!important;\r\n}";
-        /// <summary>
-        /// 默认抽取台服Flash的CSS样式
-        /// </summary>
-        public const string DefaultCSSTaiwan = "body {\r\n    margin:0;\r\n    overflow:hidden;\r\n}\r\n\r\n#externalContainer {\r\n    position:fixe" +
-                    "d;\r\n    left:50%;\r\n    top:0px;\r\n    margin-left:-480px;\r\n    z-index:1;\r\n}\r\n\r\n" +
-                    ".area-pickupgame,\r\n.area-menu\r\n{\r\n    display:none!important;\r\n}";
 
         /// <summary>
         /// 初始化 FlowerMaster.Models.SysConfig 类的新实例。
@@ -340,7 +330,6 @@ namespace FlowerMaster.Models
 
             sysConfig.userCSS = DefaultCSSJapan;
             sysConfig.userCSSAmerican = DefaultCSSAmerican;
-            sysConfig.userCSSTaiwan = DefaultCSSTaiwan;
         }
 
         /// <summary>
@@ -478,12 +467,6 @@ namespace FlowerMaster.Models
                 {
                     sysConfig.userCSSAmerican = xe.GetAttribute("CssStyle") != "" ? xe.GetAttribute("CssStyle") : DefaultCSSAmerican;
                 }
-                xn = xmlDoc.SelectSingleNode("/Config/UserCssStyleTaiwan");
-                xe = (XmlElement)xn;
-                if (xe != null)
-                {
-                    sysConfig.userCSSTaiwan = xe.GetAttribute("CssStyle") != "" ? xe.GetAttribute("CssStyle") : DefaultCSSTaiwan;
-                }
             }
             catch{ }
         }
@@ -567,9 +550,6 @@ namespace FlowerMaster.Models
                     XmlElement cssA = xmlDoc.CreateElement("UserCssStyleAmerican");
                     css.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
                     rootNode.AppendChild(cssA);
-                    XmlElement cssT = xmlDoc.CreateElement("UserCssStyleTaiwan");
-                    css.SetAttribute("CssStyle", sysConfig.userCSSTaiwan);
-                    rootNode.AppendChild(cssT);
 
                     xmlDoc.Save("config.xml");
                 }
@@ -689,15 +669,6 @@ namespace FlowerMaster.Models
                         rootNode.AppendChild(xe);
                     }
                     xe.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
-
-                    xn = xmlDoc.SelectSingleNode("/Config/UserCssStyleTaiwan");
-                    xe = (XmlElement)xn;
-                    if (xe == null)
-                    {
-                        xe = xmlDoc.CreateElement("UserCssStyleTaiwan");
-                        rootNode.AppendChild(xe);
-                    }
-                    xe.SetAttribute("CssStyle", sysConfig.userCSSTaiwan);
 
                     xmlDoc.Save("config.xml");
                 }

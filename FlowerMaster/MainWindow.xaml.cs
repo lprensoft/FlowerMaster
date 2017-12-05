@@ -38,7 +38,7 @@ namespace FlowerMaster
 
         //模拟鼠标操作相关API引入
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        static extern bool PostMessage(IntPtr WindowHandle, uint Msg, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -246,10 +246,6 @@ namespace FlowerMaster
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSAmerican;
             }
-            else if (DataUtil.Config.sysConfig.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Config.sysConfig.gameServer == (int)GameInfo.ServersList.TaiwanR18)
-            {
-                tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSTaiwan;
-            }
             else
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSS;
@@ -390,8 +386,7 @@ namespace FlowerMaster
                     }));
                 }*/
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
-                || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
+            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
             {
                 if (s.Request.PathAndQuery.IndexOf("/rpc?st=") != -1)
                 {
@@ -514,10 +509,6 @@ namespace FlowerMaster
             {
                 DataUtil.Config.sysConfig.userCSSAmerican = tbCssStyle.Text;
             }
-            else if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.Taiwan || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.TaiwanR18)
-            {
-                DataUtil.Config.sysConfig.userCSSTaiwan = tbCssStyle.Text;
-            }
             else
             {
                 DataUtil.Config.sysConfig.userCSS = tbCssStyle.Text;
@@ -569,8 +560,8 @@ namespace FlowerMaster
             IntPtr wParam = IntPtr.Zero; // 附加的按键信息（如：Ctrl）
             const uint downCode = 0x201; // 鼠标左键按下
             const uint upCode = 0x202; // 鼠标左键抬起
-            SendMessage(webHandle, downCode, wParam, lParam); // 发送鼠标按键按下消息
-            SendMessage(webHandle, upCode, wParam, lParam); // 发送鼠标按键抬起消息
+            PostMessage(webHandle, downCode, wParam, lParam); // 发送鼠标按键按下消息
+            PostMessage(webHandle, upCode, wParam, lParam); // 发送鼠标按键抬起消息
         }
 
         /// <summary>
@@ -685,8 +676,7 @@ namespace FlowerMaster
 
             //抽取Flash，应用CSS样式
             IHTMLElement gameFrame = null;
-            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
-                || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
+            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
             {
                 gameFrame = document.getElementById("game_frame");
                 if (gameFrame != null)
@@ -712,10 +702,6 @@ namespace FlowerMaster
                     {
                         target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSSAmerican;
                     }
-                    else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
-                    {
-                        target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSSTaiwan;
-                    }
                     else
                     {
                         target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSS;
@@ -730,8 +716,7 @@ namespace FlowerMaster
             {
                 IHTMLElement username = null;
                 IHTMLElement password = null;
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18 
-                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18 )
                 {
                     username = document.getElementById("s-email");
                     password = document.getElementById("s-password");
@@ -756,8 +741,7 @@ namespace FlowerMaster
                 }
 
                 //点击登录按钮
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18 
-                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
                 {
                     IHTMLElement autoLogin = document.getElementById("autoLogin");
                     IHTMLElement login = document.getElementById("login-button");
@@ -805,10 +789,6 @@ namespace FlowerMaster
             if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.American || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.AmericanR18)
             {
                 tbCssStyle.Text = SysConfig.DefaultCSSAmerican;
-            }
-            else if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.Taiwan || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.TaiwanR18)
-            {
-                tbCssStyle.Text = SysConfig.DefaultCSSTaiwan;
             }
             await this.ShowMessageAsync("提示", "已经重置为默认抽取样式！");
         }
@@ -890,10 +870,6 @@ namespace FlowerMaster
             if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.American || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.AmericanR18)
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSAmerican;
-            }
-            else if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.Taiwan || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.TaiwanR18)
-            {
-                tbCssStyle.Text = DataUtil.Config.sysConfig.userCSSTaiwan;
             }
             else
             {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Controls;
 using System.Diagnostics;
 using Microsoft.Win32;
 using System.IO;
@@ -11,7 +10,6 @@ using SHDocVw;
 using System.Drawing;
 using System.Drawing.Imaging;
 using FlowerMaster.Models;
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.IO.Compression;
@@ -277,6 +275,71 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
+        /// 解析处理用户点数物品日志信息
+        /// </summary>
+        /// <param name="item">单个物品JSON数据</param>
+        /// <returns>返回解析日志文本</returns>
+        public static string ProcessUserPointItem(JObject item)
+        {
+            if (item["itemId"].ToString() == "10")
+            {
+                return "中级装备种子" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "11")
+            {
+                return "上级装备种子" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "89")
+            {
+                return "50%体力药" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "101")
+            {
+                return "生命结晶" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "144")
+            {
+                return "绊水晶" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "171")
+            {
+                return "团长币" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "205")
+            {
+                return "特务勋章" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "206")
+            {
+                return "★2水影秘石碎片" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "207")
+            {
+                return "★3水影秘石碎片" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "208")
+            {
+                return "★4水影秘石碎片" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "209")
+            {
+                return "★5水影秘石碎片" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "210")
+            {
+                return "★6水影秘石碎片" + item["point"].ToString() + "，";
+            }
+            else if (item["itemId"].ToString() == "274")
+            {
+                return "庭院币" + item["point"].ToString() + "，";
+            }
+            else
+            {
+                return "未知物品[" + item["itemId"].ToString() + "]" + item["point"].ToString() + "，";
+            }
+        }
+
+        /// <summary>
         /// 设置IE组件屏蔽错误
         /// </summary>
         /// <param name="webBrowser">IE组件</param>
@@ -363,8 +426,7 @@ namespace FlowerMaster.Helpers
             }
             else
             {
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18
-                    || DataUtil.Game.gameServer == (int)GameInfo.ServersList.Taiwan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TaiwanR18)
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
                 {
                     var gameFrame = document.getElementById("externalContainer").document as HTMLDocument;
                     if (gameFrame == null)

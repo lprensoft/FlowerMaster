@@ -7,7 +7,7 @@
                       mc:Ignorable="d"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       GlowBrush="{DynamicResource AccentColorBrush}"
-                      Title="团长助理 1.46"
+                      Title="团长助理 1.48"
                       Height="740"
                       Width="1000"
                       ResizeMode="CanResizeWithGrip"
@@ -234,8 +234,6 @@
                                 <ComboBoxItem Content="日服-R18版"/>
                                 <ComboBoxItem Content="美服-通常版"/>
                                 <ComboBoxItem Content="美服-R18版"/>
-                                <ComboBoxItem Content="台服-通常版"/>
-                                <ComboBoxItem Content="台服-R18版"/>
                             </ComboBox>
                             <Label VerticalAlignment="Top"
                            Margin="25,115,0,0"
