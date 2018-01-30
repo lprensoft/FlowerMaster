@@ -85,12 +85,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Tools\CordWindow.xaml.cs">
+      <DependentUpon>CordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\CordCol.xaml.cs" />
+    <Compile Include="Helpers\Push.cs" />
     <Compile Include="Tools\GachaLogsWindow.xaml.cs">
       <DependentUpon>GachaLogsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\GameLogsWindow.xaml.cs">
       <DependentUpon>GameLogsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Tools\CordWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Tools\FriendsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
