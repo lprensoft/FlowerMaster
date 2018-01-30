@@ -5,16 +5,19 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.Drawing;
-using FlowerMaster.Helpers;
 using mshtml;
 using Nekoxy;
-using FlowerMaster.Models;
 using MahApps.Metro.Controls.Dialogs;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Interop;
 using System.Windows.Media;
+using FlowerMaster.Models;
+using FlowerMaster.Helpers;
+using FlowerMaster.Properties;
+using FlowerMaster.Push;
+using static FlowerMaster.CordCol;
 
 namespace FlowerMaster
 {
@@ -43,6 +46,7 @@ namespace FlowerMaster
         static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
 
         public MainWindow()
         {
@@ -556,6 +560,25 @@ namespace FlowerMaster
                 y = 475;
                 autoGoLastConf--;
             }
+            /* 
+            临时暂停原本的鼠标按键功能
+            IntPtr lParam = (IntPtr)((y << 16) | x); //坐标信息
+            IntPtr wParam = IntPtr.Zero; // 附加的按键信息（如：Ctrl）
+            const uint downCode = 0x201; // 鼠标左键按下
+            const uint upCode = 0x202; // 鼠标左键抬起
+            PostMessage(webHandle, downCode, wParam, lParam); // 发送鼠标按键按下消息
+            PostMessage(webHandle, upCode, wParam, lParam); // 发送鼠标按键抬起消息
+            */
+            MouseLeftClick(x, y);
+        }
+
+        /// <summary>
+        /// 鼠标左键点击（坐标）
+        /// </summary>
+        /// <param name="x">x-横向坐标</param>
+        /// <param name="y">y-竖向坐标</param>
+        private void MouseLeftClick(int x, int y)
+        {
             IntPtr lParam = (IntPtr)((y << 16) | x); //坐标信息
             IntPtr wParam = IntPtr.Zero; // 附加的按键信息（如：Ctrl）
             const uint downCode = 0x201; // 鼠标左键按下
@@ -624,7 +647,7 @@ namespace FlowerMaster
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        { 
+        {
             if (DataUtil.Config.sysConfig.exitConfirm && MessageBox.Show("是否确定要退出团长助理？", "退出确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
             {
                 e.Cancel = true;
@@ -716,7 +739,7 @@ namespace FlowerMaster
             {
                 IHTMLElement username = null;
                 IHTMLElement password = null;
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18 )
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
                 {
                     username = document.getElementById("s-email");
                     password = document.getElementById("s-password");
@@ -952,5 +975,57 @@ namespace FlowerMaster
             GachaLogsWindow gachalogs = new GachaLogsWindow();
             gachalogs.Show();
         }
+
+        /// <summary>
+        /// 打开游戏坐标窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCord_Click(object sender, RoutedEventArgs e)
+        {
+            CordWindow cords = new CordWindow(mainWeb.Handle, Process.GetCurrentProcess().MainWindowHandle);
+            cords.Show();
+        }
+
+        /// <summary>
+        /// 自动推图2.0按钮事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnPush_Click(object sender, RoutedEventArgs e)
+        {
+
+            //如果状态为0，启动推图功能
+            if (Nodes.status == 0)
+            {
+                Handles Han = new Handles(Process.GetCurrentProcess().MainWindowHandle);
+
+                MessageBoxResult type = MessageBox.Show("请选择自动推图模式（主线Yes，活动No）：\r\n请在游戏主页开启此功能\r\n多点几下暂停，使用愉快", "模式选择", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (type == MessageBoxResult.Yes)
+                {
+                    MiscHelper.AddLog("开始主线推图", MiscHelper.LogType.System);
+                    Nodes Node_o = new Nodes(0, Han);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    Node_o.Start(Node_o);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+                }
+                else if (type == MessageBoxResult.No)
+                {
+                    MiscHelper.AddLog("开始活动推图", MiscHelper.LogType.System);
+                    Nodes Node_o = new Nodes(1, Han);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    Node_o.Start(Node_o);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                }
+            }
+            //如果状态不为0，关闭推图功能
+            else
+            {
+                MessageBoxResult type = MessageBox.Show("成功暂停,推完这波就结束", "脚本结束", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                Nodes.status = 0;
+            }
+        }
+
     }
 }

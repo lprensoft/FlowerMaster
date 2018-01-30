@@ -22,6 +22,10 @@
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
     <Grid x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="183*"/>
+            <ColumnDefinition Width="313*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="24"/>
@@ -31,7 +35,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Margin="0,0,0,0"
-                    SelectionChanged="mainTab_SelectionChanged">
+                    SelectionChanged="mainTab_SelectionChanged" Grid.ColumnSpan="2">
             <TabItem x:Name="tabItemGame" Header="主页">
                 <Grid x:Name="grid1" Background="#FF0F0F0F">
                     <Grid.ColumnDefinitions>
@@ -173,6 +177,40 @@
                             <Rectangle.Fill>
                                 <VisualBrush Stretch="Fill"
                                          Visual="{StaticResource appbar_refresh}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Button>
+                    <Button x:Name="btnCord"
+                        Height="38"
+                        Width="38"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="0,110,-2,490"
+                        ToolTip="坐标"
+                        Click="btnCord_Click"
+                        Style="{DynamicResource MetroCircleButtonStyle}" Grid.ColumnSpan="2">
+                        <Rectangle Width="19"
+                            Height="19">
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill"
+                                    Visual="{StaticResource appbar_crosshair}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Button>
+                    <Button x:Name="btnPush"
+                        Height="38"
+                        Width="38"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="0,437,-2,163"
+                        ToolTip="自动推图2.0"
+                        Click="btnPush_Click"
+                        Style="{DynamicResource MetroCircleButtonStyle}" Grid.ColumnSpan="2">
+                        <Rectangle Width="16"
+                            Height="16">
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill"
+                                    Visual="{StaticResource appbar_control_play}" />
                             </Rectangle.Fill>
                         </Rectangle>
                     </Button>
@@ -723,7 +761,7 @@
         </TabControl>
         <DockPanel Grid.Row="1"
                    HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch">
+                   VerticalAlignment="Stretch" Grid.ColumnSpan="2">
             <StatusBar>
                 <StatusBar.ItemsPanel>
                     <ItemsPanelTemplate>
