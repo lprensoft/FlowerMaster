@@ -8,11 +8,15 @@ using System.Runtime.InteropServices;
 
 namespace FlowerMaster.Helpers
 {
-    class Color
+    partial class Color
     {
-        public Color()
-        {
 
+        private int x;
+
+        public Color(int x, int y, IntPtr Webhandle)
+        {
         }
+
+        public async
     }
 }
