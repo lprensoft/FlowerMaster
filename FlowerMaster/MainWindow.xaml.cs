@@ -37,6 +37,8 @@ namespace FlowerMaster
         public int autoGoLastConf = 0; //自动推图点击上次配置计数器
         public Timer timerNotify = null; //提醒计时器
 
+        public static bool AutoPushS = false; //自动推图2.0状态
+
         private IntPtr webHandle = IntPtr.Zero;
 
         //模拟鼠标操作相关API引入
@@ -996,7 +998,7 @@ namespace FlowerMaster
         {
 
             //如果状态为0，启动推图功能
-            if (Nodes.status == 0)
+            if (AutoPushS == false)
             {
                 Handles Han = new Handles(Process.GetCurrentProcess().MainWindowHandle);
 
@@ -1004,6 +1006,7 @@ namespace FlowerMaster
                 if (type == MessageBoxResult.Yes)
                 {
                     MiscHelper.AddLog("开始主线推图", MiscHelper.LogType.System);
+                    AutoPushS = true;
                     Nodes Node_o = new Nodes(0, Han);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     Node_o.Start(Node_o);
@@ -1013,6 +1016,7 @@ namespace FlowerMaster
                 else if (type == MessageBoxResult.No)
                 {
                     MiscHelper.AddLog("开始活动推图", MiscHelper.LogType.System);
+                    AutoPushS = true;
                     Nodes Node_o = new Nodes(1, Han);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     Node_o.Start(Node_o);
@@ -1023,7 +1027,7 @@ namespace FlowerMaster
             else
             {
                 MessageBoxResult type = MessageBox.Show("成功暂停,推完这波就结束", "脚本结束", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                Nodes.status = 0;
+                AutoPushS = false;
             }
         }
 
