@@ -29,9 +29,24 @@ namespace FlowerMaster.Push
 
 
         //自动推图2.0函数
-
+        /*需要数据：
+         *  推图：
+         *      1：图类型（主线0，活动1，水影2，上一次推的4）
+         *      2：只能推最新图
+         *  体力：
+         *      1：是否喝药水
+         *      2：是否吃石头
+         *  Boss：
+         *      1：打或者放 （不会有人碎石打Boss吧？希望我没低估土豪的力量）
+         *  特命：
+         *      1：打或者放
+         *  延迟：
+         *      1：根据电脑性能设置
+         * 
+         */
         public int Choice { get; }
         public Handles Hand { get; }
+        private IntPtr Webhand { get; set; }
 
         /// <summary>
         /// 包含推图选择与句柄信息
@@ -46,6 +61,12 @@ namespace FlowerMaster.Push
 
         private IntPtr Webhandle = IntPtr.Zero;
         int delay = 256;
+
+        public IntPtr Getwebhand()
+        {
+            IntPtr output = Webhandle;
+            return output;
+        }
 
         //核心功能
         /// <summary>
@@ -81,9 +102,8 @@ namespace FlowerMaster.Push
         /// <returns>正常延迟：颜色出现后返还true 0延迟：判断颜色是否在像素点</returns>
         private async Task<bool> Waitcol(int x, int y, byte red = 0, byte green = 0, byte blue = 0, int delay = 128)
         {
-            Random rnd = new Random();
             await Task.Delay(delay + 1);
-            System.Drawing.Color color = GetPixelColor(Hand.BotHand, x, y);
+            System.Drawing.Color color = GetPixelColor(Webhandle, x, y);
             if (color.R - 2 <= red &&
                 color.R + 2 >= red &&
                 color.G - 2 <= green &&
@@ -121,20 +141,20 @@ namespace FlowerMaster.Push
 
             while (MainWindow.AutoPushS == true)
             {
-                await ScSelect(Node);
+                await ScSelect();
                 await Task.Delay(delay);
 
-                await ScDepart(Node);
+                await ScDepart();
                 await Task.Delay(delay);
 
-                await ScComat(Node);
+                await ScComat();
                 await Task.Delay(delay);
 
-                await ScSell(Node);
+                await ScSell();
                 await Task.Delay(delay);
 
-                await ScExplore(Node);
-                await ScGarden(Node);
+                await ScExplore();
+                await ScGarden();
                 await Task.Delay(delay);
             }
 
@@ -146,19 +166,19 @@ namespace FlowerMaster.Push
         /// 选择关卡，并恢复体力
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScSelect(Nodes Node)
+        private async Task ScSelect()
         {
 
-            await CoHomeDepart(Node);
+            await CoHomeDepart();
 
             //等待出击页面1加载结束
             await Waitcol(180, 400, 146, 122, 96);
             //根据选择点击出击页面1
-            if (Node.Choice == 0)
+            if (Choice == 0)
             {
                 Click(300, 140);
             }
-            else if (Node.Choice == 1)
+            else if (Choice == 1)
             {
                 Click(400, 140);
             }
@@ -175,7 +195,7 @@ namespace FlowerMaster.Push
                 Click(300, 330);
             }
 
-            await CoDepartFirst(Node);
+            await CoDepartFirst();
 
             //等待体力恢复页面出现
             while(await Waitcol(670, 255, 23, 23, 18, 0) == true)
@@ -188,8 +208,8 @@ namespace FlowerMaster.Push
             {
                 if (await Waitcol(320, 320, 176, 31, 69, 0))
                 {
-                    await ScRefill(Node);
-                    await CoDepartFirst(Node);
+                    await ScRefill();
+                    await CoDepartFirst();
                 }
                 await Task.Delay(delay);
             }
@@ -201,7 +221,7 @@ namespace FlowerMaster.Push
         /// 恢复体力
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScRefill(Nodes Node)
+        private async Task ScRefill()
         {
             if (await Waitcol(320, 320, 176, 31, 69, 0))
             {
@@ -211,14 +231,14 @@ namespace FlowerMaster.Push
                     if (await Waitcol(341, 323, 255, 1, 1, 0))
                     {
                         Click(410, 400);
-                        await CoPrevent(Node);
+                        await CoPrevent();
                         return;
                     }
                     else
                         Click(500, 400);
                 }
 
-                await CoDepartFirst(Node);
+                await CoDepartFirst();
 
                 await Waitcol(320, 320, 176, 31, 69);
 
@@ -228,7 +248,7 @@ namespace FlowerMaster.Push
                     if (await Waitcol(341, 323, 255, 1, 1, 0))
                     {
                         Click(410, 400);
-                        await CoPrevent(Node);
+                        await CoPrevent();
                         return;
                     }
                     else
@@ -245,11 +265,11 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task ScDepart(Nodes Node)
+        private async Task ScDepart()
         {
-            await CoAssistSecond(Node);
+            await CoAssistSecond();
 
-            await CoMisssionLaunch(Node);
+            await CoMisssionLaunch();
 
             //确保进入图中
             await Task.Delay(4 * delay);
@@ -265,10 +285,10 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <param name="wait">开始前等待</param>
-        private async Task ScComat(Nodes Node, int wait = 0)
+        private async Task ScComat()
         {
             //等待并点击前进
-            await Task.Delay(wait);
+            await Task.Delay(delay);
             Click(855, 545);
             await Task.Delay(delay);
 
@@ -276,14 +296,14 @@ namespace FlowerMaster.Push
             if (await Waitcol(795, 205, 6, 90, 89, 0))
             {
                 Click(805, 205);
-                await ScComat(Node);
+                await ScComat();
             }
 
             //如果出现加战友，取消并继续推图
             else if (await Waitcol(680, 190, 76, 64, 47, 0))
             {
                 Click(550, 430);
-                await ScComat(Node);
+                await ScComat();
             }
 
             //如果在主页，返还
@@ -297,12 +317,12 @@ namespace FlowerMaster.Push
             {
                 if (Choice == 0)
                 {
-                    await ScAttackRaid(Node);
+                    await ScAttackRaid();
                     return;
                 }
                 else if (Choice == 1)
                 {
-                    await ScPublicRaid(Node);
+                    await ScPublicRaid();
                     return;
                 }
             }
@@ -310,7 +330,7 @@ namespace FlowerMaster.Push
             //如果出现特命，根据选择启动函数
             else if (await Waitcol(450, 400, 192, 89, 73, 0))
             {
-                await ScSpecial(Node);
+                await ScSpecial();
                 return;
             }
             
@@ -319,7 +339,7 @@ namespace FlowerMaster.Push
             {
                 await Task.Delay(delay);
                 Click(855, 545);
-                await ScComat(Node);
+                await ScComat();
                 return;
             }
 
@@ -329,15 +349,15 @@ namespace FlowerMaster.Push
         /// 进入主页Boss战并放野
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScAttackRaid(Nodes Node)
+        private async Task ScAttackRaid()
         {
-            await CoBossStart(Node);
-            await CoBossFirst(Node);
-            await CoMisssionLaunch(Node);
-            await CoBossAttack(Node);
+            await CoBossStart();
+            await CoBossFirst();
+            await CoMisssionLaunch();
+            await CoBossAttack();
 
             //取消取消碎石拿Boss点页面
-            await CoCancle(Node, 5);
+            await CoCancle(5);
 
             //等待并确认是否需要再次点击出击
             for (int i = 0; i < 2; i++)
@@ -357,9 +377,9 @@ namespace FlowerMaster.Push
 
             Click(855, 555);
 
-            await CoBossAssist(Node);
+            await CoBossAssist();
             await Task.Delay(delay);
-            await CoPrevent(Node);
+            await CoPrevent();
 
             return;
         }
@@ -368,14 +388,14 @@ namespace FlowerMaster.Push
         /// 直接放野主页Boss
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScPublicRaid(Nodes Node)
+        private async Task ScPublicRaid()
         {
-            await CoBossPublic(Node);
-            await CoBossAssist(Node);
+            await CoBossPublic();
+            await CoBossAssist();
 
             //通过等待确保弹窗出现
             await Task.Delay(2*delay);
-            await CoPrevent(Node);
+            await CoPrevent();
             await Task.Delay(delay);
 
             return;
@@ -385,9 +405,9 @@ namespace FlowerMaster.Push
         /// 特命 - 目前直接退出
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScSpecial(Nodes Node)
+        private async Task ScSpecial()
         {
-            await CoSpecialExit(Node);
+            await CoSpecialExit();
             await Task.Delay(delay);
 
             return;
@@ -397,12 +417,12 @@ namespace FlowerMaster.Push
         /// 出售花
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScSell(Nodes Node)
+        private async Task ScSell()
         {
-            await CoHomeTeam(Node);
-            await CoTeamSell(Node);
-            await CoSellAll(Node);
-            await CoSellConfirm(Node);
+            await CoHomeTeam();
+            await CoTeamSell();
+            await CoSellAll();
+            await CoSellConfirm();
 
             //防止无花可卖并取消出售
             await Task.Delay(delay);
@@ -417,9 +437,9 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task ScExplore(Nodes Node)
+        private async Task ScExplore()
         {
-            await CoHomeReturn(Node);
+            await CoHomeReturn();
             await Task.Delay(delay);
 
             //查看是否有探索点，并探索
@@ -439,9 +459,9 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task ScGarden(Nodes Node)
+        private async Task ScGarden()
         {
-            await CoHomeReturn(Node);
+            await CoHomeReturn();
             await Task.Delay(delay);
 
             //查看是否有花园虫，并收获
@@ -456,7 +476,7 @@ namespace FlowerMaster.Push
                     }
                 }
                 await Task.Delay(delay);
-                await CoHomeReturn(Node);
+                await CoHomeReturn();
             }
             return;
         }
@@ -469,8 +489,7 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待并关闭弹窗
         /// </summary>
-        /// <param name="Node"></param>
-        private async Task CoPrevent(Nodes Node)
+        private async Task CoPrevent()
         {
             await Waitcol(795, 205, 6, 90, 89);
             Click(805, 205);
@@ -479,8 +498,7 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待一定时间后取消弹窗
         /// </summary>
-        /// <param name="Node"></param>
-        private async Task CoCancle(Nodes Node, int multi = 1)
+        private async Task CoCancle(int multi = 1)
         {
             await Task.Delay(delay * multi);
             Click(550, 400);
@@ -489,9 +507,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 确认在主页并点击出击按钮
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoHomeDepart(Nodes Node)
+        private async Task CoHomeDepart()
         {
             await Waitcol(350, 35, 209, 195, 147);
             Click(80, 155);
@@ -500,9 +517,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 确认在主页并点击编队按钮
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoHomeTeam(Nodes Node)
+        private async Task CoHomeTeam()
         {
             await Waitcol(350, 35, 209, 195, 147);
             Click(85, 210);
@@ -511,9 +527,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待第一个可推图出现并点击
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoDepartFirst(Nodes Node)
+        private async Task CoDepartFirst()
         {
             await Waitcol(670, 255, 23, 23, 18);
             Click(430, 245);
@@ -522,10 +537,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待二号战友出现并选择
         /// </summary>
-        /// <param name="Node"></param>
-        /// <param name="multi">等待时间delay的乘数</param>
         /// <returns></returns>
-        private async Task CoAssistSecond(Nodes Node)
+        private async Task CoAssistSecond()
         {
             await Waitcol(750, 200, 228, 218, 178);
             Click(750, 250);
@@ -534,9 +547,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待出击按钮出现并开始推图
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoMisssionLaunch(Nodes Node)
+        private async Task CoMisssionLaunch()
         {
             await Waitcol(730, 200, 213, 185, 132);
             Click(800, 555);
@@ -545,9 +557,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待出现Boss并选择攻击Boss
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoBossStart(Nodes Node)
+        private async Task CoBossStart()
         {
             await Waitcol(290, 400, 249, 248, 241);
             Click(285, 400);
@@ -556,9 +567,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待出现Boss并选择放野Boss
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoBossPublic(Nodes Node)
+        private async Task CoBossPublic()
         {
             await Waitcol(290, 400, 249, 248, 241);
             Click(650, 400);
@@ -567,9 +577,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待Boss列表加载完毕并攻击第一个
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoBossFirst(Nodes Node)
+        private async Task CoBossFirst()
         {
             await Waitcol(840, 250, 87, 73, 52);
             Click(840, 250);
@@ -578,9 +587,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待攻击Boss页面出现并选择通常攻击
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoBossAttack(Nodes Node)
+        private async Task CoBossAttack()
         {
             await Waitcol(550, 600, 227, 210, 175);
             Click(750, 555);
@@ -589,9 +597,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待申请援助选项出现并点击
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoBossAssist(Nodes Node)
+        private async Task CoBossAssist()
         {
             await Waitcol(290, 400, 175, 74, 59);
             Click(290, 400);
@@ -600,9 +607,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待特命弹窗出现并选择取消
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoSpecialExit(Nodes Node)
+        private async Task CoSpecialExit()
         {
             await Waitcol(450, 400, 192, 89, 73);
             Click(550, 400);
@@ -611,9 +617,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 确认进入编成页面并点击出售
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoTeamSell(Nodes Node)
+        private async Task CoTeamSell()
         {
             await Waitcol(201, 235, 130, 184, 201);
             Click(535, 137);
@@ -622,9 +627,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 确认进入出售页面并点击批量出售
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoSellAll(Nodes Node)
+        private async Task CoSellAll()
         {
             await Waitcol(206, 329, 80, 26, 17);
             Click(220, 295);
@@ -633,9 +637,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 确认进入批量出售页面并点击出售
         /// </summary>
-        /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task CoSellConfirm(Nodes Node)
+        private async Task CoSellConfirm()
         {
             await Waitcol(802, 530, 233, 216, 183);
             Click(420, 560);
@@ -644,10 +647,8 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 连续点击Home与无效位置来返回主页
         /// </summary>
-        /// <param name="Node"></param>
-        /// <param name="multi"></param>
         /// <returns></returns>
-        private async Task CoHomeReturn(Nodes Node)
+        private async Task CoHomeReturn()
         {
             while (await Waitcol(300, 140, 158, 123, 72, 0) == false)
             {
@@ -664,7 +665,7 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task Cotemplate(Nodes Node)
+        private async Task Cotemplate()
         {
             await Waitcol(206, 329, 80, 26, 17);
             Click(220, 295);

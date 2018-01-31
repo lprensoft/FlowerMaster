@@ -1002,7 +1002,7 @@ namespace FlowerMaster
             {
                 Handles Han = new Handles(Process.GetCurrentProcess().MainWindowHandle);
 
-                MessageBoxResult type = MessageBox.Show("请选择自动推图模式（主线Yes，活动No）：\r\n请在游戏主页开启此功能\r\n多点几下暂停，使用愉快", "模式选择", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                MessageBoxResult type = MessageBox.Show("请选择自动推图模式（主线Yes，活动No）：\r\n请在游戏主页开启此功能\r\n双击设置暂停，使用愉快", "模式选择", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 if (type == MessageBoxResult.Yes)
                 {
                     MiscHelper.AddLog("开始主线推图", MiscHelper.LogType.System);
@@ -1023,11 +1023,24 @@ namespace FlowerMaster
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 }
             }
+
             //如果状态不为0，关闭推图功能
             else
             {
-                MessageBoxResult type = MessageBox.Show("成功暂停,推完这波就结束", "脚本结束", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                MessageBoxResult type = MessageBox.Show("请点击设置按钮暂停", "设置暂停", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            }
+        }
+
+        private void btnPush_Set(object sender, RoutedEventArgs e)
+        {
+            if(AutoPushS == true)
+            {
+                MessageBoxResult type = MessageBox.Show("暂停成功，推完这把就结束。\r\n再次点击进入设置", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 AutoPushS = false;
+            }
+            else
+            {
+
             }
         }
 

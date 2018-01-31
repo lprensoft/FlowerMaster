@@ -94,12 +94,7 @@ namespace FlowerMaster
                 TopHand = Top;
                 BotHand = Bot;
             }
-            
-
         }
-
-
-
 
         /// <summary>
         /// 获取坐标像素颜色
