@@ -89,7 +89,6 @@ namespace FlowerMaster.Push
             PostMessage(Webhandle, 0x0200, wParam, lParam1); // 随机移动鼠标
             PostMessage(Webhandle, upCode, wParam, lParam2); // 发送鼠标按键抬起消息
         }
-        
 
         /// <summary>
         /// 等待颜色出现
