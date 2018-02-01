@@ -229,7 +229,7 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
                         Margin="0,480,-2,120"
-                        ToolTip="自动推图2.0设置"
+                        ToolTip="暂停自动推图"
                         Click="btnPush_Set"
                         Style="{DynamicResource MetroCircleButtonStyle}" Grid.ColumnSpan="2">
                         <Rectangle Width="16"

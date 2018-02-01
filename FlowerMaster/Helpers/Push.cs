@@ -214,11 +214,13 @@ namespace FlowerMaster.Push
         /// <param name="Node"></param>
         private async Task<bool> ScRefill()
         {
+            await Task.Delay(delay);
             //确认是否出现药水瓶
             if (await Col.Check(320, 320, 176, 31, 69, true))
             {
                 //喝药水
-                if (DataUtil.Config.sysConfig.stoneTrue == true)
+                await Task.Delay(delay);
+                if (DataUtil.Config.sysConfig.potionTrue == true)
                 {
                     Click(300, 400);
                     while (true)
@@ -242,6 +244,7 @@ namespace FlowerMaster.Push
                 await CoDepartFirst();
 
                 //碎石头
+                await Task.Delay(delay);
                 if (DataUtil.Config.sysConfig.stoneTrue == true)
                 {
                     while (await Col.Check(320, 320, 176, 31, 69) == false) {};
@@ -357,6 +360,7 @@ namespace FlowerMaster.Push
         /// <param name="Node"></param>
         private async Task ScAttackRaid()
         {
+            await Task.Delay(delay);
             await Task.Delay(delay);
             await CoBossStart();
             await CoBossFirst();
