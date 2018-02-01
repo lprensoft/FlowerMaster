@@ -871,13 +871,14 @@ namespace FlowerMaster
             if (!DataUtil.Game.isOnline) return;
             if (webHandle == IntPtr.Zero)
             {
-                webHandle = mainWeb.Handle;
-                StringBuilder className = new StringBuilder(100);
-                while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
-                {
-                    webHandle = GetWindow(webHandle, 5); // 获取子窗口的句柄
-                    GetClassName(webHandle, className, className.Capacity);
-                }
+                //webHandle = mainWeb.Handle;
+                //StringBuilder className = new StringBuilder(100);
+                //while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
+                //{
+                //    webHandle = GetWindow(webHandle, 5); // 获取子窗口的句柄
+                //    GetClassName(webHandle, className, className.Capacity);
+                //}
+                webHandle = CordCol.GetWebHandle(webHandle);
             }
             if (DataUtil.Game.isAuto)
             {
@@ -1000,23 +1001,23 @@ namespace FlowerMaster
             //如果状态为0，启动推图功能
             if (AutoPushS == false)
             {
-                IntPtr Han = Process.GetCurrentProcess().MainWindowHandle;
+                IntPtr Han = GetWebHandle(mainWeb.Handle);
 
                 MessageBoxResult type = MessageBox.Show("请选择自动推图模式（主线Yes，活动No）：\r\n请在游戏主页开启此功能\r\n双击设置暂停，使用愉快", "模式选择", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 if (type == MessageBoxResult.Yes)
                 {
                     MiscHelper.AddLog("开始主线推图", MiscHelper.LogType.System);
                     AutoPushS = true;
-                    Nodes Node_o = new Nodes(0, Han);
-                    Node_o.Start(Node_o);
+                    Nodes Node = new Nodes();
+                    Node.Start(1, Han);
 
                 }
                 else if (type == MessageBoxResult.No)
                 {
                     MiscHelper.AddLog("开始活动推图", MiscHelper.LogType.System);
                     AutoPushS = true;
-                    Nodes Node_o = new Nodes(1, Han);
-                    Node_o.Start(Node_o);
+                    Nodes Node = new Nodes();
+                    Node.Start(1, Han);
                 }
                 else
                 {

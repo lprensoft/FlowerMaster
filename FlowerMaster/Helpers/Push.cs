@@ -24,6 +24,7 @@ namespace FlowerMaster.Push
 
     public class Nodes
     {
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
         static extern bool PostMessage(IntPtr WindowHandle, uint Msg, IntPtr wParam, IntPtr lParam);
 
@@ -44,21 +45,9 @@ namespace FlowerMaster.Push
          *      1：根据电脑性能设置
          * 
          */
-        public int Choice { get; }
-        public Handles Hand { get; }
-
-        /// <summary>
-        /// 包含推图选择与句柄信息
-        /// </summary>
-        /// <param name="Cho">推图选择</param>
-        /// <param name="Han">句柄信息</param>
-        public Nodes(int Cho, IntPtr TopHand)
-        {
-            Choice = Cho;
-            Hand = new Handles(TopHand);
-        }
 
         private IntPtr Webhandle = IntPtr.Zero;
+        private int Choice = 0;
         private int delay = 256;
         private Helpers.Color Col = Helpers.Color.Instance;
         
@@ -90,11 +79,10 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 开始脚本于初始化数据
         /// </summary>
-        /// <param name="Node_o">特殊数据结构Node（见上）</param>
-        public async void Start(Nodes Node_o)
+        public async void Start(int cho, IntPtr hand)
         {
-            Nodes Node = new Nodes(Node_o.Choice, Node_o.Hand.TopHand);
-            Webhandle = Node.Hand.BotHand;
+            Webhandle = hand;
+            Choice = cho;
 
             Col.Load(delay, Webhandle);
 
@@ -122,7 +110,6 @@ namespace FlowerMaster.Push
         /// <param name="Node"></param>
         private async Task ScSelect()
         {
-
             await CoHomeDepart();
 
             //等待出击页面1加载结束
@@ -157,8 +144,8 @@ namespace FlowerMaster.Push
                 await Task.Delay(delay);
             }
 
-            //确认体力页面是否出现五次
-            for (int i = 0; i < 5; i++)
+            //确认体力页面是否出现三次
+            for (int i = 0; i < 4; i++)
             {
                 if (await Col.Check(320, 320, 176, 31, 69, true))
                 {
@@ -173,16 +160,19 @@ namespace FlowerMaster.Push
         }
         
         /// <summary>
-        /// 恢复体力
+        /// 恢复体力脚本
         /// </summary>
         /// <param name="Node"></param>
         private async Task ScRefill()
         {
+            //确认是否出现药水瓶
             if (await Col.Check(320, 320, 176, 31, 69, true))
             {
+                //喝药水
                 Click(300, 400);
                 while (true)
                 {
+                    //等到确认框出现
                     while (await Col.Check(180, 450, 104, 88, 72) == false) {}
                     if (await Col.Check(341, 323, 255, 1, 1, true))
                     {
@@ -195,7 +185,6 @@ namespace FlowerMaster.Push
                         Click(500, 400);
                         break;
                     }
-
                 }
 
                 await CoDepartFirst();
@@ -268,7 +257,7 @@ namespace FlowerMaster.Push
             }
 
             //如果在主页，返还
-            else if (await Col.Check(350, 35, 209, 195, 147, true) == true)
+            else if (await Col.Check(170, 40, 163, 148, 66, true) == true)
             {
                 return true;
             }
@@ -407,7 +396,7 @@ namespace FlowerMaster.Push
             if (await Col.Check(255,160,234,116,37,true) == true)
             {
                 Click(275, 150);
-                while (await Col.Check(350, 35, 209, 195, 147, true) == false)
+                while (await Col.Check(170, 40, 163, 148, 66, true) == false)
                 {
                     Click(950, 280);
                 }
@@ -471,7 +460,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoHomeDepart()
         {
-            while (await Col.Check(350, 35, 209, 195, 147) == false) {};
+            while (await Col.Check(170, 40, 163, 148, 66) == false) {};
             Click(80, 155);
         }
 
@@ -481,7 +470,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoHomeTeam()
         {
-            while (await Col.Check(350, 35, 209, 195, 147) == false) {};
+            while (await Col.Check(170, 40, 163, 148, 66) == false) {};
             Click(85, 210);
         }
 

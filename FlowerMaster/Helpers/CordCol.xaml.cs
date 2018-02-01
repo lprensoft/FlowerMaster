@@ -41,6 +41,10 @@ namespace FlowerMaster
         static extern uint GetPixel(IntPtr hdc, int nXPos, int nYPos);
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, string windowTitle);
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
 
         /// <summary>
@@ -77,23 +81,22 @@ namespace FlowerMaster
         }
 
 
-
-        public struct Handles
+        /// <summary>
+        /// 获取最底层WebHandle用来抓取屏幕
+        /// </summary>
+        /// <param name="Top">顶层Handle</param>
+        /// <returns></returns>
+        public static IntPtr GetWebHandle(IntPtr Top)
         {
-        public IntPtr TopHand { get; }
-        public IntPtr BotHand { get; }
-
-            public Handles(IntPtr Top)
+            IntPtr WebHandle = IntPtr.Zero;
+            StringBuilder className = new StringBuilder(100);
+            while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
             {
-
-                IntPtr Bot = IntPtr.Zero;
-                Bot = FindWindowEx(Top, IntPtr.Zero, "Shell Embedding", null);
-                Bot = FindWindowEx(Bot, IntPtr.Zero, "Shell DocObject View", null);
-                Bot = FindWindowEx(Bot, IntPtr.Zero, "Internet Explorer_Server", null);
-
-                TopHand = Top;
-                BotHand = Bot;
+                Top = GetWindow(Top, 5); // 获取子窗口的句柄
+                GetClassName(Top, className, className.Capacity);
             }
+
+            return Top;
         }
 
         /// <summary>
@@ -118,16 +121,15 @@ namespace FlowerMaster
         /// <summary>
         /// 获取当前鼠标坐标
         /// </summary>
-        /// <param name="Hand">Hand结构，包含表层底层</param>
-        public CordCol(Handles Hand)
+        public CordCol(IntPtr WebHandle)
         {
             System.Drawing.Point Pointy = GetMousePosition();
-            GetWindowRect(Hand.BotHand, out RECT lprect);
+            GetWindowRect(WebHandle, out RECT lprect);
             
             Pointy.X = Pointy.X - lprect.Left;
             Pointy.Y = Pointy.Y - lprect.Top;
             
-            System.Drawing.Color Color = GetPixelColor(Hand.BotHand, Pointy.X - lprect.Left, Pointy.Y - lprect.Top);
+            System.Drawing.Color Color = GetPixelColor(WebHandle, Pointy.X - lprect.Left, Pointy.Y - lprect.Top);
             
         }
 
