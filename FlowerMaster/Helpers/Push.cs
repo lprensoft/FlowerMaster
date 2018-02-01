@@ -86,17 +86,6 @@ namespace FlowerMaster.Push
         }
         
 
-        /// <summary>
-        /// 等待颜色出现
-        /// </summary>
-        /// <param name="x">x坐标</param>
-        /// <param name="y">y坐标</param>
-        /// <param name="red">红色度</param>
-        /// <param name="green">绿色度</param>
-        /// <param name="blue">蓝色度</param>
-        /// <param name="delay">默认延迟300，设为0则会变为判断颜色是否存在</param>
-        /// <returns>正常延迟：颜色出现后返还true 0延迟：判断颜色是否在像素点</returns>
-
         //Main
         /// <summary>
         /// 开始脚本于初始化数据
@@ -137,7 +126,7 @@ namespace FlowerMaster.Push
             await CoHomeDepart();
 
             //等待出击页面1加载结束
-            await Col.Check(180, 400, 146, 122, 96);
+            while (await Col.Check(180, 400, 146, 122, 96) == false) {};
             //根据选择点击出击页面1
             if (Choice == 0)
             {
@@ -151,12 +140,12 @@ namespace FlowerMaster.Push
             //根据选择等待并点击出击页面2
             if (Choice == 0)
             {
-                await Col.Check(218, 242, 213, 200, 159);
+                while (await Col.Check(218, 242, 213, 200, 159) == false) {};
                 Click(300, 260);
             }
             else if (Choice == 1)
             {
-                await Col.Check(218, 325, 214, 202, 163);
+                while (await Col.Check(218, 325, 214, 202, 163) == false) {};
                 Click(300, 330);
             }
 
@@ -192,8 +181,9 @@ namespace FlowerMaster.Push
             if (await Col.Check(320, 320, 176, 31, 69, true))
             {
                 Click(300, 400);
-                if (await Col.Check(180, 450, 104, 88, 72))
+                while (true)
                 {
+                    while (await Col.Check(180, 450, 104, 88, 72) == false) {}
                     if (await Col.Check(341, 323, 255, 1, 1, true))
                     {
                         Click(410, 400);
@@ -201,16 +191,21 @@ namespace FlowerMaster.Push
                         return;
                     }
                     else
+                    {
                         Click(500, 400);
+                        break;
+                    }
+
                 }
 
                 await CoDepartFirst();
 
-                await Col.Check(320, 320, 176, 31, 69);
+                while (await Col.Check(320, 320, 176, 31, 69) == false) {};
 
                 Click(650, 400);
-                if (await Col.Check(180, 450, 104, 88, 72))
+                while (true)
                 {
+                    while (await Col.Check(180, 450, 104, 88, 72) == false) { }
                     if (await Col.Check(341, 323, 255, 1, 1, true))
                     {
                         Click(410, 400);
@@ -218,12 +213,12 @@ namespace FlowerMaster.Push
                         return;
                     }
                     else
+                    {
                         Click(500, 400);
+                        return;
+                    }
                 }
             }
-
-            return;
-
         }
 
         /// <summary>
@@ -259,27 +254,27 @@ namespace FlowerMaster.Push
             await Task.Delay(delay);
 
             //如果出现弹窗，关闭并继续推图
-            if (await Col.Check(795, 205, 6, 90, 89, true))
+            if (await Col.Check(795, 205, 6, 90, 89, true) == true)
             {
                 Click(805, 205);
                 return false;
             }
 
             //如果出现加战友，取消并继续推图
-            else if (await Col.Check(680, 190, 76, 64, 47, true))
+            else if (await Col.Check(680, 190, 76, 64, 47, true) == true)
             {
                 Click(550, 430);
                 return false;
             }
 
             //如果在主页，返还
-            else if (await Col.Check(350, 35, 209, 195, 147, true))
+            else if (await Col.Check(350, 35, 209, 195, 147, true) == true)
             {
                 return true;
             }
 
             //如果出现Boss，根据选择启动函数
-            else if (await Col.Check(290, 400, 249, 248, 241, true))
+            else if (await Col.Check(290, 400, 249, 248, 241, true) == true)
             {
                 if (Choice == 0)
                 {
@@ -294,7 +289,7 @@ namespace FlowerMaster.Push
             }
 
             //如果出现特命，根据选择启动函数
-            else if (await Col.Check(450, 400, 192, 89, 73, true))
+            else if (await Col.Check(450, 400, 192, 89, 73, true) == true)
             {
                 await ScSpecial();
                 return true;
@@ -457,7 +452,7 @@ namespace FlowerMaster.Push
         /// </summary>
         private async Task CoPrevent()
         {
-            await Col.Check(795, 205, 6, 90, 89);
+            while (await Col.Check(795, 205, 6, 90, 89) == false) {};
             Click(805, 205);
         }
 
@@ -476,7 +471,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoHomeDepart()
         {
-            await Col.Check(350, 35, 209, 195, 147);
+            while (await Col.Check(350, 35, 209, 195, 147) == false) {};
             Click(80, 155);
         }
 
@@ -486,7 +481,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoHomeTeam()
         {
-            await Col.Check(350, 35, 209, 195, 147);
+            while (await Col.Check(350, 35, 209, 195, 147) == false) {};
             Click(85, 210);
         }
 
@@ -496,7 +491,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoDepartFirst()
         {
-            await Col.Check(670, 255, 23, 23, 18);
+            while (await Col.Check(670, 255, 23, 23, 18) == false) {};
             Click(430, 245);
         }
 
@@ -506,7 +501,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoAssistSecond()
         {
-            await Col.Check(750, 200, 228, 218, 178);
+            while (await Col.Check(750, 200, 228, 218, 178) == false) {};
             Click(750, 250);
         }
 
@@ -516,7 +511,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoMisssionLaunch()
         {
-            await Col.Check(730, 200, 213, 185, 132);
+            while (await Col.Check(730, 200, 213, 185, 132) == false) {};
             Click(800, 555);
         }
 
@@ -526,7 +521,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoBossStart()
         {
-            await Col.Check(290, 400, 249, 248, 241);
+            while (await Col.Check(290, 400, 249, 248, 241) == false) {};
             Click(285, 400);
         }
 
@@ -536,7 +531,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoBossPublic()
         {
-            await Col.Check(290, 400, 249, 248, 241);
+            while (await Col.Check(290, 400, 249, 248, 241) == false) {};
             Click(650, 400);
         }
 
@@ -546,7 +541,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoBossFirst()
         {
-            await Col.Check(840, 250, 87, 73, 52);
+            while (await Col.Check(840, 250, 87, 73, 52) == false) {};
             Click(840, 250);
         }
 
@@ -556,7 +551,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoBossAttack()
         {
-            await Col.Check(550, 600, 227, 210, 175);
+            while (await Col.Check(550, 600, 227, 210, 175) == false) {};
             Click(750, 555);
         }
 
@@ -566,7 +561,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoBossAssist()
         {
-            await Col.Check(290, 400, 175, 74, 59);
+            while (await Col.Check(290, 400, 175, 74, 59) == false) {};
             Click(290, 400);
         }
 
@@ -576,7 +571,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoSpecialExit()
         {
-            await Col.Check(450, 400, 192, 89, 73);
+            while (await Col.Check(450, 400, 192, 89, 73) == false) {};
             Click(550, 400);
         }
 
@@ -586,7 +581,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoTeamSell()
         {
-            await Col.Check(201, 235, 130, 184, 201);
+            while (await Col.Check(201, 235, 130, 184, 201) == false) {};
             Click(535, 137);
         }
 
@@ -596,7 +591,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoSellAll()
         {
-            await Col.Check(206, 329, 80, 26, 17);
+            while (await Col.Check(206, 329, 80, 26, 17) == false) {};
             Click(220, 295);
         }
 
@@ -606,7 +601,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoSellConfirm()
         {
-            await Col.Check(802, 530, 233, 216, 183);
+            while (await Col.Check(802, 530, 233, 216, 183) == false) {};
             Click(420, 560);
         }
 

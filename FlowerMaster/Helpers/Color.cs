@@ -36,7 +36,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 等待颜色出现，可用TorF定义为判断颜色是否存在
+        /// 配合While实现等待颜色出现，可用TorF辨别为判断颜色是否存在
         /// </summary>
         /// <param name="WebHandle"></param>
         /// <param name="X"></param>
@@ -44,7 +44,7 @@ namespace FlowerMaster.Helpers
         /// <param name="Red"></param>
         /// <param name="Green"></param>
         /// <param name="Blue"></param>
-        /// <param name="TorF">false为等待颜色出现，True为判断颜色存在</param>
+        /// <param name="TorF">False为等待颜色出现，True为判断颜色存在（无影响，主要用途为可读性）</param>
         /// <returns></returns>
         public async Task<bool> Check(int X, int Y, int Red, int Green, int Blue, bool TorF = false)
         {
@@ -52,7 +52,7 @@ namespace FlowerMaster.Helpers
             await Task.Delay(Delay/2);
 
             //判定颜色是否在容错范围内
-            System.Drawing.Color color = GetPixelColor(WebHandle, X, Y);
+            System.Drawing.Color color = CordCol.GetPixelColor(WebHandle, X, Y);
             if (color.R - 2 <= Red &&
                 color.R + 2 >= Red &&
                 color.G - 2 <= Green &&
@@ -76,18 +76,6 @@ namespace FlowerMaster.Helpers
                 await Task.Delay(Delay/2);
                 return false;
             }
-        }
-
-        public static System.Drawing.Color GetPixelColor(IntPtr WebHandle, int X, int Y)
-        {
-            IntPtr HandleContext = GetDC(WebHandle);
-            uint pixel = GetPixel(HandleContext, X, Y);
-            System.Drawing.Color color = System.Drawing.Color.FromArgb(
-                (Byte)(pixel),
-                (Byte)(pixel >> 8),
-                (Byte)(pixel >> 16));
-            ReleaseDC(WebHandle, HandleContext);
-            return color;
         }
     }
 }
