@@ -391,13 +391,13 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task ScExplore()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 await CoHomeReturn();
             }
 
             //开晒探索
-            await Task.Delay(delay);
+            await Task.Delay(delay * 3);
             Click(275, 150);
             while (await Col.Check(170, 40, 163, 148, 66, true) == false)
             {
@@ -413,25 +413,22 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task ScGarden()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 await CoHomeReturn();
             }
 
             //查看是否有花园虫，并收获
-            if (await Col.Check(475, 135, 143, 0, 1, true) == true)
+            Click(435, 150);
+            while (await Col.Check(380, 615, 34, 34, 34, true) == false)
             {
-                Click(435, 150);
-                while (await Col.Check(380, 615, 34, 34, 34, true) == false)
+                if (await Col.Check(375, 610, 234, 234, 234, true) == true)
                 {
-                    if (await Col.Check(375, 610, 234, 234, 234, true) == true)
-                    {
-                        Click(380, 615);
-                    }
+                    Click(380, 615);
                 }
-                await Task.Delay(delay);
-                await CoHomeReturn();
             }
+            await Task.Delay(delay);
+            await CoHomeReturn();
             return;
         }
 
