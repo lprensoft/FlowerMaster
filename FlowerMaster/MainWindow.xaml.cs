@@ -1000,7 +1000,7 @@ namespace FlowerMaster
             //如果状态为0，启动推图功能
             if (AutoPushS == false)
             {
-                Handles Han = new Handles(Process.GetCurrentProcess().MainWindowHandle);
+                IntPtr Han = Process.GetCurrentProcess().MainWindowHandle;
 
                 MessageBoxResult type = MessageBox.Show("请选择自动推图模式（主线Yes，活动No）：\r\n请在游戏主页开启此功能\r\n双击设置暂停，使用愉快", "模式选择", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 if (type == MessageBoxResult.Yes)
@@ -1008,9 +1008,7 @@ namespace FlowerMaster
                     MiscHelper.AddLog("开始主线推图", MiscHelper.LogType.System);
                     AutoPushS = true;
                     Nodes Node_o = new Nodes(0, Han);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     Node_o.Start(Node_o);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 }
                 else if (type == MessageBoxResult.No)
@@ -1018,9 +1016,11 @@ namespace FlowerMaster
                     MiscHelper.AddLog("开始活动推图", MiscHelper.LogType.System);
                     AutoPushS = true;
                     Nodes Node_o = new Nodes(1, Han);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     Node_o.Start(Node_o);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                }
+                else
+                {
+                    return;
                 }
             }
 

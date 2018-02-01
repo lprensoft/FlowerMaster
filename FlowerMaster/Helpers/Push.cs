@@ -46,27 +46,22 @@ namespace FlowerMaster.Push
          */
         public int Choice { get; }
         public Handles Hand { get; }
-        private IntPtr Webhand { get; set; }
 
         /// <summary>
         /// 包含推图选择与句柄信息
         /// </summary>
         /// <param name="Cho">推图选择</param>
         /// <param name="Han">句柄信息</param>
-        public Nodes(int Cho, Handles Han)
+        public Nodes(int Cho, IntPtr TopHand)
         {
             Choice = Cho;
-            Hand = Han;
+            Handles Hand = new Handles(TopHand);
         }
 
         private IntPtr Webhandle = IntPtr.Zero;
-        int delay = 256;
-
-        public IntPtr Getwebhand()
-        {
-            IntPtr output = Webhandle;
-            return output;
-        }
+        private int delay = 256;
+        private Helpers.Color Col = Helpers.Color.Instance;
+        
 
         //核心功能
         /// <summary>
@@ -89,6 +84,7 @@ namespace FlowerMaster.Push
             PostMessage(Webhandle, 0x0200, wParam, lParam1); // 随机移动鼠标
             PostMessage(Webhandle, upCode, wParam, lParam2); // 发送鼠标按键抬起消息
         }
+        
 
         /// <summary>
         /// 等待颜色出现
@@ -133,11 +129,12 @@ namespace FlowerMaster.Push
         /// 开始脚本于初始化数据
         /// </summary>
         /// <param name="Node_o">特殊数据结构Node（见上）</param>
-        public async Task Start(Nodes Node_o)
+        public async void Start(Nodes Node_o)
         {
-            Nodes Node = new Nodes(Node_o.Choice, Node_o.Hand);
-
+            Nodes Node = new Nodes(Node_o.Choice, Node_o.Hand.TopHand);
             Webhandle = Node.Hand.BotHand;
+
+            Col.Load(delay, Webhandle);
 
             while (MainWindow.AutoPushS == true)
             {
@@ -210,6 +207,7 @@ namespace FlowerMaster.Push
                 {
                     await ScRefill();
                     await CoDepartFirst();
+                    return;
                 }
                 await Task.Delay(delay);
             }
@@ -510,7 +508,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoHomeDepart()
         {
-            await Waitcol(350, 35, 209, 195, 147);
+            await Col.Check(350, 35, 209, 195, 147);
             Click(80, 155);
         }
 
