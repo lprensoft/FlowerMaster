@@ -48,7 +48,6 @@ namespace FlowerMaster.Push
          */
 
         private IntPtr Webhandle = IntPtr.Zero;
-        private int Choice = 0;
         private int delay = 256;
         private Helpers.Color Col = Helpers.Color.Instance;
         
@@ -80,29 +79,32 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 开始脚本于初始化数据
         /// </summary>
-        public async void Start(int cho, IntPtr hand)
+        public async void Start(IntPtr hand)
         {
             Webhandle = hand;
-            Choice = cho;
 
             Col.Load(delay, Webhandle);
 
-            while (MainWindow.AutoPushS == true)
+            while (MainWindow.AutoPushS > 0)
             {
-                await ScSelect();
+                while (await ScSelect() == false) {}
 
                 await ScDepart();
 
-                while(await ScCombat() == false) { }
+                while(await ScCombat() == false) {}
 
                 await ScSell();
 
-                if (DataUtil.Game.player.SP > 0)
+                if (DataUtil.Game.player.SP > 0 && DataUtil.Game.player.apTime > DataUtil.Game.serverTime)
                 {
                     await ScExplore();
                 }
-                if (DataUtil.Game.player.plantTime < DateTime.Now) { }
-                await ScGarden();
+                if (DataUtil.Game.player.plantTime < DataUtil.Game.serverTime)
+                {
+                    await ScGarden();
+                }
+
+                MainWindow.AutoPushS--;
             }
 
             return;
@@ -113,106 +115,156 @@ namespace FlowerMaster.Push
         /// 选择关卡，并恢复体力
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScSelect()
+        private async Task<bool> ScSelect()
         {
             await CoHomeDepart();
 
             //等待出击页面1加载结束
             while (await Col.Check(180, 400, 146, 122, 96) == false) {};
             //根据选择点击出击页面1
-            if (Choice == 0)
-            {
+            if (DataUtil.Config.sysConfig.pushType == 0)
                 Click(300, 140);
-            }
-            else if (Choice == 1)
-            {
+
+            if (DataUtil.Config.sysConfig.pushType == 1)
                 Click(400, 140);
-            }
-            
+
+            if (DataUtil.Config.sysConfig.pushType == 2)
+                Click(590, 140);
+
+            if (DataUtil.Config.sysConfig.pushType == 3)
+                Click(250, 400);
+
             //根据选择等待并点击出击页面2
-            if (Choice == 0)
+            if (DataUtil.Config.sysConfig.pushType == 0)
             {
                 while (await Col.Check(218, 242, 213, 200, 159) == false) {};
                 Click(300, 260);
             }
-            else if (Choice == 1)
+            if (DataUtil.Config.sysConfig.pushType == 1)
             {
                 while (await Col.Check(218, 325, 214, 202, 163) == false) {};
                 Click(300, 330);
             }
 
-            await CoDepartFirst();
-
-            //等待体力恢复页面出现
-            while(await Col.Check(670, 255, 23, 23, 18, true) == true)
+            if (DataUtil.Config.sysConfig.pushType == 2)
             {
-                await Task.Delay(delay);
+                while (await Col.Check(470,275,249,247,240) == false) {};
+                Click(300, 260);
+                while (await Col.Check(625, 230, 253, 168, 2) == false) { };
+                Click(300, 260);
             }
 
-            //确认体力页面是否出现三次
-            for (int i = 0; i < 4; i++)
+
+            if (DataUtil.Config.sysConfig.pushType != 3)
             {
-                if (await Col.Check(320, 320, 176, 31, 69, true))
+                await CoDepartFirst();
+
+                //等待体力恢复页面出现
+                while (await Col.Check(670, 255, 23, 23, 18, true) == true)
                 {
-                    await ScRefill();
-                    await CoDepartFirst();
-                    return;
+                    await Task.Delay(delay);
                 }
-                await Task.Delay(delay);
+
+                //确认体力页面是否出现三次
+                for (int i = 0; i < 4; i++)
+                {
+                    if (await Col.Check(320, 320, 176, 31, 69, true))
+                    {
+                        await ScRefill();
+                        await CoDepartFirst();
+                        return true;
+                    }
+                    await Task.Delay(delay);
+                }
             }
             
-            return;
+            if (DataUtil.Config.sysConfig.pushType == 3)
+            {
+                await CoDepartPrevious();
+
+                //等待体力恢复页面出现
+                while (await Col.Check(670, 255, 23, 23, 18, true) == true)
+                {
+                    await Task.Delay(delay);
+                }
+
+                //确认体力页面是否出现三次
+                for (int i = 0; i < 4; i++)
+                {
+                    if (await Col.Check(320, 320, 176, 31, 69, true))
+                    {
+                        //如果没体力+没吃喝，回到主页
+                        if (await ScRefill() == false)
+                            return false;
+
+                        await CoDepartPrevious();
+                        return true;
+                    }
+                    await Task.Delay(delay);
+                }
+            }
+            
+            return true;
         }
         
         /// <summary>
         /// 恢复体力脚本
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScRefill()
+        private async Task<bool> ScRefill()
         {
             //确认是否出现药水瓶
             if (await Col.Check(320, 320, 176, 31, 69, true))
             {
                 //喝药水
-                Click(300, 400);
-                while (true)
+                if (DataUtil.Config.sysConfig.stoneTrue == true)
                 {
-                    //等到确认框出现
-                    while (await Col.Check(180, 450, 104, 88, 72) == false) {}
-                    if (await Col.Check(341, 323, 255, 1, 1, true))
+                    Click(300, 400);
+                    while (true)
                     {
-                        Click(410, 400);
-                        await CoPrevent();
-                        return;
-                    }
-                    else
-                    {
-                        Click(500, 400);
-                        break;
+                        //等到确认框出现
+                        while (await Col.Check(180, 450, 104, 88, 72) == false) { }
+                        if (await Col.Check(341, 323, 255, 1, 1, true))
+                        {
+                            Click(410, 400);
+                            await CoPrevent();
+                            return true;
+                        }
+                        else
+                        {
+                            Click(500, 400);
+                            break;
+                        }
                     }
                 }
 
                 await CoDepartFirst();
 
-                while (await Col.Check(320, 320, 176, 31, 69) == false) {};
-
-                Click(650, 400);
-                while (true)
+                //碎石头
+                if (DataUtil.Config.sysConfig.stoneTrue == true)
                 {
-                    while (await Col.Check(180, 450, 104, 88, 72) == false) { }
-                    if (await Col.Check(341, 323, 255, 1, 1, true))
+                    while (await Col.Check(320, 320, 176, 31, 69) == false) {};
+                    Click(650, 400);
+                    while (true)
                     {
-                        Click(410, 400);
-                        await CoPrevent();
-                        return;
-                    }
-                    else
-                    {
-                        Click(500, 400);
-                        return;
+                        while (await Col.Check(180, 450, 104, 88, 72) == false) {}
+                        if (await Col.Check(341, 323, 255, 1, 1, true))
+                        {
+                            Click(410, 400);
+                            await CoPrevent();
+                            return true;
+                        }
+                        else
+                        {
+                            Click(500, 400);
+                            return true;
+                        }
                     }
                 }
+
+                return false;
             }
+            return true;
         }
 
         /// <summary>
@@ -270,7 +322,7 @@ namespace FlowerMaster.Push
             //如果出现Boss，根据选择启动函数
             else if (await Col.Check(290, 400, 249, 248, 241, true) == true)
             {
-                if (Choice == 0)
+                if (DataUtil.Config.sysConfig.raidTrue == true)
                 {
                     await ScAttackRaid();
                     return true;
@@ -291,8 +343,7 @@ namespace FlowerMaster.Push
             {
                 await Task.Delay(delay);
                 Click(855, 545);
-                await ScCombat();
-                return true;
+                return false;
             }
 
         }
@@ -303,6 +354,7 @@ namespace FlowerMaster.Push
         /// <param name="Node"></param>
         private async Task ScAttackRaid()
         {
+            await Task.Delay(delay);
             await CoBossStart();
             await CoBossFirst();
             await CoMisssionLaunch();
@@ -342,12 +394,15 @@ namespace FlowerMaster.Push
         /// <param name="Node"></param>
         private async Task ScPublicRaid()
         {
+            await Task.Delay(delay);
             await CoBossPublic();
             await CoBossAssist();
 
-            //通过等待确保弹窗出现
-            await Task.Delay(2*delay);
-            await CoPrevent();
+            while (await Col.Check(170, 40, 163, 148, 66, true) == false)
+            {
+                await CoPrevent();
+            }
+
             await Task.Delay(delay);
 
             return;
@@ -359,8 +414,31 @@ namespace FlowerMaster.Push
         /// <param name="Node"></param>
         private async Task ScSpecial()
         {
-            await CoSpecialExit();
-            await Task.Delay(delay);
+            //判定是否进入特命]
+            if (DataUtil.Config.sysConfig.specialTrue == true)
+            {
+                //确认开始特命副本
+                Click(400, 400);
+                while (await Col.Check(218, 325, 214, 202, 163, true) == false) { }
+                await CoDepartFirst();
+                for (int i = 0; i < 4; i++)
+                {
+                    if (await Col.Check(320, 320, 176, 31, 69, true))
+                    {
+                        await ScRefill();
+                        await CoDepartFirst();
+                        return;
+                    }
+                    await Task.Delay(delay);
+                }
+                while (await ScCombat() == false) { }
+                return;
+            }
+            else
+            {
+                await CoSpecialExit();
+                await Task.Delay(delay);
+            }
 
             return;
         }
@@ -605,6 +683,12 @@ namespace FlowerMaster.Push
             await Task.Delay(delay);
             Click(5, 5);
             await Task.Delay(delay);
+        }
+
+        private async Task CoDepartPrevious()
+        {
+            while (await Col.Check(643, 375, 92, 81, 46) == false) { };
+            Click(250, 400);
         }
 
         /*

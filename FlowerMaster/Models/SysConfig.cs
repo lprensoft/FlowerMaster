@@ -181,6 +181,41 @@ namespace FlowerMaster.Models
             /// 用户抽取美服Flash样式
             /// </summary>
             public string userCSSAmerican;
+
+            //自动推图2.0系列设置
+            /// <summary>
+            /// 推图选择
+            /// </summary>
+            public int pushType;
+            /// <summary>
+            /// 推图次数
+            /// </summary>
+            public int pushTimes;
+
+            /// <summary>
+            /// 是否喝药水
+            /// </summary>
+            public bool potionTrue;
+            /// <summary>
+            /// 是否吃石头
+            /// </summary>
+            public bool stoneTrue;
+
+            /// <summary>
+            /// 是否打Boss
+            /// </summary>
+            public bool raidTrue;
+            /// <summary>
+            /// 是否推特命
+            /// </summary>
+            public bool specialTrue;
+
+            /// <summary>
+            /// 设置延迟
+            /// </summary>
+            public int delayTime;
+
+
         }
         /// <summary>
         /// 系统配置结构体
@@ -330,6 +365,15 @@ namespace FlowerMaster.Models
 
             sysConfig.userCSS = DefaultCSSJapan;
             sysConfig.userCSSAmerican = DefaultCSSAmerican;
+
+            //自动推图2.0初始化
+            sysConfig.pushType = 1;
+            sysConfig.pushTimes = 9999;
+            sysConfig.potionTrue = true;
+            sysConfig.stoneTrue = false;
+            sysConfig.raidTrue = true;
+            sysConfig.specialTrue = false;
+            sysConfig.delayTime = 250;
         }
 
         /// <summary>
@@ -461,11 +505,26 @@ namespace FlowerMaster.Models
                 {
                     sysConfig.userCSS = xe.GetAttribute("CssStyle") != "" ? xe.GetAttribute("CssStyle") : DefaultCSSJapan;
                 }
+
                 xn = xmlDoc.SelectSingleNode("/Config/UserCssStyleAmerican");
                 xe = (XmlElement)xn;
                 if (xe != null)
                 {
                     sysConfig.userCSSAmerican = xe.GetAttribute("CssStyle") != "" ? xe.GetAttribute("CssStyle") : DefaultCSSAmerican;
+                }
+
+                //自动推图2.0
+                xn = xmlDoc.SelectSingleNode("/Config/AutoPush");
+                xe = (XmlElement)xn;
+                if (xe != null)
+                {
+                    sysConfig.pushType = xe.GetAttribute("PushType") != "" ? int.Parse(xe.GetAttribute("PushType")) : sysConfig.pushType;
+                    sysConfig.pushTimes = xe.GetAttribute("PushTimes") != "" ? int.Parse(xe.GetAttribute("PushTimes")) : sysConfig.pushTimes;
+                    sysConfig.potionTrue = xe.GetAttribute("PotionTrue") != "" ? bool.Parse(xe.GetAttribute("PotionTrue")) : sysConfig.potionTrue;
+                    sysConfig.stoneTrue = xe.GetAttribute("StoneTrue") != "" ? bool.Parse(xe.GetAttribute("StoneTrue")) : sysConfig.stoneTrue;
+                    sysConfig.raidTrue = xe.GetAttribute("RaidTrue") != "" ? bool.Parse(xe.GetAttribute("RaidTrue")) : sysConfig.raidTrue;
+                    sysConfig.specialTrue = xe.GetAttribute("SpecialTrue") != "" ? bool.Parse(xe.GetAttribute("SpecialTrue")) : sysConfig.specialTrue;
+                    sysConfig.delayTime = xe.GetAttribute("DelayTime") != "" ? int.Parse(xe.GetAttribute("DelayTime")) : sysConfig.delayTime;
                 }
             }
             catch{ }
@@ -550,6 +609,17 @@ namespace FlowerMaster.Models
                     XmlElement cssA = xmlDoc.CreateElement("UserCssStyleAmerican");
                     css.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
                     rootNode.AppendChild(cssA);
+
+                    //自动推图2.0
+                    XmlElement autoPush = xmlDoc.CreateElement("AutoPush");
+                    autoPush.SetAttribute("PushType", sysConfig.pushType.ToString());
+                    autoPush.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
+                    autoPush.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
+                    autoPush.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
+                    autoPush.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
+                    autoPush.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
+                    autoPush.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
+                    rootNode.AppendChild(autoPush);
 
                     xmlDoc.Save("config.xml");
                 }
@@ -669,6 +739,20 @@ namespace FlowerMaster.Models
                         rootNode.AppendChild(xe);
                     }
                     xe.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
+
+                    //自动推图2.0
+                    xn = xmlDoc.SelectSingleNode("/Config/AutoPush");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe.SetAttribute("PushType", sysConfig.pushType.ToString());
+                        xe.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
+                        xe.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
+                        xe.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
+                        xe.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
+                        xe.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
+                        xe.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
+                    }
 
                     xmlDoc.Save("config.xml");
                 }
