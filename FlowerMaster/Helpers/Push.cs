@@ -95,7 +95,7 @@ namespace FlowerMaster.Push
 
                 await ScSell();
 
-                if (DataUtil.Game.player.SP > 0 && DataUtil.Game.player.apTime > DataUtil.Game.serverTime)
+                if (DataUtil.Game.player.SP > 0)
                 {
                     await ScExplore();
                 }
@@ -512,8 +512,11 @@ namespace FlowerMaster.Push
                     Click(380, 615);
                 }
             }
-            await Task.Delay(delay);
-            await CoHomeReturn();
+            for (int i = 0; i < 3; i++)
+            {
+                await Task.Delay(delay);
+                await CoHomeReturn();
+            }
             return;
         }
 
@@ -576,7 +579,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoAssistSecond()
         {
-            while (await Col.Check(750, 200, 228, 218, 178) == false) {};
+            while (await Col.Check(850, 167, 82, 79, 43) == false) {};
             Click(750, 250);
         }
 
