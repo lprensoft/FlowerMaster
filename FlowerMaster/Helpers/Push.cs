@@ -160,7 +160,7 @@ namespace FlowerMaster.Push
                 await CoDepartFirst();
 
                 //等待体力恢复页面出现
-                while (await Col.Check(670, 255, 23, 23, 18, true) == true)
+                while (await Col.Check(536, 255, 30, 31, 21, true) == true)
                 {
                     await Task.Delay(delay);
                 }
@@ -176,6 +176,7 @@ namespace FlowerMaster.Push
                     }
                     await Task.Delay(delay);
                 }
+                return true;
             }
             
             if (DataUtil.Config.sysConfig.pushType == 3)
@@ -183,7 +184,7 @@ namespace FlowerMaster.Push
                 await CoDepartPrevious();
 
                 //等待体力恢复页面出现
-                while (await Col.Check(670, 255, 23, 23, 18, true) == true)
+                while (await Col.Check(536, 255, 30, 31, 21, true) == true)
                 {
                     await Task.Delay(delay);
                 }
@@ -274,6 +275,8 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task ScDepart()
         {
+            await Task.Delay(delay);
+
             await CoAssistSecond();
 
             await CoMisssionLaunch();

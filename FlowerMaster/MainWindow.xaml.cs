@@ -1035,13 +1035,17 @@ namespace FlowerMaster
         /// <param name="e"></param>
         private void btnPush_Click(object sender, RoutedEventArgs e)
         {
+            if (AutoPushS >= 0)
+            {
+                MessageBoxResult type = MessageBox.Show("请点击下面的按钮暂停", "推图中", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
 
             //如果状态为0，启动推图功能
             if (AutoPushS < 0)
             {
                 IntPtr Han = GetWebHandle(mainWeb.Handle);
 
-                MessageBoxResult type = MessageBox.Show("是否开始自动推图\r\n请在游戏主页开启此功能\r\n双击下面的暂停，使用愉快", "模式选择", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                MessageBoxResult type = MessageBox.Show("OK开始自动推图\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 if (type == MessageBoxResult.OK)
                 {
                     MiscHelper.AddLog("开始推图!", MiscHelper.LogType.System);
@@ -1054,19 +1058,14 @@ namespace FlowerMaster
                     return;
                 }
             }
-
-            //如果状态不为0，关闭推图功能
-            if (AutoPushS >= 0)
-            {
-                MessageBoxResult type = MessageBox.Show("请点击下面的按钮暂停", "推图中", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            
         }
 
         private void btnPush_Set(object sender, RoutedEventArgs e)
         {
             if(AutoPushS > 0)
             {
-                MessageBoxResult type = MessageBox.Show("暂停成功，推完这把就结束。\r\n再次点击进入设置", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                MessageBoxResult type = MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 AutoPushS = -1;
             }
         }
