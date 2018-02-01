@@ -101,14 +101,14 @@ namespace FlowerMaster
         public CordWindow(IntPtr TopHandle)
         {
             InitializeComponent();
-            CordCol.Handles Handle = new CordCol.Handles(TopHandle);
+            IntPtr Handle = CordCol.GetWebHandle(TopHandle);
             
             System.Timers.Timer aTimer = new System.Timers.Timer(100);
 
             XBox.Text = "0";
             YBox.Text = "0";
 
-            aTimer.Elapsed += (s, e) => GetCord(Handle.TopHand);
+            aTimer.Elapsed += (s, e) => GetCord(Handle);
             aTimer.Enabled = true;
         }
     }

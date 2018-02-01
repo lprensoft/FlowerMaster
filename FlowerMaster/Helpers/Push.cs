@@ -24,6 +24,7 @@ namespace FlowerMaster.Push
 
     public class Nodes
     {
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
         static extern bool PostMessage(IntPtr WindowHandle, uint Msg, IntPtr wParam, IntPtr lParam);
 
@@ -33,6 +34,7 @@ namespace FlowerMaster.Push
          *  推图：
          *      1：图类型（主线0，活动1，水影2，上一次推的4）
          *      2：只能推最新图
+         *      3：推几次
          *  体力：
          *      1：是否喝药水
          *      2：是否吃石头
@@ -44,21 +46,9 @@ namespace FlowerMaster.Push
          *      1：根据电脑性能设置
          * 
          */
-        public int Choice { get; }
-        public Handles Hand { get; }
-
-        /// <summary>
-        /// 包含推图选择与句柄信息
-        /// </summary>
-        /// <param name="Cho">推图选择</param>
-        /// <param name="Han">句柄信息</param>
-        public Nodes(int Cho, IntPtr TopHand)
-        {
-            Choice = Cho;
-            Hand = new Handles(TopHand);
-        }
 
         private IntPtr Webhandle = IntPtr.Zero;
+        private int Choice = 0;
         private int delay = 256;
         private Helpers.Color Col = Helpers.Color.Instance;
         
@@ -90,11 +80,10 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 开始脚本于初始化数据
         /// </summary>
-        /// <param name="Node_o">特殊数据结构Node（见上）</param>
-        public async void Start(Nodes Node_o)
+        public async void Start(int cho, IntPtr hand)
         {
-            Nodes Node = new Nodes(Node_o.Choice, Node_o.Hand.TopHand);
-            Webhandle = Node.Hand.BotHand;
+            Webhandle = hand;
+            Choice = cho;
 
             Col.Load(delay, Webhandle);
 
@@ -108,7 +97,11 @@ namespace FlowerMaster.Push
 
                 await ScSell();
 
-                await ScExplore();
+                if (DataUtil.Game.player.SP > 0)
+                {
+                    await ScExplore();
+                }
+                if (DataUtil.Game.player.plantTime < DateTime.Now) { }
                 await ScGarden();
             }
 
@@ -122,7 +115,6 @@ namespace FlowerMaster.Push
         /// <param name="Node"></param>
         private async Task ScSelect()
         {
-
             await CoHomeDepart();
 
             //等待出击页面1加载结束
@@ -157,8 +149,8 @@ namespace FlowerMaster.Push
                 await Task.Delay(delay);
             }
 
-            //确认体力页面是否出现五次
-            for (int i = 0; i < 5; i++)
+            //确认体力页面是否出现三次
+            for (int i = 0; i < 4; i++)
             {
                 if (await Col.Check(320, 320, 176, 31, 69, true))
                 {
@@ -173,16 +165,19 @@ namespace FlowerMaster.Push
         }
         
         /// <summary>
-        /// 恢复体力
+        /// 恢复体力脚本
         /// </summary>
         /// <param name="Node"></param>
         private async Task ScRefill()
         {
+            //确认是否出现药水瓶
             if (await Col.Check(320, 320, 176, 31, 69, true))
             {
+                //喝药水
                 Click(300, 400);
                 while (true)
                 {
+                    //等到确认框出现
                     while (await Col.Check(180, 450, 104, 88, 72) == false) {}
                     if (await Col.Check(341, 323, 255, 1, 1, true))
                     {
@@ -195,7 +190,6 @@ namespace FlowerMaster.Push
                         Click(500, 400);
                         break;
                     }
-
                 }
 
                 await CoDepartFirst();
@@ -268,7 +262,7 @@ namespace FlowerMaster.Push
             }
 
             //如果在主页，返还
-            else if (await Col.Check(350, 35, 209, 195, 147, true) == true)
+            else if (await Col.Check(170, 40, 163, 148, 66, true) == true)
             {
                 return true;
             }
@@ -281,11 +275,8 @@ namespace FlowerMaster.Push
                     await ScAttackRaid();
                     return true;
                 }
-                else
-                {
-                    await ScPublicRaid();
-                    return true;
-                }
+                await ScPublicRaid();
+                return true;
             }
 
             //如果出现特命，根据选择启动函数
@@ -400,17 +391,17 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task ScExplore()
         {
-            await CoHomeReturn();
-            await Task.Delay(delay);
-
-            //查看是否有探索点，并探索
-            if (await Col.Check(255,160,234,116,37,true) == true)
+            for (int i = 0; i < 3; i++)
             {
-                Click(275, 150);
-                while (await Col.Check(350, 35, 209, 195, 147, true) == false)
-                {
-                    Click(950, 280);
-                }
+                await CoHomeReturn();
+            }
+
+            //开晒探索
+            await Task.Delay(delay);
+            Click(275, 150);
+            while (await Col.Check(170, 40, 163, 148, 66, true) == false)
+            {
+                Click(950, 280);
             }
             return;
         }
@@ -422,8 +413,10 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task ScGarden()
         {
-            await CoHomeReturn();
-            await Task.Delay(delay);
+            for (int i = 0; i < 3; i++)
+            {
+                await CoHomeReturn();
+            }
 
             //查看是否有花园虫，并收获
             if (await Col.Check(475, 135, 143, 0, 1, true) == true)
@@ -471,7 +464,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoHomeDepart()
         {
-            while (await Col.Check(350, 35, 209, 195, 147) == false) {};
+            while (await Col.Check(170, 40, 163, 148, 66) == false) {};
             Click(80, 155);
         }
 
@@ -481,7 +474,7 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoHomeTeam()
         {
-            while (await Col.Check(350, 35, 209, 195, 147) == false) {};
+            while (await Col.Check(170, 40, 163, 148, 66) == false) {};
             Click(85, 210);
         }
 
@@ -611,13 +604,10 @@ namespace FlowerMaster.Push
         /// <returns></returns>
         private async Task CoHomeReturn()
         {
-            while (await Col.Check(300, 140, 158, 123, 72, true) == false)
-            {
-                Click(80, 80);
-                await Task.Delay(delay);
-                Click(5, 5);
-                await Task.Delay(delay);
-            }
+            Click(80, 80);
+            await Task.Delay(delay);
+            Click(5, 5);
+            await Task.Delay(delay);
         }
 
         /*
