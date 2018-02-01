@@ -95,7 +95,7 @@ namespace FlowerMaster.Push
 
                 await ScSell();
 
-                if (DataUtil.Game.player.SP > 0)
+                if (await Col.Check(258, 163, 99, 99, 99, true) == false)
                 {
                     await ScExplore();
                 }
@@ -368,7 +368,10 @@ namespace FlowerMaster.Push
             await CoBossAttack();
 
             //取消取消碎石拿Boss点页面
-            await CoCancle(5);
+            for (int i = 0; i < 8; i++)
+            {
+                await CoCancle();
+            }
 
             //等待并确认是否需要再次点击出击
             for (int i = 0; i < 2; i++)
@@ -537,9 +540,9 @@ namespace FlowerMaster.Push
         /// <summary>
         /// 等待一定时间后取消弹窗
         /// </summary>
-        private async Task CoCancle(int multi = 1)
-        {
-            await Task.Delay(delay * multi);
+        private async Task CoCancle()
+        { 
+            await Task.Delay(delay);
             Click(550, 400);
         }
 
