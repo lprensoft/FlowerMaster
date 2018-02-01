@@ -95,6 +95,7 @@ namespace FlowerMaster.Push
 
                 await ScSell();
 
+                await CoHomeReturn();
                 if (await Col.Check(258, 163, 99, 99, 99, true) == false)
                 {
                     await ScExplore();
