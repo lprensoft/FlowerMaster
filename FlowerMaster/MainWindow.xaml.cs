@@ -985,7 +985,7 @@ namespace FlowerMaster
         /// <param name="e"></param>
         private void btnCord_Click(object sender, RoutedEventArgs e)
         {
-            CordWindow cords = new CordWindow(mainWeb.Handle, Process.GetCurrentProcess().MainWindowHandle);
+            CordWindow cords = new CordWindow(Process.GetCurrentProcess().MainWindowHandle);
             cords.Show();
         }
 

@@ -78,7 +78,7 @@ namespace FlowerMaster.Helpers
             }
         }
 
-        private System.Drawing.Color GetPixelColor(IntPtr WebHandle, int X, int Y)
+        public static System.Drawing.Color GetPixelColor(IntPtr WebHandle, int X, int Y)
         {
             IntPtr HandleContext = GetDC(WebHandle);
             uint pixel = GetPixel(HandleContext, X, Y);
