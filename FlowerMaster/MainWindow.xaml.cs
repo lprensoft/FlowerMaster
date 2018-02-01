@@ -871,14 +871,14 @@ namespace FlowerMaster
             if (!DataUtil.Game.isOnline) return;
             if (webHandle == IntPtr.Zero)
             {
-                //webHandle = mainWeb.Handle;
+                webHandle = mainWeb.Handle;
+                webHandle = CordCol.GetWebHandle(webHandle);
                 //StringBuilder className = new StringBuilder(100);
                 //while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
                 //{
                 //    webHandle = GetWindow(webHandle, 5); // 获取子窗口的句柄
                 //    GetClassName(webHandle, className, className.Capacity);
                 //}
-                webHandle = CordCol.GetWebHandle(webHandle);
             }
             if (DataUtil.Game.isAuto)
             {
