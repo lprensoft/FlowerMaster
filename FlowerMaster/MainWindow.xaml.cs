@@ -16,7 +16,6 @@ using System.Windows.Media;
 using FlowerMaster.Models;
 using FlowerMaster.Helpers;
 using FlowerMaster.Properties;
-using FlowerMaster.Push;
 using static FlowerMaster.CordCol;
 
 namespace FlowerMaster
@@ -1033,7 +1032,7 @@ namespace FlowerMaster
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnPush_Click(object sender, RoutedEventArgs e)
+        private async void btnPush_Click(object sender, RoutedEventArgs e)
         {
             if (AutoPushS >= 0)
             {
@@ -1045,13 +1044,18 @@ namespace FlowerMaster
             {
                 IntPtr Han = GetWebHandle(mainWeb.Handle);
 
-                MessageBoxResult type = MessageBox.Show("OK开始自动推图\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                MessageBoxResult type = MessageBox.Show("点击OK开始自动推图\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 if (type == MessageBoxResult.OK)
                 {
                     MiscHelper.AddLog("开始推图!", MiscHelper.LogType.System);
                     AutoPushS = AutoPushS + DataUtil.Config.sysConfig.delayTime;
                     Nodes Node = new Nodes();
-                    Node.Start(Han);
+                    Node.ScInitialize(Han);
+                    while (AutoPushS > 0)
+                    {
+                        await Node.Start();
+                        AutoPushS--;
+                    }
                 }
                 else
                 {

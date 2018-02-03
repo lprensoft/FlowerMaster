@@ -745,14 +745,16 @@ namespace FlowerMaster.Models
                     xe = (XmlElement)xn;
                     if (xe == null)
                     {
-                        xe.SetAttribute("PushType", sysConfig.pushType.ToString());
-                        xe.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
-                        xe.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
-                        xe.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
-                        xe.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
-                        xe.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
-                        xe.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
+                        xe = xmlDoc.CreateElement("AutoPush");
+                        rootNode.AppendChild(xe);
                     }
+                    xe.SetAttribute("PushType", sysConfig.pushType.ToString());
+                    xe.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
+                    xe.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
+                    xe.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
+                    xe.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
+                    xe.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
+                    xe.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
 
                     xmlDoc.Save("config.xml");
                 }

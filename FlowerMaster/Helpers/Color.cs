@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Runtime.InteropServices;
-using FlowerMaster.Push;
 using System.Drawing;
 
 namespace FlowerMaster.Helpers
@@ -48,17 +47,16 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         public async Task<bool> Check(int X, int Y, int Red, int Green, int Blue, bool TorF = false)
         {
-            //方法内带延迟这样外面就不用带async delay了
             await Task.Delay(Delay/2);
 
             //判定颜色是否在容错范围内
             System.Drawing.Color color = CordCol.GetPixelColor(WebHandle, X, Y);
-            if (color.R - 2 <= Red &&
-                color.R + 2 >= Red &&
-                color.G - 2 <= Green &&
-                color.G + 2 >= Green &&
-                color.B - 2 <= Blue &&
-                color.B + 2 >= Blue)
+            if (color.R - 5 <= Red &&
+                color.R + 5 >= Red &&
+                color.G - 5 <= Green &&
+                color.G + 5 >= Green &&
+                color.B - 5 <= Blue &&
+                color.B + 5 >= Blue)
             {
                 await Task.Delay(Delay/2);
                 return true;
