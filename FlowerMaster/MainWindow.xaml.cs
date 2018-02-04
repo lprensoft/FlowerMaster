@@ -1040,7 +1040,7 @@ namespace FlowerMaster
             }
 
             //如果状态为0，启动推图功能
-            if (AutoPushS < 0)
+            else
             {
                 IntPtr Han = GetWebHandle(mainWeb.Handle);
 
@@ -1050,11 +1050,15 @@ namespace FlowerMaster
                     MiscHelper.AddLog("开始推图!", MiscHelper.LogType.System);
                     AutoPushS = AutoPushS + DataUtil.Config.sysConfig.delayTime;
                     Nodes Node = new Nodes();
+
                     Node.ScInitialize(Han);
-                    while (AutoPushS > 0)
+
+                    Thread PushThread = new Thread(Node.Start);
+                    PushThread.Start();
+                    while( PushThread.IsAlive == true)
                     {
-                        await Node.Start();
-                        AutoPushS--;
+                        if (AutoPushS < 0) { PushThread.Abort(); }
+                        await Task.Delay(1000);
                     }
                 }
                 else

@@ -181,6 +181,7 @@
                         </Rectangle>
                     </Button>
                     <Button x:Name="btnCord"
+                        Grid.Column="1"
                         Height="38"
                         Width="38"
                         VerticalAlignment="Center"
@@ -188,7 +189,7 @@
                         Margin="0,110,-2,490"
                         ToolTip="坐标"
                         Click="btnCord_Click"
-                        Style="{DynamicResource MetroCircleButtonStyle}" Grid.ColumnSpan="2">
+                        Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="19"
                             Height="19">
                             <Rectangle.Fill>
@@ -207,6 +208,7 @@
                         Click="btnPush_Click"
                         Style="{DynamicResource MetroCircleButtonStyle}" Grid.ColumnSpan="2">
                         <Button x:Name="btnPush_Copy"
+                            Grid.Column="1"
                             Height="38"
                             Width="38"
                             VerticalAlignment="Center"
@@ -224,6 +226,7 @@
                         </Button>
                     </Button>
                     <Button x:Name="btnPushSet"
+                            Grid.Column="1"
                         Height="38"
                         Width="38"
                         VerticalAlignment="Center"
