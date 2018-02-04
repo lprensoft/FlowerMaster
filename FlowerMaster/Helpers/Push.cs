@@ -387,6 +387,7 @@ namespace FlowerMaster.Helpers
             CoBossStart();
             CoBossFirst();
             CoMisssionLaunch();
+            while (Col.Check(550, 600, 227, 210, 175) == false) { Thread.Sleep(delay); }
             CoBossAttack();
 
             //判定是否出现无Boss点碎石页面
@@ -719,7 +720,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 等待攻击Boss页面出现并选择通常攻击
+        /// 在进入下一步之前不停地选择普通攻击Boss
         /// </summary>
         /// <returns></returns>
         private void CoBossAttack()
@@ -728,7 +729,6 @@ namespace FlowerMaster.Helpers
                    Col.Check(500, 297, 58, 39, 35) == false &&
                    Col.Check(630, 540, 0, 0, 0) == false)
             {
-                while (Col.Check(550, 600, 227, 210, 175) == false) { Thread.Sleep(delay); }
                 Click(750, 555);
                 Thread.Sleep(delay);
             }
