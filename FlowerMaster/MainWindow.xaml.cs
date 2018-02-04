@@ -268,6 +268,9 @@ namespace FlowerMaster
             
             tbDelayTime.Text = DataUtil.Config.sysConfig.delayTime.ToString();
 
+            chkSellTrue.IsChecked = DataUtil.Config.sysConfig.sellTrue;
+            chkExploreTrue.IsChecked = DataUtil.Config.sysConfig.exploreTrue;
+            chkGardenTrue.IsChecked = DataUtil.Config.sysConfig.gardenTrue;
             chkActionPrep.IsChecked = DataUtil.Config.sysConfig.actionPrep;
 
         }
@@ -545,6 +548,9 @@ namespace FlowerMaster
 
             DataUtil.Config.sysConfig.delayTime = int.Parse(tbDelayTime.Text);
 
+            DataUtil.Config.sysConfig.sellTrue = chkSellTrue.IsChecked.HasValue ? (bool)chkSellTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.exploreTrue = chkExploreTrue.IsChecked.HasValue ? (bool)chkExploreTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.gardenTrue = chkGardenTrue.IsChecked.HasValue ? (bool)chkGardenTrue.IsChecked : false;
             DataUtil.Config.sysConfig.actionPrep = chkActionPrep.IsChecked.HasValue ? (bool)chkActionPrep.IsChecked : false;
 
 

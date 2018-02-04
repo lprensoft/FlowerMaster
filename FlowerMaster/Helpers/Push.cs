@@ -98,20 +98,34 @@ namespace FlowerMaster.Helpers
                 while (ScSelect() == false) { }
                 ScDepart();
                 while (ScCombat() == false) { }
-                ScSell();
-                while (Col.Check(750, 625, 206, 69, 59) == false) { Thread.Sleep(delay); }
-                CoHomeReturn();
 
-                if (Col.Check(250, 140, 216, 184, 111) == true &&
-                    Col.Check(258, 163, 99, 99, 99) == false && 
-                    Col.Check(520, 75, 50, 41, 37) == true)
+
+                if (DataUtil.Config.sysConfig.sellTrue == true)
                 {
-                    ScExplore();
+                    CoHomeReturn();
+                    ScSell(); 
                 }
-                if (DataUtil.Game.player.plantTime < DataUtil.Game.serverTime)
+
+                if (DataUtil.Config.sysConfig.exploreTrue == true)
                 {
-                    ScGarden();
+                    CoHomeReturn();
+                    if (Col.Check(250, 140, 216, 184, 111) == true &&
+                        Col.Check(258, 163, 99, 99, 99) == false &&
+                        Col.Check(520, 75, 50, 41, 37) == true)
+                    {
+                        ScExplore();
+                    } 
                 }
+
+                if (DataUtil.Config.sysConfig.gardenTrue == true)
+                {
+                    CoHomeReturn();
+                    if (DataUtil.Game.player.plantTime < DataUtil.Game.serverTime)
+                    {
+                        ScGarden();
+                    } 
+                }
+
                 MainWindow.AutoPushS--;
             }
 
@@ -533,14 +547,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void ScExplore()
         {
-            //等待加载出花园图标（保证可以探索），在此之前不停返回主页
-            while (Col.Check(437, 177, 211, 209, 205) == false)
-            {
-                CoHomeReturn();
-                Thread.Sleep(delay);
-            }
-
-            //开晒探索
+            //开始探索
             Click(275, 150);
             //等到探索页面出现后开始连点
             Thread.Sleep(delay * 3);
@@ -559,13 +566,6 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void ScGarden()
         {
-            //确定能点击花园页面，在此之前不停返回主页
-            while (Col.Check(437, 177, 211, 209, 205) == false)
-            {
-                CoHomeReturn();
-                Thread.Sleep(delay);
-            }
-
             //查看是否有花园虫，并收获
             Click(435, 150);
             while (Col.Check(380, 615, 34, 34, 34) == false)
@@ -807,9 +807,14 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoHomeReturn()
         {
-            Click(80, 80);
-            Thread.Sleep(delay/2);
-            Click(5, 5);
+            while (Col.Check(437, 177, 211, 209, 205) == false )
+            {
+                Thread.Sleep(delay);
+                Click(80, 80);
+                Thread.Sleep(delay);
+                Click(5, 5);
+                Thread.Sleep(delay);
+            }
         }
 
         /// <summary>

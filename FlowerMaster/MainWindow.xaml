@@ -186,7 +186,7 @@
                         Width="38"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
-                        Margin="0,110,-2,490"
+                        Margin="0,-300,-2,0"
                         ToolTip="坐标"
                         Click="btnCord_Click"
                         Style="{DynamicResource MetroCircleButtonStyle}">
@@ -199,31 +199,22 @@
                         </Rectangle>
                     </Button>
                     <Button x:Name="btnPush"
+                        Grid.Column="1"
                         Height="38"
                         Width="38"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
-                        Margin="0,437,-2,163"
+                        Margin="0,250,-2,0"
                         ToolTip="自动推图2.0"
                         Click="btnPush_Click"
-                        Style="{DynamicResource MetroCircleButtonStyle}" Grid.ColumnSpan="2">
-                        <Button x:Name="btnPush_Copy"
-                            Grid.Column="1"
-                            Height="38"
-                            Width="38"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Right"
-                            ToolTip="自动推图2.0"
-                            Click="btnPush_Click"
-                            Style="{DynamicResource MetroCircleButtonStyle}">
-                            <Rectangle Width="16"
+                        Style="{DynamicResource MetroCircleButtonStyle}" >
+                        <Rectangle Width="16"
                                 Height="16">
-                                <Rectangle.Fill>
-                                    <VisualBrush Stretch="Fill"
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="Fill"
                                         Visual="{StaticResource appbar_control_play}" />
-                                </Rectangle.Fill>
-                            </Rectangle>
-                        </Button>
+                            </Rectangle.Fill>
+                        </Rectangle>
                     </Button>
                     <Button x:Name="btnPushSet"
                             Grid.Column="1"
@@ -231,10 +222,10 @@
                         Width="38"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
-                        Margin="0,480,-2,120"
+                        Margin="0,325,-2,0"
                         ToolTip="暂停自动推图"
                         Click="btnPush_Set"
-                        Style="{DynamicResource MetroCircleButtonStyle}" Grid.ColumnSpan="2">
+                        Style="{DynamicResource MetroCircleButtonStyle}" >
                         <Rectangle Width="16"
                             Height="16">
                             <Rectangle.Fill>
@@ -826,7 +817,7 @@
                                 Height="30"
                                 VerticalAlignment="Top"
                                 Margin="5,115,0,0"
-                                Content="体力设置" Grid.ColumnSpan="2"/>
+                                Content="体力恢复设置" Grid.ColumnSpan="2"/>
                             <Label Margin="25,70,20,0"
                                 Height="25"
                                 VerticalAlignment="Top"
@@ -925,11 +916,32 @@
                         Height="30"
                         Click="btnCancel_Click"
                         Content="取消"/>
+                    <CheckBox x:Name="chkSellTrue"
+                        VerticalAlignment="Top"
+                        Margin="0,35,25,0"
+                        Height="25"
+                        Content="自动出售" Grid.Column="1" HorizontalAlignment="Right" Width="384" />
+                    <CheckBox x:Name="chkExploreTrue"
+                        VerticalAlignment="Top"
+                        Margin="50,65,25,0"
+                        Height="25"
+                        Content="自动探索" Grid.Column="1" />
+                    <CheckBox x:Name="chkGardenTrue"
+                        VerticalAlignment="Top"
+                        Margin="50,95,25,0"
+                        Height="25"
+                        Content="自动抓虫" Grid.Column="1" />
                     <CheckBox x:Name="chkActionPrep"
                         VerticalAlignment="Top"
-                        Margin="10,500,65,0"
+                        Margin="50,125,25,0"
                         Height="25"
-                        Content="提前吃体力（配合加速器使用）" />
+                        Content="提前恢复体力" Grid.Column="1" />
+                    <Label FontWeight="Bold"
+                        FontSize="16px"
+                        Height="30"
+                        VerticalAlignment="Top"
+                        Margin="0,0,344,0"
+                        Content="自动设置：" HorizontalAlignment="Right" Width="105" Grid.Column="1"/>
                 </Grid>
             </TabItem>
         </TabControl>

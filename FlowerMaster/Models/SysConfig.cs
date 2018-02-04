@@ -216,6 +216,18 @@ namespace FlowerMaster.Models
             public int delayTime;
 
             /// <summary>
+            /// 是否自动出售
+            /// </summary>
+            public bool sellTrue;
+            /// <summary>
+            /// 是否自动探索
+            /// </summary>
+            public bool exploreTrue;
+            /// <summary>
+            /// 是否自动抓虫
+            /// </summary>
+            public bool gardenTrue;
+            /// <summary>
             /// 提前恢复体力
             /// </summary>
             public bool actionPrep;
@@ -379,6 +391,9 @@ namespace FlowerMaster.Models
             sysConfig.raidTrue = true;
             sysConfig.specialTrue = false;
             sysConfig.delayTime = 250;
+            sysConfig.sellTrue = true;
+            sysConfig.exploreTrue = true;
+            sysConfig.gardenTrue = true;
             sysConfig.actionPrep = false;
         }
 
@@ -531,6 +546,9 @@ namespace FlowerMaster.Models
                     sysConfig.raidTrue = xe.GetAttribute("RaidTrue") != "" ? bool.Parse(xe.GetAttribute("RaidTrue")) : sysConfig.raidTrue;
                     sysConfig.specialTrue = xe.GetAttribute("SpecialTrue") != "" ? bool.Parse(xe.GetAttribute("SpecialTrue")) : sysConfig.specialTrue;
                     sysConfig.delayTime = xe.GetAttribute("DelayTime") != "" ? int.Parse(xe.GetAttribute("DelayTime")) : sysConfig.delayTime;
+                    sysConfig.sellTrue = xe.GetAttribute("SellTrue") != "" ? bool.Parse(xe.GetAttribute("SellTrue")) : sysConfig.sellTrue;
+                    sysConfig.exploreTrue = xe.GetAttribute("ExploreTrue") != "" ? bool.Parse(xe.GetAttribute("ExploreTrue")) : sysConfig.exploreTrue;
+                    sysConfig.gardenTrue = xe.GetAttribute("GardenTrue") != "" ? bool.Parse(xe.GetAttribute("GardenTrue")) : sysConfig.gardenTrue;
                     sysConfig.actionPrep = xe.GetAttribute("ActionPrep") != "" ? bool.Parse(xe.GetAttribute("ActionPrep")) : sysConfig.actionPrep;
                 }
             }
@@ -626,6 +644,9 @@ namespace FlowerMaster.Models
                     autoPush.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
                     autoPush.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
                     autoPush.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
+                    autoPush.SetAttribute("SellTrue", sysConfig.sellTrue.ToString());
+                    autoPush.SetAttribute("ExploreTrue", sysConfig.exploreTrue.ToString());
+                    autoPush.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     autoPush.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
                     rootNode.AppendChild(autoPush);
 
@@ -763,6 +784,9 @@ namespace FlowerMaster.Models
                     xe.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
                     xe.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
                     xe.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
+                    xe.SetAttribute("SellTrue", sysConfig.sellTrue.ToString());
+                    xe.SetAttribute("ExploreTrue", sysConfig.exploreTrue.ToString());
+                    xe.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     xe.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
 
                     xmlDoc.Save("config.xml");
