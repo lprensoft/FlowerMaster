@@ -89,6 +89,9 @@ namespace FlowerMaster.Helpers
             Random rnd = new Random();
             while (MainWindow.AutoPushS > 0)
             {
+                if (DataUtil.Config.sysConfig.actionPrep == true && 
+                    Col.Check(540, 75, 55, 47, 44) == true) { ScActionPrep(); }
+
                 delay = rnd.Next(DataUtil.Config.sysConfig.delayTime, DataUtil.Config.sysConfig.delayTime * 2);
                 Thread.Sleep(delay);
 
@@ -584,6 +587,20 @@ namespace FlowerMaster.Helpers
                 Thread.Sleep(delay);
             }
             return;
+        }
+
+        /// <summary>
+        /// 提前恢复体力
+        /// </summary>
+        private void ScActionPrep()
+        {
+            while (Col.Check(5, 634, 71, 62, 21) == false) { Thread.Sleep(delay); }
+            Click(80, 360);
+            while (Col.Check(300, 380, 202, 165, 144) == false) { Thread.Sleep(delay); }
+            Click(300, 380);
+            while (Col.Check(320, 320, 176, 31, 69) == false) { Thread.Sleep(delay); }
+            ScRefill();
+
         }
 
         /* Place Holder

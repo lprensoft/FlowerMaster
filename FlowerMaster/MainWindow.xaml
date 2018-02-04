@@ -925,6 +925,11 @@
                         Height="30"
                         Click="btnCancel_Click"
                         Content="取消"/>
+                    <CheckBox x:Name="chkActionPrep"
+                        VerticalAlignment="Top"
+                        Margin="10,500,65,0"
+                        Height="25"
+                        Content="提前吃体力（配合加速器使用）" />
                 </Grid>
             </TabItem>
         </TabControl>

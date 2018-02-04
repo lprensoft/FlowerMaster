@@ -268,6 +268,8 @@ namespace FlowerMaster
             
             tbDelayTime.Text = DataUtil.Config.sysConfig.delayTime.ToString();
 
+            chkActionPrep.IsChecked = DataUtil.Config.sysConfig.actionPrep;
+
         }
 
         /// <summary>
@@ -542,6 +544,8 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.specialTrue = chkSpecialTrue.IsChecked.HasValue ? (bool)chkSpecialTrue.IsChecked : false;
 
             DataUtil.Config.sysConfig.delayTime = int.Parse(tbDelayTime.Text);
+
+            DataUtil.Config.sysConfig.actionPrep = chkActionPrep.IsChecked.HasValue ? (bool)chkActionPrep.IsChecked : false;
 
 
             DataUtil.Config.sysConfig.capFormat = (SysConfig.ScreenShotFormat)cbCapFormat.SelectedIndex;

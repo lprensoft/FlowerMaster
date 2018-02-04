@@ -215,6 +215,11 @@ namespace FlowerMaster.Models
             /// </summary>
             public int delayTime;
 
+            /// <summary>
+            /// 提前恢复体力
+            /// </summary>
+            public bool actionPrep;
+
 
         }
         /// <summary>
@@ -374,6 +379,7 @@ namespace FlowerMaster.Models
             sysConfig.raidTrue = true;
             sysConfig.specialTrue = false;
             sysConfig.delayTime = 250;
+            sysConfig.actionPrep = false;
         }
 
         /// <summary>
@@ -525,6 +531,7 @@ namespace FlowerMaster.Models
                     sysConfig.raidTrue = xe.GetAttribute("RaidTrue") != "" ? bool.Parse(xe.GetAttribute("RaidTrue")) : sysConfig.raidTrue;
                     sysConfig.specialTrue = xe.GetAttribute("SpecialTrue") != "" ? bool.Parse(xe.GetAttribute("SpecialTrue")) : sysConfig.specialTrue;
                     sysConfig.delayTime = xe.GetAttribute("DelayTime") != "" ? int.Parse(xe.GetAttribute("DelayTime")) : sysConfig.delayTime;
+                    sysConfig.actionPrep = xe.GetAttribute("ActionPrep") != "" ? bool.Parse(xe.GetAttribute("ActionPrep")) : sysConfig.actionPrep;
                 }
             }
             catch{ }
@@ -619,6 +626,7 @@ namespace FlowerMaster.Models
                     autoPush.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
                     autoPush.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
                     autoPush.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
+                    autoPush.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
                     rootNode.AppendChild(autoPush);
 
                     xmlDoc.Save("config.xml");
@@ -755,6 +763,7 @@ namespace FlowerMaster.Models
                     xe.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
                     xe.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
                     xe.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
+                    xe.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
 
                     xmlDoc.Save("config.xml");
                 }
