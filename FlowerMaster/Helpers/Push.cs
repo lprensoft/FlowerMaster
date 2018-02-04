@@ -19,7 +19,7 @@ using FlowerMaster.Properties;
 using static FlowerMaster.CordCol;
 using System.Threading;
 
-namespace FlowerMaster.Push
+namespace FlowerMaster.Helpers
 {
 
     public class Nodes
@@ -48,10 +48,8 @@ namespace FlowerMaster.Push
          */
 
         private IntPtr Webhandle = IntPtr.Zero;
-        private int Choice = 0;
-        private int delay = 256;
-        private Helpers.Color Col = Helpers.Color.Instance;
-        
+        private int delay = 1000;
+        private Color Col = Color.Instance;
 
         //核心功能
         /// <summary>
@@ -74,35 +72,44 @@ namespace FlowerMaster.Push
             PostMessage(Webhandle, 0x0200, wParam, lParam1); // 随机移动鼠标
             PostMessage(Webhandle, upCode, wParam, lParam2); // 发送鼠标按键抬起消息
         }
-        
 
+        public void ScInitialize(IntPtr Hand)
+        {
+            Webhandle = Hand;
+            Col.Load(Webhandle);
+        }
+        
+        
         //Main
         /// <summary>
         /// 开始脚本于初始化数据
         /// </summary>
-        public async void Start(int cho, IntPtr hand)
+        public void Start()
         {
-            Webhandle = hand;
-            Choice = cho;
-
-            Col.Load(delay, Webhandle);
-
-            while (MainWindow.AutoPushS == true)
+            Random rnd = new Random();
+            while (MainWindow.AutoPushS > 0)
             {
-                await ScSelect();
+                delay = rnd.Next(DataUtil.Config.sysConfig.delayTime, DataUtil.Config.sysConfig.delayTime * 2);
+                Thread.Sleep(delay);
 
-                await ScDepart();
+                while (ScSelect() == false) { }
+                ScDepart();
+                while (ScCombat() == false) { }
+                ScSell();
+                while (Col.Check(750, 625, 206, 69, 59) == false) { Thread.Sleep(delay); }
+                CoHomeReturn();
 
-                while(await ScCombat() == false) { }
-
-                await ScSell();
-
-                if (DataUtil.Game.player.SP > 0)
+                if (Col.Check(250, 140, 216, 184, 111) == true &&
+                    Col.Check(258, 163, 99, 99, 99) == false && 
+                    Col.Check(520, 75, 50, 41, 37) == true)
                 {
-                    await ScExplore();
+                    ScExplore();
                 }
-                if (DataUtil.Game.player.plantTime < DateTime.Now) { }
-                await ScGarden();
+                if (DataUtil.Game.player.plantTime < DataUtil.Game.serverTime)
+                {
+                    ScGarden();
+                }
+                MainWindow.AutoPushS--;
             }
 
             return;
@@ -113,77 +120,171 @@ namespace FlowerMaster.Push
         /// 选择关卡，并恢复体力
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScSelect()
+        private bool ScSelect()
         {
-            await CoHomeDepart();
+            CoHomeDepart();
 
-            //等待出击页面1加载结束
-            while (await Col.Check(180, 400, 146, 122, 96) == false) {};
-            //根据选择点击出击页面1
-            if (Choice == 0)
+            //等待出击页面加载结束
+            while (Col.Check(600, 400, 28, 29, 19) == false) { Thread.Sleep(delay); }
+
+
+            //根据选择点击出击页面
+
+            //进入主线推图页面
+            if (DataUtil.Config.sysConfig.pushType == 0)
             {
-                Click(300, 140);
-            }
-            else if (Choice == 1)
-            {
-                Click(400, 140);
-            }
-            
-            //根据选择等待并点击出击页面2
-            if (Choice == 0)
-            {
-                while (await Col.Check(218, 242, 213, 200, 159) == false) {};
+                while (Col.Check(218, 242, 213, 200, 159) == false)
+                {
+                    Click(300, 140);
+                    Thread.Sleep(delay);
+;                }
+                while (Col.Check(218, 242, 213, 200, 159) == false) { Thread.Sleep(delay); }
                 Click(300, 260);
             }
-            else if (Choice == 1)
+
+            //进入活动推图页面
+            if (DataUtil.Config.sysConfig.pushType == 1)
             {
-                while (await Col.Check(218, 325, 214, 202, 163) == false) {};
+                while (Col.Check(218, 325, 214, 202, 163) == false)
+                {
+                    Click(400, 140);
+                    Thread.Sleep(delay);
+                }
+                while (Col.Check(218, 325, 214, 202, 163) == false) { Thread.Sleep(delay); }
                 Click(300, 330);
             }
 
-            await CoDepartFirst();
-
-            //等待体力恢复页面出现
-            while(await Col.Check(670, 255, 23, 23, 18, true) == true)
+            //进图水影推图页面
+            if (DataUtil.Config.sysConfig.pushType == 2)
             {
-                await Task.Delay(delay);
-            }
-
-            //确认体力页面是否出现三次
-            for (int i = 0; i < 4; i++)
-            {
-                if (await Col.Check(320, 320, 176, 31, 69, true))
+                while (Col.Check(470, 275, 249, 247, 240) == false)
                 {
-                    await ScRefill();
-                    await CoDepartFirst();
-                    return;
+                    Click(590, 140);
+                    Thread.Sleep(delay);
                 }
-                await Task.Delay(delay);
+                while (Col.Check(470, 275, 249, 247, 240) == false) { Thread.Sleep(delay); }
+                Click(300, 260);
+                while (Col.Check(625, 230, 253, 168, 2) == false) { Thread.Sleep(delay); }
+                Click(300, 260);
             }
             
-            return;
+            //尝试进入队友选择
+            if (DataUtil.Config.sysConfig.pushType != 3)
+            {
+                CoDepartFirst();
+                
+                //确认体力页面是否或者推图页面是否出现
+                while (true)
+                {
+                    Thread.Sleep(2 * delay);
+                    //判断体力恢复是否出现
+                    if (Col.Check(320, 320, 176, 31, 69) == true)
+                    {
+                        //如果碎石失败，返回主页面
+                        if(ScRefill() == false) return false;
+
+                        CoDepartFirst();
+                        return true;
+                    }
+
+                    //判断队友选择是否出现
+                    if (Col.Check(934, 200, 55, 46, 5) == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            //进入上一次推的图
+            if (DataUtil.Config.sysConfig.pushType == 3)
+            {
+                Thread.Sleep(delay);
+                CoDepartPrevious();
+
+                //确认体力页面是否或者推图页面是否出现
+                while (true)
+                {
+                    Thread.Sleep(2 * delay);
+                    //判断体力恢复是否出现
+                    if (Col.Check(320, 320, 176, 31, 69) == true)
+                    {
+                        //如果碎石失败，返回主页面
+                        if (ScRefill() == false) return false;
+
+                        CoDepartPrevious();
+                        return true;
+                    }
+
+                    //判断队友选择是否出现
+                    if (Col.Check(934, 200, 55, 46, 5) == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return true;
         }
         
         /// <summary>
         /// 恢复体力脚本
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScRefill()
+        private bool ScRefill()
         {
-            //确认是否出现药水瓶
-            if (await Col.Check(320, 320, 176, 31, 69, true))
+            //如果不喝药+碎石，则退出碎石页面
+            if (DataUtil.Config.sysConfig.potionTrue == false && DataUtil.Config.sysConfig.stoneTrue == false)
             {
-                //喝药水
-                Click(300, 400);
+                Click(500, 460);
+                Thread.Sleep(delay);
+                return false;
+            }
+
+            //喝药水
+            if (DataUtil.Config.sysConfig.potionTrue == true)
+            {
+                if (Col.Check(300, 400, 128, 128, 128) == false)
+                {
+                    Click(300, 400);
+                    while (true)
+                    {
+                        //等到确认框出现
+                        while (Col.Check(410, 400, 190, 88, 73) == false) { Thread.Sleep(delay); }
+                        //确定喝药红字出现
+                        if (Col.Check(341, 323, 255, 1, 1) == true)
+                        {
+                            Click(410, 400);
+                            CoPreventC();
+                            return true;
+                        }
+                        //没药 - 取消窗口
+                        else
+                        {
+                            Click(500, 400);
+                            break;
+                        }
+                    } 
+                }
+                else
+                {
+                    Click(500, 465);
+                    return false;
+                }
+            }
+
+            //碎石头
+            if (DataUtil.Config.sysConfig.stoneTrue == true)
+            {
+                Click(650, 400);
                 while (true)
                 {
-                    //等到确认框出现
-                    while (await Col.Check(180, 450, 104, 88, 72) == false) {}
-                    if (await Col.Check(341, 323, 255, 1, 1, true))
+                    //等确认窗口出现
+                    while (Col.Check(410, 400, 190, 88, 73) == false) { Thread.Sleep(delay); }
+                    //确定碎石红字出现
+                    if (Col.Check(341, 323, 255, 1, 1) == true)
                     {
                         Click(410, 400);
-                        await CoPrevent();
-                        return;
+                        CoPreventC();
+                        return true;
                     }
                     else
                     {
@@ -191,28 +292,9 @@ namespace FlowerMaster.Push
                         break;
                     }
                 }
-
-                await CoDepartFirst();
-
-                while (await Col.Check(320, 320, 176, 31, 69) == false) {};
-
-                Click(650, 400);
-                while (true)
-                {
-                    while (await Col.Check(180, 450, 104, 88, 72) == false) { }
-                    if (await Col.Check(341, 323, 255, 1, 1, true))
-                    {
-                        Click(410, 400);
-                        await CoPrevent();
-                        return;
-                    }
-                    else
-                    {
-                        Click(500, 400);
-                        return;
-                    }
-                }
             }
+
+            return false;
         }
 
         /// <summary>
@@ -220,17 +302,12 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task ScDepart()
+        private void ScDepart()
         {
-            await CoAssistSecond();
-
-            await CoMisssionLaunch();
-
-            //确保进入图中
-            await Task.Delay(4 * delay);
-            Click(800, 555);
-            await Task.Delay(4 * delay);
-            Click(800, 555);
+            CoAssistSelect();
+            CoMisssionLaunch();
+            //等待成功进图
+            while(Col.Check(900, 25, 1, 45, 44) == false) { Thread.Sleep(delay); }
             
             return;
         }
@@ -240,59 +317,63 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <param name="wait">开始前等待</param>
-        private async Task<bool> ScCombat()
+        private bool ScCombat()
         {
             //等待并点击前进
-            await Task.Delay(delay);
+            Thread.Sleep(delay);
             Click(855, 545);
-            await Task.Delay(delay);
 
             //如果出现弹窗，关闭并继续推图
-            if (await Col.Check(795, 205, 6, 90, 89, true) == true)
+            if (Col.Check(795, 205, 6, 90, 89) == true)
             {
                 Click(805, 205);
                 return false;
             }
 
             //如果出现加战友，取消并继续推图
-            else if (await Col.Check(680, 190, 76, 64, 47, true) == true)
+            else if (Col.Check(680, 190, 76, 64, 47) == true)
             {
                 Click(550, 430);
                 return false;
             }
 
             //如果在主页，返还
-            else if (await Col.Check(170, 40, 163, 148, 66, true) == true)
+            else if (Col.Check(170, 40, 163, 148, 66) == true && 
+                     Col.Check(5, 634, 71, 62, 21) == true)
             {
                 return true;
             }
 
             //如果出现Boss，根据选择启动函数
-            else if (await Col.Check(290, 400, 249, 248, 241, true) == true)
+            else if (Col.Check(290, 400, 249, 248, 241) == true &&
+                        Col.Check(720, 400, 85, 76, 48) == true)
             {
-                if (Choice == 0)
+                if (DataUtil.Config.sysConfig.raidTrue == true)
                 {
-                    await ScAttackRaid();
+                    ScAttackRaid();
                     return true;
                 }
-                await ScPublicRaid();
-                return true;
+                else
+                {
+                    ScPublicRaid();
+                    return true;
+                }
             }
 
             //如果出现特命，根据选择启动函数
-            else if (await Col.Check(450, 400, 192, 89, 73, true) == true)
+            else if (Col.Check(450, 400, 192, 89, 73) == true && 
+                    Col.Check(590, 400, 35, 152, 149) == true)
             {
-                await ScSpecial();
+                ScSpecial();
                 return true;
             }
             
             //如果无事件，继续推图
             else
             {
-                await Task.Delay(delay);
+                Thread.Sleep(delay);
                 Click(855, 545);
-                await ScCombat();
-                return true;
+                return false;
             }
 
         }
@@ -301,37 +382,51 @@ namespace FlowerMaster.Push
         /// 进入主页Boss战并放野
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScAttackRaid()
+        private void ScAttackRaid()
         {
-            await CoBossStart();
-            await CoBossFirst();
-            await CoMisssionLaunch();
-            await CoBossAttack();
+            CoBossStart();
+            CoBossFirst();
+            CoMisssionLaunch();
+            CoBossAttack();
 
-            //取消取消碎石拿Boss点页面
-            await CoCancle(5);
-
-            //等待并确认是否需要再次点击出击
-            for (int i = 0; i < 2; i++)
+            //判定是否出现无Boss点碎石页面
+            while (true)
             {
-                if (await Col.Check(550, 600, 227, 210, 175, true) == true)
+                //无Boss点 要求碎石
+                if (Col.Check(500, 305, 58, 39, 35) == true || 
+                    Col.Check(500, 297, 58, 39, 35) == true)
                 {
-                    Click(750, 555);
+                    //取消碎石
+                    Click(550, 400);
+                    while (Col.Check(255, 135, 43, 24, 0) == false) { Thread.Sleep(delay); }
+                    //请求援助
+                    Click(220, 130);
+                    CoBossAssist();
+                    //等待并取消弹窗
+                    Thread.Sleep(delay * 2);
+                    while (Col.Check(5, 634, 71, 62, 21) == false)
+                    {
+                        CoPreventW();
+                    }
+
+                    return;
                 }
-                await Task.Delay(delay);
+                //有Boss点 成功进入
+                if (Col.Check(630, 540, 0, 0, 0) == true) { break; }
+                Thread.Sleep(100);
             }
             
-            //黑屏时等待
-            while(await Col.Check(630,540,0,0,0,true))
+            //等到能快时快进
+            while(Col.Check(630, 540, 0, 0, 0) == true){ Thread.Sleep(delay); }
+            CoBossSkip();
+            CoBossAssist();
+            //等待并取消弹窗
+            Thread.Sleep(delay * 2);
+            while (Col.Check(5, 634, 71, 62, 21) == false)
             {
-                await Task.Delay(delay);
+                CoPreventW();
             }
-
-            Click(855, 555);
-
-            await CoBossAssist();
-            await Task.Delay(delay);
-            await CoPrevent();
+            while (Col.Check(5, 634, 71, 62, 21) == false) { Thread.Sleep(delay); }
 
             return;
         }
@@ -340,27 +435,60 @@ namespace FlowerMaster.Push
         /// 直接放野主页Boss
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScPublicRaid()
+        private void ScPublicRaid()
         {
-            await CoBossPublic();
-            await CoBossAssist();
-
-            //通过等待确保弹窗出现
-            await Task.Delay(2*delay);
-            await CoPrevent();
-            await Task.Delay(delay);
+            CoBossPublic();
+            CoBossAssist();
+            //等待并取消弹窗
+            Thread.Sleep(delay * 2);
+            while (Col.Check(5, 634, 71, 62, 21) == false)
+            {
+                CoPreventW();
+            }
 
             return;
         }
 
         /// <summary>
-        /// 特命 - 目前直接退出
+        /// 特命
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScSpecial()
+        private void ScSpecial()
         {
-            await CoSpecialExit();
-            await Task.Delay(delay);
+            //判定是否进入特命]
+            if (DataUtil.Config.sysConfig.specialTrue == true)
+            {
+                //确认开始特命副本
+                Click(400, 400);
+                while (Col.Check(218, 325, 214, 202, 163) == false) { Thread.Sleep(delay); }
+                CoDepartFirst();
+                while (true)
+                {
+                    Thread.Sleep(2 * delay);
+                    //判断体力恢复是否出现
+                    if (Col.Check(320, 320, 176, 31, 69) == true)
+                    {
+                        //如果碎石失败，返回主页面
+                        if (ScRefill() == false) return;
+
+                        CoDepartFirst();
+                        break;
+                    }
+
+                    //判断队友选择是否出现
+                    if (Col.Check(934, 200, 55, 46, 5) == true)
+                    {
+                        break;
+                    }
+                }
+                ScDepart();
+                while (ScCombat() == false) { }
+                return;
+            }
+            else
+            {
+                CoSpecialExit();
+            }
 
             return;
         }
@@ -369,19 +497,29 @@ namespace FlowerMaster.Push
         /// 出售花
         /// </summary>
         /// <param name="Node"></param>
-        private async Task ScSell()
+        private void ScSell()
         {
-            await CoHomeTeam();
-            await CoTeamSell();
-            await CoSellAll();
-            await CoSellConfirm();
+            CoHomeTeam();
+            CoTeamSell();
+            while (Col.Check(5, 634, 71, 62, 21) == true) { Thread.Sleep(delay); }
+            CoSellAll();
 
-            //防止无花可卖并取消出售
-            await Task.Delay(delay);
-            Click(810, 65);
-            await Task.Delay(delay * 3);
-
-            return;
+            //判定是否有花可卖
+            while (true)
+            {
+                Thread.Sleep(delay * 2);
+                //没花 点击取消
+                if (Col.Check(420, 560, 51, 51, 51) == true)
+                {
+                    Click(810, 65);
+                }
+                //有花 点击确认
+                else
+                {
+                    CoSellConfirm();
+                }
+                return;
+            }
         }
 
         /// <summary>
@@ -389,19 +527,23 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task ScExplore()
+        private void ScExplore()
         {
-            for (int i = 0; i < 2; i++)
+            //等待加载出花园图标（保证可以探索），在此之前不停返回主页
+            while (Col.Check(437, 177, 211, 209, 205) == false)
             {
-                await CoHomeReturn();
+                CoHomeReturn();
+                Thread.Sleep(delay);
             }
 
             //开晒探索
-            await Task.Delay(delay * 3);
             Click(275, 150);
-            while (await Col.Check(170, 40, 163, 148, 66, true) == false)
+            //等到探索页面出现后开始连点
+            Thread.Sleep(delay * 3);
+            while (Col.Check(170, 40, 163, 148, 66) == false)
             {
-                Click(950, 280);
+                Click(800, 200);
+                Thread.Sleep(delay);
             }
             return;
         }
@@ -411,67 +553,95 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task ScGarden()
+        private void ScGarden()
         {
-            for (int i = 0; i < 2; i++)
+            //确定能点击花园页面，在此之前不停返回主页
+            while (Col.Check(437, 177, 211, 209, 205) == false)
             {
-                await CoHomeReturn();
+                CoHomeReturn();
+                Thread.Sleep(delay);
             }
 
             //查看是否有花园虫，并收获
             Click(435, 150);
-            while (await Col.Check(380, 615, 34, 34, 34, true) == false)
+            while (Col.Check(380, 615, 34, 34, 34) == false)
             {
-                if (await Col.Check(375, 610, 234, 234, 234, true) == true)
+                if (Col.Check(375, 610, 234, 234, 234) == true)
                 {
                     Click(380, 615);
                 }
             }
-            await Task.Delay(delay);
-            await CoHomeReturn();
+
+            //返回主页之前，关闭任何弹窗+点击返回主页
+            while(Col.Check(170, 40, 163, 148, 66) == false)
+            {
+                if (Col.Check(850, 150, 1, 75, 73) == true)
+                {
+                    Click(850, 150);
+                }
+                CoHomeReturn();
+                Thread.Sleep(delay);
+            }
             return;
         }
 
         /* Place Holder
          */
 
-        
+
         //鼠标验色与点击事件 - Co系列
+
         /// <summary>
-        /// 等待并关闭弹窗
+        /// 等待弹窗出现后关闭
         /// </summary>
-        private async Task CoPrevent()
+        private void CoPreventC()
         {
-            while (await Col.Check(795, 205, 6, 90, 89) == false) {};
+            while (Col.Check(795, 205, 6, 90, 89) == false) { Thread.Sleep(delay); }
             Click(805, 205);
+        }
+
+        /// <summary>
+        /// 如果目前有弹窗 则关闭 需要配合while使用
+        /// </summary>
+        private void CoPreventW()
+        {
+            while (Col.Check(795, 205, 6, 90, 89) == true)
+            {
+                Thread.Sleep(delay);
+                Click(805, 205);
+            }
         }
 
         /// <summary>
         /// 等待一定时间后取消弹窗
         /// </summary>
-        private async Task CoCancle(int multi = 1)
-        {
-            await Task.Delay(delay * multi);
+        private void CoCancle()
+        { 
+            Thread.Sleep(delay);
             Click(550, 400);
         }
 
         /// <summary>
-        /// 确认在主页并点击出击按钮
+        /// 等待下方黑条载入结束后 确认在主页并点击出击按钮
         /// </summary>
         /// <returns></returns>
-        private async Task CoHomeDepart()
+        private void CoHomeDepart()
         {
-            while (await Col.Check(170, 40, 163, 148, 66) == false) {};
-            Click(80, 155);
+            while (Col.Check(600, 400, 28, 29, 19) == false)
+            {
+                while (Col.Check(5, 634, 71, 62, 21) == false) { Thread.Sleep(delay); }
+                Click(80, 155);
+                Thread.Sleep(delay);
+            }
         }
 
         /// <summary>
-        /// 确认在主页并点击编队按钮
+        /// 等待下方黑条载入结束后 确认在主页并点击编队按钮
         /// </summary>
         /// <returns></returns>
-        private async Task CoHomeTeam()
+        private void CoHomeTeam()
         {
-            while (await Col.Check(170, 40, 163, 148, 66) == false) {};
+            while (Col.Check(5, 634, 71, 62, 21) == false) { Thread.Sleep(delay); }
             Click(85, 210);
         }
 
@@ -479,39 +649,52 @@ namespace FlowerMaster.Push
         /// 等待第一个可推图出现并点击
         /// </summary>
         /// <returns></returns>
-        private async Task CoDepartFirst()
+        private void CoDepartFirst()
         {
-            while (await Col.Check(670, 255, 23, 23, 18) == false) {};
+            while (Col.Check(600, 265, 28, 29, 19) == false) { Thread.Sleep(delay); }
             Click(430, 245);
+        }
+
+        /// <summary>
+        /// 进入上一次推的图
+        /// </summary>
+        private void CoDepartPrevious()
+        {
+            while (Col.Check(600, 400, 28, 29, 19) == false) { Thread.Sleep(delay); }
+            Click(250, 400);
         }
 
         /// <summary>
         /// 等待二号战友出现并选择
         /// </summary>
         /// <returns></returns>
-        private async Task CoAssistSecond()
+        private void CoAssistSelect()
         {
-            while (await Col.Check(750, 200, 228, 218, 178) == false) {};
-            Click(750, 250);
+            while (Col.Check(730, 200, 213, 185, 132) == false)
+            {
+                while (Col.Check(934, 200, 55, 46, 5) == false) { Thread.Sleep(delay); }
+                Click(750, 250);
+                Thread.Sleep(delay);
+            }
         }
 
         /// <summary>
         /// 等待出击按钮出现并开始推图
         /// </summary>
         /// <returns></returns>
-        private async Task CoMisssionLaunch()
+        private void CoMisssionLaunch()
         {
-            while (await Col.Check(730, 200, 213, 185, 132) == false) {};
-            Click(800, 555);
+            while (Col.Check(730, 200, 213, 185, 132) == false) { Thread.Sleep(delay); }
+            Click(850, 555);
         }
 
         /// <summary>
         /// 等待出现Boss并选择攻击Boss
         /// </summary>
         /// <returns></returns>
-        private async Task CoBossStart()
+        private void CoBossStart()
         {
-            while (await Col.Check(290, 400, 249, 248, 241) == false) {};
+            while (Col.Check(290, 400, 249, 248, 241) == false) { Thread.Sleep(delay); }
             Click(285, 400);
         }
 
@@ -519,9 +702,9 @@ namespace FlowerMaster.Push
         /// 等待出现Boss并选择放野Boss
         /// </summary>
         /// <returns></returns>
-        private async Task CoBossPublic()
+        private void CoBossPublic()
         {
-            while (await Col.Check(290, 400, 249, 248, 241) == false) {};
+            while (Col.Check(290, 400, 249, 248, 241) == false) { Thread.Sleep(delay); }
             Click(650, 400);
         }
 
@@ -529,9 +712,9 @@ namespace FlowerMaster.Push
         /// 等待Boss列表加载完毕并攻击第一个
         /// </summary>
         /// <returns></returns>
-        private async Task CoBossFirst()
+        private void CoBossFirst()
         {
-            while (await Col.Check(840, 250, 87, 73, 52) == false) {};
+            while (Col.Check(840, 250, 87, 73, 52) == false) { Thread.Sleep(delay); }
             Click(840, 250);
         }
 
@@ -539,19 +722,25 @@ namespace FlowerMaster.Push
         /// 等待攻击Boss页面出现并选择通常攻击
         /// </summary>
         /// <returns></returns>
-        private async Task CoBossAttack()
+        private void CoBossAttack()
         {
-            while (await Col.Check(550, 600, 227, 210, 175) == false) {};
-            Click(750, 555);
+            while (Col.Check(500, 305, 58, 39, 35) == false ||
+                   Col.Check(500, 297, 58, 39, 35) == false ||
+                   Col.Check(630, 540, 0, 0, 0) == false)
+            {
+                while (Col.Check(550, 600, 227, 210, 175) == false) { Thread.Sleep(delay); }
+                Click(750, 555);
+                Thread.Sleep(delay);
+            }
         }
 
         /// <summary>
         /// 等待申请援助选项出现并点击
         /// </summary>
         /// <returns></returns>
-        private async Task CoBossAssist()
+        private void CoBossAssist()
         {
-            while (await Col.Check(290, 400, 175, 74, 59) == false) {};
+            while (Col.Check(290, 400, 175, 74, 59) == false) { Thread.Sleep(delay); }
             Click(290, 400);
         }
 
@@ -559,9 +748,9 @@ namespace FlowerMaster.Push
         /// 等待特命弹窗出现并选择取消
         /// </summary>
         /// <returns></returns>
-        private async Task CoSpecialExit()
+        private void CoSpecialExit()
         {
-            while (await Col.Check(450, 400, 192, 89, 73) == false) {};
+            while (Col.Check(450, 400, 192, 89, 73) == false) { Thread.Sleep(delay); }
             Click(550, 400);
         }
 
@@ -569,9 +758,9 @@ namespace FlowerMaster.Push
         /// 确认进入编成页面并点击出售
         /// </summary>
         /// <returns></returns>
-        private async Task CoTeamSell()
+        private void CoTeamSell()
         {
-            while (await Col.Check(201, 235, 130, 184, 201) == false) {};
+            while (Col.Check(201, 235, 130, 184, 201) == false) { Thread.Sleep(delay); }
             Click(535, 137);
         }
 
@@ -579,9 +768,9 @@ namespace FlowerMaster.Push
         /// 确认进入出售页面并点击批量出售
         /// </summary>
         /// <returns></returns>
-        private async Task CoSellAll()
+        private void CoSellAll()
         {
-            while (await Col.Check(206, 329, 80, 26, 17) == false) {};
+            while (Col.Check(206, 329, 80, 26, 17) == false) { Thread.Sleep(delay); }
             Click(220, 295);
         }
 
@@ -589,9 +778,9 @@ namespace FlowerMaster.Push
         /// 确认进入批量出售页面并点击出售
         /// </summary>
         /// <returns></returns>
-        private async Task CoSellConfirm()
+        private void CoSellConfirm()
         {
-            while (await Col.Check(802, 530, 233, 216, 183) == false) {};
+            while (Col.Check(802, 530, 233, 216, 183) == false) { Thread.Sleep(delay); }
             Click(420, 560);
         }
 
@@ -599,12 +788,25 @@ namespace FlowerMaster.Push
         /// 连续点击Home与无效位置来返回主页
         /// </summary>
         /// <returns></returns>
-        private async Task CoHomeReturn()
+        private void CoHomeReturn()
         {
             Click(80, 80);
-            await Task.Delay(delay);
+            Thread.Sleep(delay/2);
             Click(5, 5);
-            await Task.Delay(delay);
+        }
+
+        /// <summary>
+        /// 快进主页Boss
+        /// </summary>
+        /// <param name="Node"></param>
+        /// <returns></returns>
+        private void CoBossSkip()
+        {
+            while (Col.Check(855, 555, 229, 229, 229) == true)
+            {
+                Thread.Sleep(delay);
+                Click(855, 555);
+            }
         }
 
         /*
@@ -613,10 +815,10 @@ namespace FlowerMaster.Push
         /// </summary>
         /// <param name="Node"></param>
         /// <returns></returns>
-        private async Task Cotemplate()
+        private void Cotemplate()
         {
-            await Col.Check(206, 329, 80, 26, 17);
-            Click(220, 295);
+            while (Col.Check(0, 0, 0, 0, 0) == false) { Thread.Sleep(delay); }
+            Click(0, 0);
         }
         */
 

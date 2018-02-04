@@ -16,7 +16,6 @@ using System.Windows.Media;
 using FlowerMaster.Models;
 using FlowerMaster.Helpers;
 using FlowerMaster.Properties;
-using FlowerMaster.Push;
 using static FlowerMaster.CordCol;
 
 namespace FlowerMaster
@@ -37,7 +36,7 @@ namespace FlowerMaster
         public int autoGoLastConf = 0; //自动推图点击上次配置计数器
         public Timer timerNotify = null; //提醒计时器
 
-        public static bool AutoPushS = false; //自动推图2.0状态
+        public static int AutoPushS = -1; //自动推图2.0状态
 
         private IntPtr webHandle = IntPtr.Zero;
 
@@ -256,6 +255,19 @@ namespace FlowerMaster
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSS;
             }
+
+            //自动推图2.0设置
+            cbPushType.SelectedIndex = DataUtil.Config.sysConfig.pushType;
+            tbPushTimes.Text = DataUtil.Config.sysConfig.pushTimes.ToString();
+
+            chkPotionTrue.IsChecked = DataUtil.Config.sysConfig.potionTrue;
+            chkStoneTrue.IsChecked = DataUtil.Config.sysConfig.stoneTrue;
+
+            chkRaidTrue.IsChecked = DataUtil.Config.sysConfig.raidTrue;
+            chkSpecialTrue.IsChecked = DataUtil.Config.sysConfig.specialTrue;
+            
+            tbDelayTime.Text = DataUtil.Config.sysConfig.delayTime.ToString();
+
         }
 
         /// <summary>
@@ -453,6 +465,16 @@ namespace FlowerMaster
                 await this.ShowMessageAsync("错误 - 保存失败", "指定战点必须是整数！");
                 return false;
             }
+            if (!int.TryParse(tbPushTimes.Text, out tryInt))
+            {
+                await this.ShowMessageAsync("错误 - 保存失败", "代理服务器端口号必须是整数！");
+                return false;
+            }
+            if (!int.TryParse(tbDelayTime.Text, out tryInt))
+            {
+                await this.ShowMessageAsync("错误 - 保存失败", "代理服务器端口号必须是整数！");
+                return false;
+            }
             if (chkEnableHotKey.IsChecked.HasValue && (bool)chkEnableHotKey.IsChecked)
             {
                 if (!(bool)chkHotKeyAlt.IsChecked && !(bool)chkHotKeyCtrl.IsChecked && !(bool)chkHotKeyShift.IsChecked)
@@ -508,6 +530,19 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.hotKeyAlt = chkHotKeyAlt.IsChecked.HasValue ? (bool)chkHotKeyAlt.IsChecked : false;
             DataUtil.Config.sysConfig.hotKeyShift = chkHotKeyShift.IsChecked.HasValue ? (bool)chkHotKeyShift.IsChecked : false;
             DataUtil.Config.sysConfig.hotKey = tbHotKey.Text[0];
+            
+            //自动推图设置
+            DataUtil.Config.sysConfig.pushType = cbPushType.SelectedIndex;
+            DataUtil.Config.sysConfig.pushTimes = int.Parse(tbPushTimes.Text);
+
+            DataUtil.Config.sysConfig.potionTrue = chkPotionTrue.IsChecked.HasValue ? (bool)chkPotionTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.stoneTrue = chkStoneTrue.IsChecked.HasValue ? (bool)chkStoneTrue.IsChecked : false;
+
+            DataUtil.Config.sysConfig.raidTrue = chkRaidTrue.IsChecked.HasValue ? (bool)chkRaidTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.specialTrue = chkSpecialTrue.IsChecked.HasValue ? (bool)chkSpecialTrue.IsChecked : false;
+
+            DataUtil.Config.sysConfig.delayTime = int.Parse(tbDelayTime.Text);
+
 
             DataUtil.Config.sysConfig.capFormat = (SysConfig.ScreenShotFormat)cbCapFormat.SelectedIndex;
 
@@ -543,6 +578,7 @@ namespace FlowerMaster
 
             return true;
         }
+
 
         /// <summary>
         /// 自动推图定时器
@@ -835,6 +871,7 @@ namespace FlowerMaster
                 }
             }
         }
+        
 
         private async void btnClearCache_Click(object sender, RoutedEventArgs e)
         {
@@ -995,55 +1032,50 @@ namespace FlowerMaster
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnPush_Click(object sender, RoutedEventArgs e)
+        private async void btnPush_Click(object sender, RoutedEventArgs e)
         {
+            if (AutoPushS >= 0)
+            {
+                MessageBoxResult type = MessageBox.Show("请点击下面的按钮暂停", "推图中", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
 
             //如果状态为0，启动推图功能
-            if (AutoPushS == false)
+            else
             {
                 IntPtr Han = GetWebHandle(mainWeb.Handle);
 
-                MessageBoxResult type = MessageBox.Show("请选择自动推图模式（主线Yes，活动No）：\r\n请在游戏主页开启此功能\r\n双击设置暂停，使用愉快", "模式选择", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-                if (type == MessageBoxResult.Yes)
+                MessageBoxResult type = MessageBox.Show("点击OK开始自动推图\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (type == MessageBoxResult.OK)
                 {
-                    MiscHelper.AddLog("开始主线推图", MiscHelper.LogType.System);
-                    AutoPushS = true;
+                    MiscHelper.AddLog("开始推图!", MiscHelper.LogType.System);
+                    AutoPushS = AutoPushS + DataUtil.Config.sysConfig.delayTime;
                     Nodes Node = new Nodes();
-                    Node.Start(1, Han);
 
-                }
-                else if (type == MessageBoxResult.No)
-                {
-                    MiscHelper.AddLog("开始活动推图", MiscHelper.LogType.System);
-                    AutoPushS = true;
-                    Nodes Node = new Nodes();
-                    Node.Start(1, Han);
+                    Node.ScInitialize(Han);
+
+                    Thread PushThread = new Thread(Node.Start);
+                    PushThread.Start();
+                    while( PushThread.IsAlive == true)
+                    {
+                        if (AutoPushS < 0) { PushThread.Abort(); }
+                        await Task.Delay(1000);
+                    }
                 }
                 else
                 {
                     return;
                 }
             }
-
-            //如果状态不为0，关闭推图功能
-            else
-            {
-                MessageBoxResult type = MessageBox.Show("请点击设置按钮暂停", "设置暂停", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-            }
+            
         }
 
         private void btnPush_Set(object sender, RoutedEventArgs e)
         {
-            if(AutoPushS == true)
+            if(AutoPushS > 0)
             {
-                MessageBoxResult type = MessageBox.Show("暂停成功，推完这把就结束。\r\n再次点击进入设置", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-                AutoPushS = false;
-            }
-            else
-            {
-
+                MessageBoxResult type = MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                AutoPushS = -1;
             }
         }
-
     }
 }
