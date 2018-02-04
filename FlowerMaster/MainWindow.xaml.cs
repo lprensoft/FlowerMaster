@@ -268,6 +268,11 @@ namespace FlowerMaster
             
             tbDelayTime.Text = DataUtil.Config.sysConfig.delayTime.ToString();
 
+            chkSellTrue.IsChecked = DataUtil.Config.sysConfig.sellTrue;
+            chkExploreTrue.IsChecked = DataUtil.Config.sysConfig.exploreTrue;
+            chkGardenTrue.IsChecked = DataUtil.Config.sysConfig.gardenTrue;
+            chkActionPrep.IsChecked = DataUtil.Config.sysConfig.actionPrep;
+
         }
 
         /// <summary>
@@ -542,6 +547,11 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.specialTrue = chkSpecialTrue.IsChecked.HasValue ? (bool)chkSpecialTrue.IsChecked : false;
 
             DataUtil.Config.sysConfig.delayTime = int.Parse(tbDelayTime.Text);
+
+            DataUtil.Config.sysConfig.sellTrue = chkSellTrue.IsChecked.HasValue ? (bool)chkSellTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.exploreTrue = chkExploreTrue.IsChecked.HasValue ? (bool)chkExploreTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.gardenTrue = chkGardenTrue.IsChecked.HasValue ? (bool)chkGardenTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.actionPrep = chkActionPrep.IsChecked.HasValue ? (bool)chkActionPrep.IsChecked : false;
 
 
             DataUtil.Config.sysConfig.capFormat = (SysConfig.ScreenShotFormat)cbCapFormat.SelectedIndex;
@@ -1057,7 +1067,7 @@ namespace FlowerMaster
                     PushThread.Start();
                     while( PushThread.IsAlive == true)
                     {
-                        if (AutoPushS < 0) { PushThread.Abort(); }
+                        if (AutoPushS < 0 || DataUtil.Game.isOnline == false) { PushThread.Abort(); }
                         await Task.Delay(1000);
                     }
                 }
@@ -1069,6 +1079,11 @@ namespace FlowerMaster
             
         }
 
+        /// <summary>
+        /// 自动推图停止按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnPush_Set(object sender, RoutedEventArgs e)
         {
             if(AutoPushS > 0)

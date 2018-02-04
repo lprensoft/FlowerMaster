@@ -89,26 +89,43 @@ namespace FlowerMaster.Helpers
             Random rnd = new Random();
             while (MainWindow.AutoPushS > 0)
             {
+                if (DataUtil.Config.sysConfig.actionPrep == true && 
+                    Col.Check(540, 75, 55, 47, 44) == true) { ScActionPrep(); }
+
                 delay = rnd.Next(DataUtil.Config.sysConfig.delayTime, DataUtil.Config.sysConfig.delayTime * 2);
                 Thread.Sleep(delay);
 
                 while (ScSelect() == false) { }
                 ScDepart();
                 while (ScCombat() == false) { }
-                ScSell();
-                while (Col.Check(750, 625, 206, 69, 59) == false) { Thread.Sleep(delay); }
-                CoHomeReturn();
 
-                if (Col.Check(250, 140, 216, 184, 111) == true &&
-                    Col.Check(258, 163, 99, 99, 99) == false && 
-                    Col.Check(520, 75, 50, 41, 37) == true)
+
+                if (DataUtil.Config.sysConfig.sellTrue == true)
                 {
-                    ScExplore();
+                    CoHomeReturn();
+                    ScSell(); 
                 }
-                if (DataUtil.Game.player.plantTime < DataUtil.Game.serverTime)
+
+                if (DataUtil.Config.sysConfig.exploreTrue == true)
                 {
-                    ScGarden();
+                    CoHomeReturn();
+                    if (Col.Check(250, 140, 216, 184, 111) == true &&
+                        Col.Check(258, 163, 99, 99, 99) == false &&
+                        Col.Check(520, 75, 50, 41, 37) == true)
+                    {
+                        ScExplore();
+                    } 
                 }
+
+                if (DataUtil.Config.sysConfig.gardenTrue == true)
+                {
+                    CoHomeReturn();
+                    if (DataUtil.Game.player.plantTime < DataUtil.Game.serverTime)
+                    {
+                        ScGarden();
+                    } 
+                }
+
                 MainWindow.AutoPushS--;
             }
 
@@ -502,7 +519,7 @@ namespace FlowerMaster.Helpers
         {
             CoHomeTeam();
             CoTeamSell();
-            while (Col.Check(5, 634, 71, 62, 21) == true) { Thread.Sleep(delay); }
+            while (Col.Check(765, 620, 62, 35, 33) == false) { Thread.Sleep(delay); }
             CoSellAll();
 
             //判定是否有花可卖
@@ -513,13 +530,17 @@ namespace FlowerMaster.Helpers
                 if (Col.Check(420, 560, 51, 51, 51) == true)
                 {
                     Click(810, 65);
+                    Thread.Sleep(delay);
+                    return;
                 }
                 //有花 点击确认
-                else
+                else if (Col.Check(420, 560, 95, 34, 25) == true)
                 {
-                    CoSellConfirm();
+                        CoSellConfirm();
+                        Thread.Sleep(delay); 
+                    return;
                 }
-                return;
+                else { Thread.Sleep(delay); }
             }
         }
 
@@ -530,14 +551,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void ScExplore()
         {
-            //等待加载出花园图标（保证可以探索），在此之前不停返回主页
-            while (Col.Check(437, 177, 211, 209, 205) == false)
-            {
-                CoHomeReturn();
-                Thread.Sleep(delay);
-            }
-
-            //开晒探索
+            //开始探索
             Click(275, 150);
             //等到探索页面出现后开始连点
             Thread.Sleep(delay * 3);
@@ -556,13 +570,6 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void ScGarden()
         {
-            //确定能点击花园页面，在此之前不停返回主页
-            while (Col.Check(437, 177, 211, 209, 205) == false)
-            {
-                CoHomeReturn();
-                Thread.Sleep(delay);
-            }
-
             //查看是否有花园虫，并收获
             Click(435, 150);
             while (Col.Check(380, 615, 34, 34, 34) == false)
@@ -584,6 +591,20 @@ namespace FlowerMaster.Helpers
                 Thread.Sleep(delay);
             }
             return;
+        }
+
+        /// <summary>
+        /// 提前恢复体力
+        /// </summary>
+        private void ScActionPrep()
+        {
+            while (Col.Check(5, 634, 71, 62, 21) == false) { Thread.Sleep(delay); }
+            Click(80, 360);
+            while (Col.Check(300, 380, 202, 165, 144) == false) { Thread.Sleep(delay); }
+            Click(300, 380);
+            while (Col.Check(320, 320, 176, 31, 69) == false) { Thread.Sleep(delay); }
+            ScRefill();
+
         }
 
         /* Place Holder
@@ -765,13 +786,17 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 确认进入出售页面并点击批量出售
+        /// 确认进入出售页面并不停地点击出售
+        /// 直到出售页面出现为止
         /// </summary>
         /// <returns></returns>
         private void CoSellAll()
         {
-            while (Col.Check(206, 329, 80, 26, 17) == false) { Thread.Sleep(delay); }
-            Click(220, 295);
+            while (Col.Check(780, 580, 237, 225, 198) == false)
+            {
+                Click(220, 295);
+                Thread.Sleep(delay);
+            }
         }
 
         /// <summary>
@@ -790,9 +815,14 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoHomeReturn()
         {
-            Click(80, 80);
-            Thread.Sleep(delay/2);
-            Click(5, 5);
+            while (Col.Check(437, 177, 211, 209, 205) == false )
+            {
+                Thread.Sleep(delay);
+                Click(80, 80);
+                Thread.Sleep(delay);
+                Click(5, 5);
+                Thread.Sleep(delay);
+            }
         }
 
         /// <summary>
