@@ -724,8 +724,8 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoBossAttack()
         {
-            while (Col.Check(500, 305, 58, 39, 35) == false ||
-                   Col.Check(500, 297, 58, 39, 35) == false ||
+            while (Col.Check(500, 305, 58, 39, 35) == false &&
+                   Col.Check(500, 297, 58, 39, 35) == false &&
                    Col.Check(630, 540, 0, 0, 0) == false)
             {
                 while (Col.Check(550, 600, 227, 210, 175) == false) { Thread.Sleep(delay); }
