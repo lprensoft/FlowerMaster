@@ -1067,7 +1067,7 @@ namespace FlowerMaster
                     PushThread.Start();
                     while( PushThread.IsAlive == true)
                     {
-                        if (AutoPushS < 0) { PushThread.Abort(); }
+                        if (AutoPushS < 0 || DataUtil.Game.isOnline == false) { PushThread.Abort(); }
                         await Task.Delay(1000);
                     }
                 }
@@ -1079,6 +1079,11 @@ namespace FlowerMaster
             
         }
 
+        /// <summary>
+        /// 自动推图停止按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnPush_Set(object sender, RoutedEventArgs e)
         {
             if(AutoPushS > 0)

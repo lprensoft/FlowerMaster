@@ -519,6 +519,7 @@ namespace FlowerMaster.Helpers
         {
             CoHomeTeam();
             CoTeamSell();
+            Thread.Sleep(delay);
             while (Col.Check(5, 634, 71, 62, 21) == true) { Thread.Sleep(delay); }
             CoSellAll();
 
@@ -530,13 +531,17 @@ namespace FlowerMaster.Helpers
                 if (Col.Check(420, 560, 51, 51, 51) == true)
                 {
                     Click(810, 65);
+                    Thread.Sleep(delay);
+                    return;
                 }
                 //有花 点击确认
-                else
+                else if (Col.Check(420, 560, 95, 34, 25) == true)
                 {
                     CoSellConfirm();
+                    Thread.Sleep(delay);
+                    return;
                 }
-                return;
+                else { }
             }
         }
 

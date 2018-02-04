@@ -918,22 +918,22 @@
                         Content="取消"/>
                     <CheckBox x:Name="chkSellTrue"
                         VerticalAlignment="Top"
-                        Margin="0,35,25,0"
+                        Margin="0,30,25,0"
                         Height="25"
                         Content="自动出售" Grid.Column="1" HorizontalAlignment="Right" Width="384" />
                     <CheckBox x:Name="chkExploreTrue"
                         VerticalAlignment="Top"
-                        Margin="50,65,25,0"
+                        Margin="50,60,25,0"
                         Height="25"
                         Content="自动探索" Grid.Column="1" />
                     <CheckBox x:Name="chkGardenTrue"
                         VerticalAlignment="Top"
-                        Margin="50,95,25,0"
+                        Margin="50,90,25,0"
                         Height="25"
                         Content="自动抓虫" Grid.Column="1" />
                     <CheckBox x:Name="chkActionPrep"
                         VerticalAlignment="Top"
-                        Margin="50,125,25,0"
+                        Margin="50,120,25,0"
                         Height="25"
                         Content="提前恢复体力" Grid.Column="1" />
                     <Label FontWeight="Bold"
