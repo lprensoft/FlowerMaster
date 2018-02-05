@@ -942,6 +942,11 @@
                         VerticalAlignment="Top"
                         Margin="0,0,344,0"
                         Content="自动设置：" HorizontalAlignment="Right" Width="105" Grid.Column="1"/>
+                    <CheckBox x:Name="chkGameRestart"
+                        VerticalAlignment="Top"
+                        Margin="0,205,25,0"
+                        Height="25"
+                        Content="每日更新后自动刷新（需要在登录游戏时选择自动登录）" Grid.Column="1" HorizontalAlignment="Right" Width="384" Checked="chkSellTrue_Copy_Checked" />
                 </Grid>
             </TabItem>
         </TabControl>
