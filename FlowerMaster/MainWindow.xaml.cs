@@ -673,13 +673,25 @@ namespace FlowerMaster
             if (MessageBox.Show("确实要重新载入页面吗？", "操作确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
-                styleSheetApplied = false;
-                loginSubmitted = false;
-                newsHadShown = false;
-                DataUtil.Game.isOnline = false;
-                DataUtil.Game.canAuto = false;
-                mainWeb.Navigate(DataUtil.Game.gameUrl);
+                //styleSheetApplied = false;
+                //loginSubmitted = false;
+                //newsHadShown = false;
+                //DataUtil.Game.isOnline = false;
+                //DataUtil.Game.canAuto = false;
+                //mainWeb.Navigate(DataUtil.Game.gameUrl);
+                Refresh();
             }
+        }
+
+        private void Refresh()
+        {
+            MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
+            styleSheetApplied = false;
+            loginSubmitted = false;
+            newsHadShown = false;
+            DataUtil.Game.isOnline = false;
+            DataUtil.Game.canAuto = false;
+            mainWeb.Navigate(DataUtil.Game.gameUrl);
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
@@ -1070,6 +1082,9 @@ namespace FlowerMaster
             
         }
 
+        /// <summary>
+        /// 启动自动推图
+        /// </summary>
         private async void AutoPush()
         {
             IntPtr Han = GetWebHandle(mainWeb.Handle);
@@ -1088,10 +1103,12 @@ namespace FlowerMaster
                     PushThread.Abort();
                 }
                 if (DataUtil.Game.serverTime.Hour == 03 &&
-                   DataUtil.Game.serverTime.Minute == 59)
+                   DataUtil.Game.serverTime.Minute == 59 &&
+                   DataUtil.Config.sysConfig.gameRestart == true)
                 {
                     await Task.Delay(120000);
                     PushThread.Abort();
+                    Refresh();
                     Helpers.Color Col = Helpers.Color.Instance;
                     Mouse Mou = Mouse.Instance;
                     while (Col.Check(437, 177, 211, 209, 205) == false)

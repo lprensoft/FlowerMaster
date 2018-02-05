@@ -890,11 +890,15 @@
                             <Label Height="25"
                         VerticalAlignment="Top"
                         Margin="25,400,137,0"
-                        Content="怕封号建议设置3000以上"/>
+                        Content="怕封号建议设置3000以上（还是有可能被封）"/>
                             <Label Height="25"
                         VerticalAlignment="Top"
                         Margin="25,430,137,0"
                         Content="脚本有风险，量力而行"/>
+                            <Label Height="25"
+                                VerticalAlignment="Top"
+                                Margin="151,241,-267,0"
+                                Content="默认延迟250，根据电脑性能可增减" Grid.Column="1"/>
                         </Grid>
                     </ScrollViewer>
 
@@ -944,9 +948,13 @@
                         Content="自动设置：" HorizontalAlignment="Right" Width="105" Grid.Column="1"/>
                     <CheckBox x:Name="chkGameRestart"
                         VerticalAlignment="Top"
-                        Margin="0,205,25,0"
+                        Margin="50,205,25,0"
                         Height="25"
-                        Content="每日更新后自动刷新（需要在登录游戏时选择自动登录）" Grid.Column="1" HorizontalAlignment="Right" Width="384" Checked="chkSellTrue_Copy_Checked" />
+                        Content="每日更新后自动刷新" Grid.Column="1"/>
+                    <Label Height="25"
+                        VerticalAlignment="Top"
+                        Margin="50,235,25,0"
+                        Content="需要在登录游戏时选择自动登录（最下面的那个打钩)" Grid.Column="1"/>
                 </Grid>
             </TabItem>
         </TabControl>
