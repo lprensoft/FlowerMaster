@@ -179,10 +179,11 @@ namespace FlowerMaster.Helpers
                     Click(590, 140);
                     Thread.Sleep(delay);
                 }
-                while (Col.Check(470, 275, 249, 247, 240) == false) { Thread.Sleep(delay); }
-                Click(300, 260);
-                while (Col.Check(625, 230, 253, 168, 2) == false) { Thread.Sleep(delay); }
-                Click(300, 260);
+                while (Col.Check(730,200,213,185,132) == false)
+                {
+                    Click(600, 250);
+                    Thread.Sleep(delay);
+                }
             }
             
             //尝试进入队友选择
@@ -687,7 +688,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 等待二号战友出现并选择
+        /// 战友选择成功之前不停地点击二号战友位
         /// </summary>
         /// <returns></returns>
         private void CoAssistSelect()
@@ -695,7 +696,7 @@ namespace FlowerMaster.Helpers
             while (Col.Check(730, 200, 213, 185, 132) == false)
             {
                 while (Col.Check(934, 200, 55, 46, 5) == false) { Thread.Sleep(delay); }
-                Click(750, 250);
+                Click(600, 250);
                 Thread.Sleep(delay);
             }
         }
