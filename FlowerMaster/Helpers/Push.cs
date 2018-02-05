@@ -200,7 +200,6 @@ namespace FlowerMaster.Helpers
                     {
                         //如果碎石失败，返回主页面
                         if(ScRefill() == false) return false;
-
                         CoDepartFirst();
                         return true;
                     }
@@ -673,8 +672,16 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoDepartFirst()
         {
-            while (Col.Check(600, 265, 28, 29, 19) == false) { Thread.Sleep(delay); }
-            Click(430, 245);
+            while (Col.Check(600, 265, 28, 29, 19) == true)
+            {
+                while (Col.Check(934, 200, 55, 46, 5) == false &&
+                    Col.Check(730, 200, 213, 185, 132) == false &&
+                    Col.Check(320, 320, 176, 31, 69) == false)
+                {
+                    Click(430, 245);
+                    Thread.Sleep(delay);
+                }
+            }
         }
 
         /// <summary>
