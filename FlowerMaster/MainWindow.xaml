@@ -881,7 +881,7 @@
                                 FontSize="16px"
                                 Height="30"
                                 VerticalAlignment="Top"
-                                Margin="5,326,268,0"
+                                Margin="0,326,299,0"
                                 Content="设置延迟：" HorizontalAlignment="Right" Width="105"/>
                             <Label Height="25"
                         VerticalAlignment="Top"
