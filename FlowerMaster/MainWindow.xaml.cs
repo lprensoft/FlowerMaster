@@ -1088,8 +1088,8 @@ namespace FlowerMaster
         {
             if(AutoPushS > 0)
             {
-                MessageBoxResult type = MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 AutoPushS = -1;
+                MessageBoxResult type = MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             }
         }
     }
