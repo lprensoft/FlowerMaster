@@ -228,10 +228,14 @@ namespace FlowerMaster.Models
             /// </summary>
             public bool gardenTrue;
             /// <summary>
-            /// 提前恢复体力
+            /// 是否提前恢复体力
             /// </summary>
             public bool actionPrep;
 
+            /// <summary>
+            /// 是否自动重启游戏
+            /// </summary>
+            public bool gameRestart;
 
         }
         /// <summary>
@@ -395,6 +399,7 @@ namespace FlowerMaster.Models
             sysConfig.exploreTrue = true;
             sysConfig.gardenTrue = true;
             sysConfig.actionPrep = false;
+            sysConfig.gameRestart = false;
         }
 
         /// <summary>
@@ -550,6 +555,7 @@ namespace FlowerMaster.Models
                     sysConfig.exploreTrue = xe.GetAttribute("ExploreTrue") != "" ? bool.Parse(xe.GetAttribute("ExploreTrue")) : sysConfig.exploreTrue;
                     sysConfig.gardenTrue = xe.GetAttribute("GardenTrue") != "" ? bool.Parse(xe.GetAttribute("GardenTrue")) : sysConfig.gardenTrue;
                     sysConfig.actionPrep = xe.GetAttribute("ActionPrep") != "" ? bool.Parse(xe.GetAttribute("ActionPrep")) : sysConfig.actionPrep;
+                    sysConfig.gameRestart = xe.GetAttribute("GameRestart") != "" ? bool.Parse(xe.GetAttribute("GameRestart")) : sysConfig.gameRestart;
                 }
             }
             catch{ }
@@ -648,6 +654,7 @@ namespace FlowerMaster.Models
                     autoPush.SetAttribute("ExploreTrue", sysConfig.exploreTrue.ToString());
                     autoPush.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     autoPush.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
+                    autoPush.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
                     rootNode.AppendChild(autoPush);
 
                     xmlDoc.Save("config.xml");
@@ -788,6 +795,7 @@ namespace FlowerMaster.Models
                     xe.SetAttribute("ExploreTrue", sysConfig.exploreTrue.ToString());
                     xe.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     xe.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
+                    xe.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
 
                     xmlDoc.Save("config.xml");
                 }
