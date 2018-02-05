@@ -152,6 +152,10 @@ namespace FlowerMaster.Models
         private int[] expLow = { 15, 30, 160, 200, 230, 260, 290, 320, 350, 400, 450, 500, 600, 700, 900 };
         //高等级经验表
         private int[] expHigh = { 300, 500, 800, 1200, 1500, 2500, 3500, 5000, 7500, 10000, 15000, 20000 };
+        //极高等级经验表
+        private int[] expExt = { 350, 365, 380, 395, 410, 425, 440, 455, 470, 485, 500, 515, 530, 545, 560, 575, 590, 605, 620, 635,
+                                 650, 650, 650, 650, 650, 650, 650, 650, 650, 650, 740, 740, 740, 740, 740, 740, 740, 740, 740, 740, 
+                                 830, 830, 830, 830, 830, 830, 830, 830, 830, 830};
 
         private Dictionary<int, string> _gameServers;
         private Dictionary<int, string> _gameUrls;
@@ -372,6 +376,10 @@ namespace FlowerMaster.Models
                     else if (player.lv <= 100)
                     {
                         player.maxExp += 100;
+                    }
+                    else if (player.lv >= 200)
+                    {
+                        player.maxExp = expExt[player.lv - 200] * 1000;
                     }
                     else
                     {
