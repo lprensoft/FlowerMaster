@@ -781,15 +781,11 @@
             <TabItem Header="推图">
                 <Grid Background="#FF0F0F0F">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="26*"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="0*"/>
-                        </Grid.ColumnDefinitions>
                         <Label FontWeight="Bold"
                                 FontSize="16px"
                                 Height="30"
@@ -841,12 +837,6 @@
                                 Margin="75,151,0,0"
                                 Height="25"
                                 Content="能者喝！" Grid.ColumnSpan="1" />
-                        <TextBox x:Name="tbDelayTime"
-                                VerticalAlignment="Top"
-                                HorizontalAlignment="Left"
-                                Margin="110,309,0,0"
-                                Width="50"
-                                Text="" Height="26"/>
                         <Label Height="25"
                                 VerticalAlignment="Top"
                                 Margin="25,180,0,0"
@@ -881,19 +871,28 @@
                                 Margin="5,305,0,0"
                                 Content="设置延迟：" Grid.ColumnSpan="1" />
                         <Label Height="25"
-                        VerticalAlignment="Top"
-                        Margin="25,340,156,0"
-                        Content="默认延迟250，根据电脑性能可增减"/>
+                                VerticalAlignment="Top"
+                                Margin="25,371,0,0"
+                                Content="默认延迟250，根据电脑性能可增减" Grid.ColumnSpan="1"/>
                         <Label Height="25"
-                        VerticalAlignment="Top"
-                        Margin="25,370,137,0"
-                        Content="怕封号建议设置3000以上（还是有可能被封）"/>
+                                VerticalAlignment="Top"
+                                Margin="25,401,0,0"
+                                Content="怕封号建议设置3000以上（还是有可能被封)" Grid.ColumnSpan="1"/>
                         <Label Height="25"
-                        VerticalAlignment="Top"
-                        Margin="25,400,137,0"
-                        Content="脚本有风险，量力而行"/>
+                                VerticalAlignment="Top"
+                                Margin="25,431,0,0"
+                                Content="脚本有风险，量力而行" Grid.ColumnSpan="1"/>
+                        <Label Height="25"
+                                VerticalAlignment="Top"
+                                Margin="25,340,0,0"
+                                Content="数值：" Grid.ColumnSpan="1"/>
+                        <TextBox x:Name="tbDelayTime"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Margin="75,340,0,0"
+                                Width="50"
+                                Text="" Height="26" />
                     </Grid>
-
                     <Button x:Name="btnPushSave"
                         Grid.Column="2"
                         VerticalAlignment="Bottom"
@@ -914,38 +913,38 @@
                         Content="取消"/>
                     <CheckBox x:Name="chkSellTrue"
                         VerticalAlignment="Top"
-                        Margin="25,35,0,0"
+                        Margin="50,35,0,0"
                         Height="25"
                         Content="自动出售" Grid.Column="1" />
                     <CheckBox x:Name="chkExploreTrue"
                         VerticalAlignment="Top"
-                        Margin="25,65,0,0"
+                        Margin="50,65,0,0"
                         Height="25"
                         Content="自动探索" Grid.Column="1" />
                     <CheckBox x:Name="chkGardenTrue"
                         VerticalAlignment="Top"
-                        Margin="25,95,0,0"
+                        Margin="50,95,0,0"
                         Height="25"
                         Content="自动抓虫" Grid.Column="1" />
                     <CheckBox x:Name="chkActionPrep"
                         VerticalAlignment="Top"
-                        Margin="25,125,0,0"
+                        Margin="50,125,0,0"
                         Height="25"
                         Content="提前恢复体力" Grid.Column="1" />
                     <Label FontWeight="Bold"
                         FontSize="16px"
                         Height="30"
                         VerticalAlignment="Top"
-                        Margin="5,0,0,0"
+                        Margin="25,0,0,0"
                         Content="自动设置：" Grid.Column="1"/>
                     <CheckBox x:Name="chkGameRestart"
                         VerticalAlignment="Top"
-                        Margin="25,205,0,0"
+                        Margin="50,205,0,0"
                         Height="25"
                         Content="每日更新后自动刷新" Grid.Column="1"/>
                     <Label Height="25"
                         VerticalAlignment="Top"
-                        Margin="25,235,0,0"
+                        Margin="50,235,0,0"
                         Content="需要在登录游戏时选择自动登录（最下面的那个打钩)" Grid.Column="1"/>
                 </Grid>
             </TabItem>
