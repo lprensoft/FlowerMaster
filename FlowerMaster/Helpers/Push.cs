@@ -45,7 +45,7 @@ namespace FlowerMaster.Helpers
         
         //Main
         /// <summary>
-        /// 开始脚本于初始化数据
+        /// 开始脚本与初始化数据
         /// </summary>
         public void Start()
         {
@@ -54,8 +54,12 @@ namespace FlowerMaster.Helpers
                    DataUtil.Config.sysConfig.autoType == 0)
             {
                 if (DataUtil.Config.sysConfig.actionPrep == true && 
-                    Col.Check(540, 75, 55, 47, 44) == true) { ScActionPrep(); }
+                    Col.Check(540, 75, 55, 47, 44) == true)
+                {
+                    ScActionPrep();
+                }
 
+                //随即延迟
                 delay = rnd.Next(DataUtil.Config.sysConfig.delayTime, DataUtil.Config.sysConfig.delayTime * 2);
                 Thread.Sleep(delay);
 
@@ -103,6 +107,11 @@ namespace FlowerMaster.Helpers
             while ((DataUtil.Config.sysConfig.autoType == 1) &&
                     MainWindow.AutoPushS > 0)
             {
+
+                //随机延迟
+                delay = rnd.Next(DataUtil.Config.sysConfig.delayTime, DataUtil.Config.sysConfig.delayTime * 2);
+                Thread.Sleep(delay);
+
                 if (Col.Check(625, 70, 243, 212, 0) == true &&
                     DataUtil.Config.sysConfig.raidOther == true)
                 {
@@ -748,7 +757,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 在进入下一步之前不停地选择普通攻击Boss
+        /// 在进入下一步之前不停地选择普通攻击Boss。因延迟关系使用绝对值延迟100.
         /// </summary>
         /// <returns></returns>
         private void CoBossAttack()
@@ -758,7 +767,7 @@ namespace FlowerMaster.Helpers
                    Col.Check(630, 540, 0, 0, 0) == false)
             {
                 Mou.Click(750, 555);
-                Thread.Sleep(delay);
+                Thread.Sleep(100);
             }
         }
 
