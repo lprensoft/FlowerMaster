@@ -961,7 +961,7 @@
                     <Label Height="25"
                         VerticalAlignment="Top"
                         Margin="50,235,0,0"
-                        Content="需要在登录游戏时选择自动登录（最下面的那个打钩)" Grid.Column="1"/>
+                        Content="需要使用设置中的账号登录界面" Grid.Column="1"/>
                 </Grid>
             </TabItem>
         </TabControl>
