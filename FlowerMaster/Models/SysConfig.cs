@@ -184,7 +184,11 @@ namespace FlowerMaster.Models
 
             //自动推图2.0系列设置
             /// <summary>
-            /// 推图选择
+            /// 自动模式
+            /// </summary>
+            public int autoType;
+            /// <summary>
+            /// 推图模式
             /// </summary>
             public int pushType;
             /// <summary>
@@ -388,6 +392,7 @@ namespace FlowerMaster.Models
             sysConfig.userCSSAmerican = DefaultCSSAmerican;
 
             //自动推图2.0初始化
+            sysConfig.autoType = 0;
             sysConfig.pushType = 1;
             sysConfig.pushTimes = 9999;
             sysConfig.potionTrue = true;
@@ -544,6 +549,7 @@ namespace FlowerMaster.Models
                 xe = (XmlElement)xn;
                 if (xe != null)
                 {
+                    sysConfig.autoType = xe.GetAttribute("AutoType") != "" ? int.Parse(xe.GetAttribute("AutoType")) : sysConfig.autoType;
                     sysConfig.pushType = xe.GetAttribute("PushType") != "" ? int.Parse(xe.GetAttribute("PushType")) : sysConfig.pushType;
                     sysConfig.pushTimes = xe.GetAttribute("PushTimes") != "" ? int.Parse(xe.GetAttribute("PushTimes")) : sysConfig.pushTimes;
                     sysConfig.potionTrue = xe.GetAttribute("PotionTrue") != "" ? bool.Parse(xe.GetAttribute("PotionTrue")) : sysConfig.potionTrue;
@@ -643,6 +649,7 @@ namespace FlowerMaster.Models
 
                     //自动推图2.0
                     XmlElement autoPush = xmlDoc.CreateElement("AutoPush");
+                    autoPush.SetAttribute("AutoType", sysConfig.autoType.ToString());
                     autoPush.SetAttribute("PushType", sysConfig.pushType.ToString());
                     autoPush.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
                     autoPush.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
@@ -784,6 +791,7 @@ namespace FlowerMaster.Models
                         xe = xmlDoc.CreateElement("AutoPush");
                         rootNode.AppendChild(xe);
                     }
+                    xe.SetAttribute("AutoType", sysConfig.autoType.ToString());
                     xe.SetAttribute("PushType", sysConfig.pushType.ToString());
                     xe.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
                     xe.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());

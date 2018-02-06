@@ -257,6 +257,7 @@ namespace FlowerMaster
             }
 
             //自动推图2.0设置
+            cbAutoType.SelectedIndex = DataUtil.Config.sysConfig.autoType;
             cbPushType.SelectedIndex = DataUtil.Config.sysConfig.pushType;
             tbPushTimes.Text = DataUtil.Config.sysConfig.pushTimes.ToString();
 
@@ -537,8 +538,9 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.hotKeyAlt = chkHotKeyAlt.IsChecked.HasValue ? (bool)chkHotKeyAlt.IsChecked : false;
             DataUtil.Config.sysConfig.hotKeyShift = chkHotKeyShift.IsChecked.HasValue ? (bool)chkHotKeyShift.IsChecked : false;
             DataUtil.Config.sysConfig.hotKey = tbHotKey.Text[0];
-            
+
             //自动推图设置
+            DataUtil.Config.sysConfig.autoType = cbAutoType.SelectedIndex;
             DataUtil.Config.sysConfig.pushType = cbPushType.SelectedIndex;
             DataUtil.Config.sysConfig.pushTimes = int.Parse(tbPushTimes.Text);
 
@@ -1113,7 +1115,7 @@ namespace FlowerMaster
                     Mouse Mou = Mouse.Instance;
                     while (Col.Check(437, 177, 211, 209, 205) == false)
                     {
-                        Mou.Click(5, 5);
+                        Mou.Click(800, 200);
                         await Task.Delay(1000);
                     }
                     AutoPush();
