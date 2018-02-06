@@ -264,7 +264,8 @@ namespace FlowerMaster
             chkPotionTrue.IsChecked = DataUtil.Config.sysConfig.potionTrue;
             chkStoneTrue.IsChecked = DataUtil.Config.sysConfig.stoneTrue;
 
-            chkRaidTrue.IsChecked = DataUtil.Config.sysConfig.raidTrue;
+            chkRaidOther.IsChecked = DataUtil.Config.sysConfig.raidOther;
+            chkRaidSelf.IsChecked = DataUtil.Config.sysConfig.raidSelf;
             chkSpecialTrue.IsChecked = DataUtil.Config.sysConfig.specialTrue;
             
             tbDelayTime.Text = DataUtil.Config.sysConfig.delayTime.ToString();
@@ -547,7 +548,8 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.potionTrue = chkPotionTrue.IsChecked.HasValue ? (bool)chkPotionTrue.IsChecked : false;
             DataUtil.Config.sysConfig.stoneTrue = chkStoneTrue.IsChecked.HasValue ? (bool)chkStoneTrue.IsChecked : false;
 
-            DataUtil.Config.sysConfig.raidTrue = chkRaidTrue.IsChecked.HasValue ? (bool)chkRaidTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.raidOther = chkRaidOther.IsChecked.HasValue ? (bool)chkRaidOther.IsChecked : false;
+            DataUtil.Config.sysConfig.raidSelf = chkRaidSelf.IsChecked.HasValue ? (bool)chkRaidSelf.IsChecked : false;
             DataUtil.Config.sysConfig.specialTrue = chkSpecialTrue.IsChecked.HasValue ? (bool)chkSpecialTrue.IsChecked : false;
 
             DataUtil.Config.sysConfig.delayTime = int.Parse(tbDelayTime.Text);
@@ -1104,11 +1106,9 @@ namespace FlowerMaster
                 {
                     PushThread.Abort();
                 }
-                if (DataUtil.Game.serverTime.Hour == 03 &&
-                   DataUtil.Game.serverTime.Minute == 59 &&
+                if ((DataUtil.Game.isOnline == false) &&
                    DataUtil.Config.sysConfig.gameRestart == true)
                 {
-                    await Task.Delay(120000);
                     PushThread.Abort();
                     Refresh();
                     Helpers.Color Col = Helpers.Color.Instance;

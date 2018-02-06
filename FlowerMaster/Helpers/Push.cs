@@ -63,6 +63,13 @@ namespace FlowerMaster.Helpers
                 ScDepart();
                 while (ScCombat() == false) { }
 
+                if (Col.Check(625, 70, 243, 212, 0) == true &&
+                    DataUtil.Config.sysConfig.raidOther == true)
+                {
+                    CoHomeReturn();
+                    Mou.Click(355, 160);
+                    ScAttackRaid();
+                }
 
                 if (DataUtil.Config.sysConfig.sellTrue == true)
                 {
@@ -93,12 +100,11 @@ namespace FlowerMaster.Helpers
                 MainWindow.AutoPushS--;
             }
 
-            while ((DataUtil.Config.sysConfig.autoType == 1 || 
-                    DataUtil.Config.sysConfig.autoType == 2) &&
+            while ((DataUtil.Config.sysConfig.autoType == 1) &&
                     MainWindow.AutoPushS > 0)
             {
                 if (Col.Check(625, 70, 243, 212, 0) == true &&
-                    DataUtil.Config.sysConfig.autoType == 2)
+                    DataUtil.Config.sysConfig.raidOther == true)
                 {
                     Mou.Click(355, 160);
                     ScAttackRaid();
@@ -343,7 +349,7 @@ namespace FlowerMaster.Helpers
 
             //如果在主页，返还
             else if (Col.Check(170, 40, 163, 148, 66) == true && 
-                     Col.Check(5, 634, 71, 62, 21) == true)
+                     Col.Check(5, 634, 71, 61, 21) == true)
             {
                 return true;
             }
@@ -352,7 +358,7 @@ namespace FlowerMaster.Helpers
             else if (Col.Check(290, 400, 249, 248, 241) == true &&
                      Col.Check(720, 400, 85, 76, 48) == true)
             {
-                if (DataUtil.Config.sysConfig.raidTrue == true)
+                if (DataUtil.Config.sysConfig.raidSelf == true)
                 {
                     CoBossStart();
                     ScAttackRaid();
@@ -431,7 +437,7 @@ namespace FlowerMaster.Helpers
                     CoPrevent();
                     return;
                 }
-                if (Col.Check(5, 634, 71, 62, 21) == true)
+                if (Col.Check(5, 634, 71, 61, 21) == true)
                 {
                     return;
                 }
@@ -515,13 +521,14 @@ namespace FlowerMaster.Helpers
         {
             CoHomeTeam();
             CoTeamSell();
-            while (Col.Check(765, 620, 62, 35, 33) == false) { Thread.Sleep(delay); }
+            while (Col.Check(650, 605, 155, 134, 119) == true) { Thread.Sleep(delay); }
             CoSellAll();
 
             //判定是否有花可卖
             while (true)
             {
-                Thread.Sleep(delay * 2);
+                Thread.Sleep(delay);
+                while (Col.Check(770, 620, 43, 23, 22) == false) { Thread.Sleep(delay); }
                 //没花 点击取消
                 if (Col.Check(420, 560, 51, 51, 51) == true)
                 {
@@ -536,7 +543,7 @@ namespace FlowerMaster.Helpers
                         Thread.Sleep(delay); 
                     return;
                 }
-                else { Thread.Sleep(delay); }
+                else {}
             }
         }
 
@@ -597,7 +604,7 @@ namespace FlowerMaster.Helpers
         /// </summary>
         private void ScActionPrep()
         {
-            while (Col.Check(5, 634, 71, 62, 21) == false) { Thread.Sleep(delay); }
+            while (Col.Check(5, 634, 71, 61, 21) == false) { Thread.Sleep(delay); }
             Mou.Click(80, 360);
             while (Col.Check(300, 380, 202, 165, 144) == false) { Thread.Sleep(delay); }
             Mou.Click(300, 380);
@@ -618,7 +625,7 @@ namespace FlowerMaster.Helpers
         private void CoPrevent()
         {
             while (Col.Check(795, 205, 6, 90, 89) == false) { Thread.Sleep(delay); }
-            while (Col.Check(5, 634, 71, 62, 21) == false)
+            while (Col.Check(5, 634, 71, 61, 21) == false)
             {
                 Mou.Click(805, 205);
                 Thread.Sleep(delay);
@@ -634,7 +641,7 @@ namespace FlowerMaster.Helpers
             while (Col.Check(600, 400, 28, 29, 19) == false &&
                    Col.Check(210, 290, 249, 248, 240) == false)
             {
-                while (Col.Check(5, 634, 71, 62, 21) == false) { Thread.Sleep(delay); }
+                while (Col.Check(5, 634, 71, 61, 21) == false) { Thread.Sleep(delay); }
                 Mou.Click(80, 155);
                 Thread.Sleep(delay);
             }
@@ -646,7 +653,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoHomeTeam()
         {
-            while (Col.Check(5, 634, 71, 62, 21) == false) { Thread.Sleep(delay); }
+            while (Col.Check(5, 634, 71, 61, 21) == false) { Thread.Sleep(delay); }
             Mou.Click(85, 210);
         }
 
@@ -762,8 +769,12 @@ namespace FlowerMaster.Helpers
         private void CoBossAssist()
         {
             while (Col.Check(290, 400, 175, 74, 59) == false ||
-                   Col.Check(300, 400, 186, 44, 68) == false) { Thread.Sleep(delay); }
-            Mou.Click(290, 400);
+                   Col.Check(300, 400, 186, 84, 68) == false) { Thread.Sleep(delay); }
+            while (Col.Check(290, 400, 175, 74, 59) == true)
+            {
+                Mou.Click(290, 400);
+                Thread.Sleep(delay);
+            }
         }
 
         /// <summary>
@@ -818,11 +829,10 @@ namespace FlowerMaster.Helpers
         {
             while (Col.Check(437, 177, 211, 209, 205) == false )
             {
-                Thread.Sleep(delay / 3);
                 Mou.Click(80, 80);
-                Thread.Sleep(delay / 3);
+                Thread.Sleep(delay / 2);
                 Mou.Click(5, 5);
-                Thread.Sleep(delay / 3);
+                Thread.Sleep(delay / 2);
             }
         }
 
@@ -834,7 +844,7 @@ namespace FlowerMaster.Helpers
         private void CoBossSkip()
         {
             while (Col.Check(290, 400, 175, 74, 59) == false &&
-                   Col.Check(5, 634, 71, 62, 21) == false)
+                   Col.Check(5, 634, 71, 61, 21) == false)
             {
                 Mou.Click(855, 555);
                 Thread.Sleep(delay);

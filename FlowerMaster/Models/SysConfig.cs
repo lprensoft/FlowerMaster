@@ -206,9 +206,13 @@ namespace FlowerMaster.Models
             public bool stoneTrue;
 
             /// <summary>
-            /// 是否打Boss
+            /// 是否打别人的Boss
             /// </summary>
-            public bool raidTrue;
+            public bool raidOther;
+            /// <summary>
+            /// 是否打自己的Boss
+            /// </summary>
+            public bool raidSelf;
             /// <summary>
             /// 是否推特命
             /// </summary>
@@ -397,7 +401,8 @@ namespace FlowerMaster.Models
             sysConfig.pushTimes = 9999;
             sysConfig.potionTrue = true;
             sysConfig.stoneTrue = false;
-            sysConfig.raidTrue = true;
+            sysConfig.raidOther = true;
+            sysConfig.raidSelf = true;
             sysConfig.specialTrue = false;
             sysConfig.delayTime = 250;
             sysConfig.sellTrue = true;
@@ -554,7 +559,8 @@ namespace FlowerMaster.Models
                     sysConfig.pushTimes = xe.GetAttribute("PushTimes") != "" ? int.Parse(xe.GetAttribute("PushTimes")) : sysConfig.pushTimes;
                     sysConfig.potionTrue = xe.GetAttribute("PotionTrue") != "" ? bool.Parse(xe.GetAttribute("PotionTrue")) : sysConfig.potionTrue;
                     sysConfig.stoneTrue = xe.GetAttribute("StoneTrue") != "" ? bool.Parse(xe.GetAttribute("StoneTrue")) : sysConfig.stoneTrue;
-                    sysConfig.raidTrue = xe.GetAttribute("RaidTrue") != "" ? bool.Parse(xe.GetAttribute("RaidTrue")) : sysConfig.raidTrue;
+                    sysConfig.raidOther = xe.GetAttribute("RaidOther") != "" ? bool.Parse(xe.GetAttribute("RaidOther")) : sysConfig.raidOther;
+                    sysConfig.raidSelf = xe.GetAttribute("RaidSelf") != "" ? bool.Parse(xe.GetAttribute("RaidSelf")) : sysConfig.raidSelf;
                     sysConfig.specialTrue = xe.GetAttribute("SpecialTrue") != "" ? bool.Parse(xe.GetAttribute("SpecialTrue")) : sysConfig.specialTrue;
                     sysConfig.delayTime = xe.GetAttribute("DelayTime") != "" ? int.Parse(xe.GetAttribute("DelayTime")) : sysConfig.delayTime;
                     sysConfig.sellTrue = xe.GetAttribute("SellTrue") != "" ? bool.Parse(xe.GetAttribute("SellTrue")) : sysConfig.sellTrue;
@@ -654,7 +660,8 @@ namespace FlowerMaster.Models
                     autoPush.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
                     autoPush.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
                     autoPush.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
-                    autoPush.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
+                    autoPush.SetAttribute("RaidOther", sysConfig.raidOther.ToString());
+                    autoPush.SetAttribute("RaidSelf", sysConfig.raidSelf.ToString());
                     autoPush.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
                     autoPush.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
                     autoPush.SetAttribute("SellTrue", sysConfig.sellTrue.ToString());
@@ -796,7 +803,8 @@ namespace FlowerMaster.Models
                     xe.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
                     xe.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
                     xe.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
-                    xe.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
+                    xe.SetAttribute("RaidOther", sysConfig.raidOther.ToString());
+                    xe.SetAttribute("RaidSelf", sysConfig.raidSelf.ToString());
                     xe.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
                     xe.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
                     xe.SetAttribute("SellTrue", sysConfig.sellTrue.ToString());
