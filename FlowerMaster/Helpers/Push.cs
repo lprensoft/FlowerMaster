@@ -61,7 +61,6 @@ namespace FlowerMaster.Helpers
 
                 //随即延迟
                 delay = rnd.Next(DataUtil.Config.sysConfig.delayTime, DataUtil.Config.sysConfig.delayTime * 2);
-                Thread.Sleep(delay);
 
                 while (ScSelect() == false) { }
                 ScDepart();
@@ -139,6 +138,7 @@ namespace FlowerMaster.Helpers
                     }
                 }
 
+                CoHomeReturn();
                 Thread.Sleep(delay);
             }
 
@@ -247,6 +247,7 @@ namespace FlowerMaster.Helpers
                 {
                     //如果碎石失败，返回主页面
                     if (ScRefill() == false) return false;
+
                     CoDepartFirst();
                     return true;
                 }
@@ -338,10 +339,6 @@ namespace FlowerMaster.Helpers
         /// <param name="wait">开始前等待</param>
         private bool ScCombat()
         {
-            //等待并点击前进
-            Thread.Sleep(delay);
-            Mou.Click(855, 545);
-
             //如果出现弹窗，关闭并继续推图
             if (Col.Check(795, 205, 6, 90, 89) == true)
             {
@@ -536,13 +533,11 @@ namespace FlowerMaster.Helpers
             //判定是否有花可卖
             while (true)
             {
-                Thread.Sleep(delay);
-                while (Col.Check(770, 620, 43, 23, 22) == false) { Thread.Sleep(delay); }
+                while (Col.Check(150, 620, 139, 42, 37) == false) { Thread.Sleep(delay); }
                 //没花 点击取消
                 if (Col.Check(420, 560, 51, 51, 51) == true)
                 {
                     Mou.Click(810, 65);
-                    Thread.Sleep(delay);
                     return;
                 }
                 //有花 点击确认
@@ -552,7 +547,10 @@ namespace FlowerMaster.Helpers
                         Thread.Sleep(delay); 
                     return;
                 }
-                else {}
+                else
+                {
+                    Thread.Sleep(delay);
+                }
             }
         }
 
@@ -602,8 +600,10 @@ namespace FlowerMaster.Helpers
                 {
                     Mou.Click(850, 150);
                 }
-                CoHomeReturn();
-                Thread.Sleep(delay);
+                Mou.Click(80, 80);
+                Thread.Sleep(delay / 2);
+                Mou.Click(5, 5);
+                Thread.Sleep(delay / 2);
             }
             return;
         }
@@ -629,16 +629,19 @@ namespace FlowerMaster.Helpers
         //鼠标验色与点击事件 - Co系列
 
         /// <summary>
-        /// 等到弹窗出现之后，在回到主页面或画面恢复正常之前，不停等待并关闭弹窗
+        /// 等到弹窗出现之后，在回到主页面或画面恢复正常之前并且弹窗消失前，不停等待并关闭弹窗
         /// </summary>
         private void CoPrevent()
         {
             while (Col.Check(795, 205, 6, 90, 89) == false) { Thread.Sleep(delay); }
-            while (Col.Check(5, 634, 71, 61, 21) == false)
+            while (Col.Check(5, 634, 71, 61, 21) == false &&
+                   Col.Check(795, 205, 6, 90, 89) == true)
             {
                 Mou.Click(805, 205);
                 Thread.Sleep(delay);
             }
+
+            while (Col.Check(5, 634, 71, 61, 21) == false) { Thread.Sleep(delay); }
         }
 
         /// <summary>
@@ -650,7 +653,6 @@ namespace FlowerMaster.Helpers
             while (Col.Check(600, 400, 28, 29, 19) == false &&
                    Col.Check(210, 290, 249, 248, 240) == false)
             {
-                while (Col.Check(5, 634, 71, 61, 21) == false) { Thread.Sleep(delay); }
                 Mou.Click(80, 155);
                 Thread.Sleep(delay);
             }
@@ -724,6 +726,7 @@ namespace FlowerMaster.Helpers
         {
             while (Col.Check(730, 200, 213, 185, 132) == false) { Thread.Sleep(delay); }
             Mou.Click(850, 555);
+            CoMaintainConfirm();
         }
 
         /// <summary>
@@ -768,6 +771,7 @@ namespace FlowerMaster.Helpers
             {
                 Mou.Click(750, 555);
                 Thread.Sleep(100);
+                CoMaintainConfirm();
             }
         }
 
@@ -857,6 +861,20 @@ namespace FlowerMaster.Helpers
             {
                 Mou.Click(855, 555);
                 Thread.Sleep(delay);
+            }
+        }
+
+        private void CoMaintainConfirm()
+        {
+            if(DataUtil.Game.serverTime.Hour == 3 &&
+               DataUtil.Game.serverTime.Minute >= 40)
+            {
+                while (Col.Check(550, 330, 72, 55, 50) == false) { Thread.Sleep(delay); }
+                while (Col.Check(550, 330, 72, 55, 50) == true)
+                {
+                    Mou.Click(410, 400);
+                    Thread.Sleep(delay);
+                }
             }
         }
 
