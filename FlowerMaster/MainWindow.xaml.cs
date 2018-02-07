@@ -5,16 +5,18 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.Drawing;
-using FlowerMaster.Helpers;
 using mshtml;
 using Nekoxy;
-using FlowerMaster.Models;
 using MahApps.Metro.Controls.Dialogs;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Interop;
 using System.Windows.Media;
+using FlowerMaster.Models;
+using FlowerMaster.Helpers;
+using FlowerMaster.Properties;
+using static FlowerMaster.CordCol;
 
 namespace FlowerMaster
 {
@@ -34,6 +36,8 @@ namespace FlowerMaster
         public int autoGoLastConf = 0; //自动推图点击上次配置计数器
         public Timer timerNotify = null; //提醒计时器
 
+        public static int AutoPushS = -1; //自动推图2.0状态
+
         private IntPtr webHandle = IntPtr.Zero;
 
         //模拟鼠标操作相关API引入
@@ -43,6 +47,7 @@ namespace FlowerMaster
         static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
 
         public MainWindow()
         {
@@ -250,6 +255,28 @@ namespace FlowerMaster
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSS;
             }
+
+            //自动推图2.0设置
+            cbAutoType.SelectedIndex = DataUtil.Config.sysConfig.autoType;
+            cbPushType.SelectedIndex = DataUtil.Config.sysConfig.pushType;
+            tbPushTimes.Text = DataUtil.Config.sysConfig.pushTimes.ToString();
+
+            chkPotionTrue.IsChecked = DataUtil.Config.sysConfig.potionTrue;
+            chkStoneTrue.IsChecked = DataUtil.Config.sysConfig.stoneTrue;
+
+            chkRaidOther.IsChecked = DataUtil.Config.sysConfig.raidOther;
+            chkRaidSelf.IsChecked = DataUtil.Config.sysConfig.raidSelf;
+            chkSpecialTrue.IsChecked = DataUtil.Config.sysConfig.specialTrue;
+            
+            tbDelayTime.Text = DataUtil.Config.sysConfig.delayTime.ToString();
+
+            chkSellTrue.IsChecked = DataUtil.Config.sysConfig.sellTrue;
+            chkExploreTrue.IsChecked = DataUtil.Config.sysConfig.exploreTrue;
+            chkGardenTrue.IsChecked = DataUtil.Config.sysConfig.gardenTrue;
+            chkActionPrep.IsChecked = DataUtil.Config.sysConfig.actionPrep;
+
+            chkGameRestart.IsChecked = DataUtil.Config.sysConfig.gameRestart;
+
         }
 
         /// <summary>
@@ -447,6 +474,16 @@ namespace FlowerMaster
                 await this.ShowMessageAsync("错误 - 保存失败", "指定战点必须是整数！");
                 return false;
             }
+            if (!int.TryParse(tbPushTimes.Text, out tryInt))
+            {
+                await this.ShowMessageAsync("错误 - 保存失败", "代理服务器端口号必须是整数！");
+                return false;
+            }
+            if (!int.TryParse(tbDelayTime.Text, out tryInt))
+            {
+                await this.ShowMessageAsync("错误 - 保存失败", "代理服务器端口号必须是整数！");
+                return false;
+            }
             if (chkEnableHotKey.IsChecked.HasValue && (bool)chkEnableHotKey.IsChecked)
             {
                 if (!(bool)chkHotKeyAlt.IsChecked && !(bool)chkHotKeyCtrl.IsChecked && !(bool)chkHotKeyShift.IsChecked)
@@ -503,6 +540,28 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.hotKeyShift = chkHotKeyShift.IsChecked.HasValue ? (bool)chkHotKeyShift.IsChecked : false;
             DataUtil.Config.sysConfig.hotKey = tbHotKey.Text[0];
 
+            //自动推图设置
+            DataUtil.Config.sysConfig.autoType = cbAutoType.SelectedIndex;
+            DataUtil.Config.sysConfig.pushType = cbPushType.SelectedIndex;
+            DataUtil.Config.sysConfig.pushTimes = int.Parse(tbPushTimes.Text);
+
+            DataUtil.Config.sysConfig.potionTrue = chkPotionTrue.IsChecked.HasValue ? (bool)chkPotionTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.stoneTrue = chkStoneTrue.IsChecked.HasValue ? (bool)chkStoneTrue.IsChecked : false;
+
+            DataUtil.Config.sysConfig.raidOther = chkRaidOther.IsChecked.HasValue ? (bool)chkRaidOther.IsChecked : false;
+            DataUtil.Config.sysConfig.raidSelf = chkRaidSelf.IsChecked.HasValue ? (bool)chkRaidSelf.IsChecked : false;
+            DataUtil.Config.sysConfig.specialTrue = chkSpecialTrue.IsChecked.HasValue ? (bool)chkSpecialTrue.IsChecked : false;
+
+            DataUtil.Config.sysConfig.delayTime = int.Parse(tbDelayTime.Text);
+
+            DataUtil.Config.sysConfig.sellTrue = chkSellTrue.IsChecked.HasValue ? (bool)chkSellTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.exploreTrue = chkExploreTrue.IsChecked.HasValue ? (bool)chkExploreTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.gardenTrue = chkGardenTrue.IsChecked.HasValue ? (bool)chkGardenTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.actionPrep = chkActionPrep.IsChecked.HasValue ? (bool)chkActionPrep.IsChecked : false;
+
+            DataUtil.Config.sysConfig.gameRestart = chkGameRestart.IsChecked.HasValue ? (bool)chkGameRestart.IsChecked : false;
+
+
             DataUtil.Config.sysConfig.capFormat = (SysConfig.ScreenShotFormat)cbCapFormat.SelectedIndex;
 
             if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.American || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.AmericanR18)
@@ -538,6 +597,7 @@ namespace FlowerMaster
             return true;
         }
 
+
         /// <summary>
         /// 自动推图定时器
         /// </summary>
@@ -556,6 +616,25 @@ namespace FlowerMaster
                 y = 475;
                 autoGoLastConf--;
             }
+            /* 
+            临时暂停原本的鼠标按键功能
+            IntPtr lParam = (IntPtr)((y << 16) | x); //坐标信息
+            IntPtr wParam = IntPtr.Zero; // 附加的按键信息（如：Ctrl）
+            const uint downCode = 0x201; // 鼠标左键按下
+            const uint upCode = 0x202; // 鼠标左键抬起
+            PostMessage(webHandle, downCode, wParam, lParam); // 发送鼠标按键按下消息
+            PostMessage(webHandle, upCode, wParam, lParam); // 发送鼠标按键抬起消息
+            */
+            MouseLeftClick(x, y);
+        }
+
+        /// <summary>
+        /// 鼠标左键点击（坐标）
+        /// </summary>
+        /// <param name="x">x-横向坐标</param>
+        /// <param name="y">y-竖向坐标</param>
+        private void MouseLeftClick(int x, int y)
+        {
             IntPtr lParam = (IntPtr)((y << 16) | x); //坐标信息
             IntPtr wParam = IntPtr.Zero; // 附加的按键信息（如：Ctrl）
             const uint downCode = 0x201; // 鼠标左键按下
@@ -597,14 +676,29 @@ namespace FlowerMaster
         {
             if (MessageBox.Show("确实要重新载入页面吗？", "操作确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
-                styleSheetApplied = false;
-                loginSubmitted = false;
-                newsHadShown = false;
-                DataUtil.Game.isOnline = false;
-                DataUtil.Game.canAuto = false;
-                mainWeb.Navigate(DataUtil.Game.gameUrl);
+                //MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
+                //styleSheetApplied = false;
+                //loginSubmitted = false;
+                //newsHadShown = false;
+                //DataUtil.Game.isOnline = false;
+                //DataUtil.Game.canAuto = false;
+                //mainWeb.Navigate(DataUtil.Game.gameUrl);
+                Refresh();
             }
+        }
+
+        /// <summary>
+        /// 独立出的刷新游戏代码
+        /// </summary>
+        private void Refresh()
+        {
+            MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
+            styleSheetApplied = false;
+            loginSubmitted = false;
+            newsHadShown = false;
+            DataUtil.Game.isOnline = false;
+            DataUtil.Game.canAuto = false;
+            mainWeb.Navigate(DataUtil.Game.gameUrl);
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
@@ -624,7 +718,7 @@ namespace FlowerMaster
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        { 
+        {
             if (DataUtil.Config.sysConfig.exitConfirm && MessageBox.Show("是否确定要退出团长助理？", "退出确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
             {
                 e.Cancel = true;
@@ -716,7 +810,7 @@ namespace FlowerMaster
             {
                 IHTMLElement username = null;
                 IHTMLElement password = null;
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18 )
+                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
                 {
                     username = document.getElementById("s-email");
                     password = document.getElementById("s-password");
@@ -810,6 +904,7 @@ namespace FlowerMaster
                 }
             }
         }
+        
 
         private async void btnClearCache_Click(object sender, RoutedEventArgs e)
         {
@@ -847,12 +942,14 @@ namespace FlowerMaster
             if (webHandle == IntPtr.Zero)
             {
                 webHandle = mainWeb.Handle;
-                StringBuilder className = new StringBuilder(100);
-                while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
-                {
-                    webHandle = GetWindow(webHandle, 5); // 获取子窗口的句柄
-                    GetClassName(webHandle, className, className.Capacity);
-                }
+                webHandle = CordCol.GetWebHandle(webHandle);
+                //独立出的获取句柄
+                //StringBuilder className = new StringBuilder(100);
+                //while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
+                //{
+                //    webHandle = GetWindow(webHandle, 5); // 获取子窗口的句柄
+                //    GetClassName(webHandle, className, className.Capacity);
+                //}
             }
             if (DataUtil.Game.isAuto)
             {
@@ -952,5 +1049,97 @@ namespace FlowerMaster
             GachaLogsWindow gachalogs = new GachaLogsWindow();
             gachalogs.Show();
         }
+
+        /// <summary>
+        /// 打开游戏坐标窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCord_Click(object sender, RoutedEventArgs e)
+        {
+            CordWindow cords = new CordWindow(Process.GetCurrentProcess().MainWindowHandle);
+            cords.Show();
+        }
+
+        /// <summary>
+        /// 自动推图2.0按钮事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnPush_Click(object sender, RoutedEventArgs e)
+        {
+            if (AutoPushS >= 0)
+            {
+                MessageBoxResult type = MessageBox.Show("请点击下面的按钮暂停", "推图中", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            //如果状态为0，启动推图功能
+            else
+            {
+                MessageBoxResult type = MessageBox.Show("点击OK开始自动推图\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (type == MessageBoxResult.OK)
+                {
+                    AutoPushS = AutoPushS + DataUtil.Config.sysConfig.delayTime;
+                    AutoPush();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            
+        }
+
+        /// <summary>
+        /// 启动自动推图
+        /// </summary>
+        private async void AutoPush()
+        {
+            IntPtr Han = GetWebHandle(mainWeb.Handle);
+            MiscHelper.AddLog("开始推图!", MiscHelper.LogType.System);
+            Nodes Node = new Nodes();
+
+            Node.ScInitialize(Han);
+
+            Thread PushThread = new Thread(Node.Start);
+            PushThread.Start();
+            while (PushThread.IsAlive == true)
+            {
+                await Task.Delay(1000);
+                if (AutoPushS < 0)
+                {
+                    PushThread.Abort();
+                }
+                if (DataUtil.Game.isOnline == false &&
+                    DataUtil.Config.sysConfig.gameRestart == true)
+                {
+                    PushThread.Abort();
+                    Refresh();
+                    Helpers.Color Col = Helpers.Color.Instance;
+                    Mouse Mou = Mouse.Instance;
+                    while (Col.Check(437, 177, 211, 209, 205) == false)
+                    {
+                        Mou.Click(800, 200);
+                        await Task.Delay(1000);
+                    }
+                    AutoPush();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 自动推图停止按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnPush_Set(object sender, RoutedEventArgs e)
+        {
+            if(AutoPushS > 0)
+            {
+                AutoPushS = -1;
+                MessageBoxResult type = MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            }
+        }
+        
     }
 }

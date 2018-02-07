@@ -152,6 +152,10 @@ namespace FlowerMaster.Models
         private int[] expLow = { 15, 30, 160, 200, 230, 260, 290, 320, 350, 400, 450, 500, 600, 700, 900 };
         //高等级经验表
         private int[] expHigh = { 300, 500, 800, 1200, 1500, 2500, 3500, 5000, 7500, 10000, 15000, 20000 };
+        //极高等级经验表
+        private int[] expExt = { 350, 365, 380, 395, 410, 425, 440, 455, 470, 485, 500, 515, 530, 545, 560, 575, 590, 605, 620, 635,
+                                 650, 650, 650, 650, 650, 650, 650, 650, 650, 650, 740, 740, 740, 740, 740, 740, 740, 740, 740, 740, 
+                                 830, 830, 830, 830, 830, 830, 830, 830, 830, 830};
 
         private Dictionary<int, string> _gameServers;
         private Dictionary<int, string> _gameUrls;
@@ -190,10 +194,10 @@ namespace FlowerMaster.Models
         private void InitGameServers()
         {
             _gameServers = new Dictionary<int, string>();
-            _gameServers.Add((int)ServersList.Japan, "http://www.dmm.com/netgame_s/flower/");
-            _gameServers.Add((int)ServersList.JapanR18, "http://www.dmm.co.jp/netgame_s/flower-x/");
-            _gameServers.Add((int)ServersList.American, "http://www.nutaku.com/games/flower-knight-girl-online/");
-            _gameServers.Add((int)ServersList.AmericanR18, "http://www.nutaku.net/games/flower-knight-girl/");
+            _gameServers.Add((int)ServersList.Japan, "https://www.dmm.com/netgame_s/flower/");
+            _gameServers.Add((int)ServersList.JapanR18, "https://www.dmm.co.jp/netgame_s/flower-x/");
+            _gameServers.Add((int)ServersList.American, "https://www.nutaku.com/games/flower-knight-girl-online/");
+            _gameServers.Add((int)ServersList.AmericanR18, "https://www.nutaku.net/games/flower-knight-girl/");
         }
 
         /// <summary>
@@ -202,10 +206,10 @@ namespace FlowerMaster.Models
         private void InitGameUrls()
         {
             _gameUrls = new Dictionary<int, string>();
-            _gameUrls.Add((int)ServersList.Japan, "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=738496/");
-            _gameUrls.Add((int)ServersList.JapanR18, "http://www.dmm.co.jp/netgame/social/-/gadgets/=/app_id=329993/");
-            _gameUrls.Add((int)ServersList.American, "http://www.nutaku.com/games/flower-knight-girl-online/play/");
-            _gameUrls.Add((int)ServersList.AmericanR18, "http://www.nutaku.net/games/flower-knight-girl/play/");
+            _gameUrls.Add((int)ServersList.Japan, "https://www.dmm.com/netgame/social/-/gadgets/=/app_id=738496/");
+            _gameUrls.Add((int)ServersList.JapanR18, "https://www.dmm.co.jp/netgame/social/-/gadgets/=/app_id=329993/");
+            _gameUrls.Add((int)ServersList.American, "https://www.nutaku.com/games/flower-knight-girl-online/play/");
+            _gameUrls.Add((int)ServersList.AmericanR18, "https://www.nutaku.net/games/flower-knight-girl/play/");
         }
 
         /// <summary>
@@ -214,10 +218,10 @@ namespace FlowerMaster.Models
         private void InitGameNewsUrls()
         {
             _gameNewsUrls = new Dictionary<int, string>();
-            _gameNewsUrls.Add((int)ServersList.Japan, "http://s3-ap-northeast-1.amazonaws.com/flower-help/index.html");
-            _gameNewsUrls.Add((int)ServersList.JapanR18, "http://s3-ap-northeast-1.amazonaws.com/flower-help/index.html");
-            _gameNewsUrls.Add((int)ServersList.American, "http://cdn.flowerknight.nutaku.net/index.html");
-            _gameNewsUrls.Add((int)ServersList.AmericanR18, "http://cdn.flowerknight.nutaku.net/index.html");
+            _gameNewsUrls.Add((int)ServersList.Japan, "https://s3-ap-northeast-1.amazonaws.com/flower-help/index.html");
+            _gameNewsUrls.Add((int)ServersList.JapanR18, "https://s3-ap-northeast-1.amazonaws.com/flower-help/index.html");
+            _gameNewsUrls.Add((int)ServersList.American, "https://cdn.flowerknight.nutaku.net/index.html");
+            _gameNewsUrls.Add((int)ServersList.AmericanR18, "https://cdn.flowerknight.nutaku.net/index.html");
         }
 
         /// <summary>
@@ -372,6 +376,10 @@ namespace FlowerMaster.Models
                     else if (player.lv <= 100)
                     {
                         player.maxExp += 100;
+                    }
+                    else if (player.lv >= 200)
+                    {
+                        player.maxExp = expExt[player.lv - 200] * 1000;
                     }
                     else
                     {
