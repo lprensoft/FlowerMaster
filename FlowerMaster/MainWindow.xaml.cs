@@ -687,6 +687,9 @@ namespace FlowerMaster
             }
         }
 
+        /// <summary>
+        /// 独立出的刷新游戏代码
+        /// </summary>
         private void Refresh()
         {
             MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
@@ -940,6 +943,7 @@ namespace FlowerMaster
             {
                 webHandle = mainWeb.Handle;
                 webHandle = CordCol.GetWebHandle(webHandle);
+                //独立出的获取句柄
                 //StringBuilder className = new StringBuilder(100);
                 //while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
                 //{
