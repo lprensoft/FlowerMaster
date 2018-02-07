@@ -864,6 +864,9 @@ namespace FlowerMaster.Helpers
             }
         }
 
+        /// <summary>
+        /// 处理在每日维护之前的20分钟出击时出现的弹窗
+        /// </summary>
         private void CoMaintainConfirm()
         {
             if(DataUtil.Game.serverTime.Hour == 3 &&
