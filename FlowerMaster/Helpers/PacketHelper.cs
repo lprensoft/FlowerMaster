@@ -175,6 +175,20 @@ namespace FlowerMaster.Helpers
                     {
                         DataUtil.Game.serverTime = Convert.ToDateTime(pack.data["serverTime"].ToString());
                     }
+                    //确认游戏是否在线
+                    if (pack.data["resultCode"] != null)
+                    {
+                        int status = Convert.ToInt16(pack.data["resultCode"].ToString());
+                        if (status == 1)
+                        {
+                            DataUtil.Game.isOnline = false;
+                        }
+                        if (status == 11)
+                        {
+                            MiscHelper.AddLog("此账号在其他地方登陆，进行刷新。", MiscHelper.LogType.System);
+                            DataUtil.Game.isOnline = false;
+                        }
+                    }
                     //----- 游戏数据处理开始 -----
                     //游戏登录
                     if (pack.funcApi == "/user/login")

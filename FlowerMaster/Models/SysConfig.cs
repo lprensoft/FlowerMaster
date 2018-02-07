@@ -184,7 +184,11 @@ namespace FlowerMaster.Models
 
             //自动推图2.0系列设置
             /// <summary>
-            /// 推图选择
+            /// 自动模式
+            /// </summary>
+            public int autoType;
+            /// <summary>
+            /// 推图模式
             /// </summary>
             public int pushType;
             /// <summary>
@@ -202,9 +206,13 @@ namespace FlowerMaster.Models
             public bool stoneTrue;
 
             /// <summary>
-            /// 是否打Boss
+            /// 是否打别人的Boss
             /// </summary>
-            public bool raidTrue;
+            public bool raidOther;
+            /// <summary>
+            /// 是否打自己的Boss
+            /// </summary>
+            public bool raidSelf;
             /// <summary>
             /// 是否推特命
             /// </summary>
@@ -228,10 +236,14 @@ namespace FlowerMaster.Models
             /// </summary>
             public bool gardenTrue;
             /// <summary>
-            /// 提前恢复体力
+            /// 是否提前恢复体力
             /// </summary>
             public bool actionPrep;
 
+            /// <summary>
+            /// 是否自动重启游戏
+            /// </summary>
+            public bool gameRestart;
 
         }
         /// <summary>
@@ -384,17 +396,20 @@ namespace FlowerMaster.Models
             sysConfig.userCSSAmerican = DefaultCSSAmerican;
 
             //自动推图2.0初始化
+            sysConfig.autoType = 0;
             sysConfig.pushType = 1;
             sysConfig.pushTimes = 9999;
             sysConfig.potionTrue = true;
             sysConfig.stoneTrue = false;
-            sysConfig.raidTrue = true;
+            sysConfig.raidOther = true;
+            sysConfig.raidSelf = true;
             sysConfig.specialTrue = false;
             sysConfig.delayTime = 250;
             sysConfig.sellTrue = true;
             sysConfig.exploreTrue = true;
             sysConfig.gardenTrue = true;
             sysConfig.actionPrep = false;
+            sysConfig.gameRestart = false;
         }
 
         /// <summary>
@@ -539,17 +554,20 @@ namespace FlowerMaster.Models
                 xe = (XmlElement)xn;
                 if (xe != null)
                 {
+                    sysConfig.autoType = xe.GetAttribute("AutoType") != "" ? int.Parse(xe.GetAttribute("AutoType")) : sysConfig.autoType;
                     sysConfig.pushType = xe.GetAttribute("PushType") != "" ? int.Parse(xe.GetAttribute("PushType")) : sysConfig.pushType;
                     sysConfig.pushTimes = xe.GetAttribute("PushTimes") != "" ? int.Parse(xe.GetAttribute("PushTimes")) : sysConfig.pushTimes;
                     sysConfig.potionTrue = xe.GetAttribute("PotionTrue") != "" ? bool.Parse(xe.GetAttribute("PotionTrue")) : sysConfig.potionTrue;
                     sysConfig.stoneTrue = xe.GetAttribute("StoneTrue") != "" ? bool.Parse(xe.GetAttribute("StoneTrue")) : sysConfig.stoneTrue;
-                    sysConfig.raidTrue = xe.GetAttribute("RaidTrue") != "" ? bool.Parse(xe.GetAttribute("RaidTrue")) : sysConfig.raidTrue;
+                    sysConfig.raidOther = xe.GetAttribute("RaidOther") != "" ? bool.Parse(xe.GetAttribute("RaidOther")) : sysConfig.raidOther;
+                    sysConfig.raidSelf = xe.GetAttribute("RaidSelf") != "" ? bool.Parse(xe.GetAttribute("RaidSelf")) : sysConfig.raidSelf;
                     sysConfig.specialTrue = xe.GetAttribute("SpecialTrue") != "" ? bool.Parse(xe.GetAttribute("SpecialTrue")) : sysConfig.specialTrue;
                     sysConfig.delayTime = xe.GetAttribute("DelayTime") != "" ? int.Parse(xe.GetAttribute("DelayTime")) : sysConfig.delayTime;
                     sysConfig.sellTrue = xe.GetAttribute("SellTrue") != "" ? bool.Parse(xe.GetAttribute("SellTrue")) : sysConfig.sellTrue;
                     sysConfig.exploreTrue = xe.GetAttribute("ExploreTrue") != "" ? bool.Parse(xe.GetAttribute("ExploreTrue")) : sysConfig.exploreTrue;
                     sysConfig.gardenTrue = xe.GetAttribute("GardenTrue") != "" ? bool.Parse(xe.GetAttribute("GardenTrue")) : sysConfig.gardenTrue;
                     sysConfig.actionPrep = xe.GetAttribute("ActionPrep") != "" ? bool.Parse(xe.GetAttribute("ActionPrep")) : sysConfig.actionPrep;
+                    sysConfig.gameRestart = xe.GetAttribute("GameRestart") != "" ? bool.Parse(xe.GetAttribute("GameRestart")) : sysConfig.gameRestart;
                 }
             }
             catch{ }
@@ -637,17 +655,20 @@ namespace FlowerMaster.Models
 
                     //自动推图2.0
                     XmlElement autoPush = xmlDoc.CreateElement("AutoPush");
+                    autoPush.SetAttribute("AutoType", sysConfig.autoType.ToString());
                     autoPush.SetAttribute("PushType", sysConfig.pushType.ToString());
                     autoPush.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
                     autoPush.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
                     autoPush.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
-                    autoPush.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
+                    autoPush.SetAttribute("RaidOther", sysConfig.raidOther.ToString());
+                    autoPush.SetAttribute("RaidSelf", sysConfig.raidSelf.ToString());
                     autoPush.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
                     autoPush.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
                     autoPush.SetAttribute("SellTrue", sysConfig.sellTrue.ToString());
                     autoPush.SetAttribute("ExploreTrue", sysConfig.exploreTrue.ToString());
                     autoPush.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     autoPush.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
+                    autoPush.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
                     rootNode.AppendChild(autoPush);
 
                     xmlDoc.Save("config.xml");
@@ -777,17 +798,20 @@ namespace FlowerMaster.Models
                         xe = xmlDoc.CreateElement("AutoPush");
                         rootNode.AppendChild(xe);
                     }
+                    xe.SetAttribute("AutoType", sysConfig.autoType.ToString());
                     xe.SetAttribute("PushType", sysConfig.pushType.ToString());
                     xe.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
                     xe.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
                     xe.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
-                    xe.SetAttribute("RaidTrue", sysConfig.raidTrue.ToString());
+                    xe.SetAttribute("RaidOther", sysConfig.raidOther.ToString());
+                    xe.SetAttribute("RaidSelf", sysConfig.raidSelf.ToString());
                     xe.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
                     xe.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
                     xe.SetAttribute("SellTrue", sysConfig.sellTrue.ToString());
                     xe.SetAttribute("ExploreTrue", sysConfig.exploreTrue.ToString());
                     xe.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     xe.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
+                    xe.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
 
                     xmlDoc.Save("config.xml");
                 }
