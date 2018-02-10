@@ -24,7 +24,7 @@ namespace FlowerMaster.Helpers
 
     public class Nodes
     {
-        //自动推图2.0函数
+        //自动推兔2.0函数
 
         private IntPtr WebHandle = IntPtr.Zero;
         private int delay = 1000;
@@ -162,7 +162,7 @@ namespace FlowerMaster.Helpers
 
             //根据选择点击出击页面
 
-            //进入主线推图页面
+            //进入主线推兔页面
             if (DataUtil.Config.sysConfig.pushType == 0)
             {
                 while (Col.Check(218, 242, 213, 200, 159) == false)
@@ -174,7 +174,7 @@ namespace FlowerMaster.Helpers
                 Mou.Click(300, 260);
             }
 
-            //进入活动推图页面
+            //进入活动推兔页面
             if (DataUtil.Config.sysConfig.pushType == 1)
             {
                 while (Col.Check(218, 325, 214, 202, 163) == false)
@@ -186,7 +186,7 @@ namespace FlowerMaster.Helpers
                 Mou.Click(300, 330);
             }
 
-            //进图水影推图页面
+            //进图水影推兔页面
             if (DataUtil.Config.sysConfig.pushType == 2)
             {
                 while (Col.Check(470, 275, 249, 247, 240) == false)
@@ -205,7 +205,7 @@ namespace FlowerMaster.Helpers
             if (DataUtil.Config.sysConfig.pushType != 3)
             {
                 CoDepartFirst();
-                //确认体力页面是否或者推图页面是否出现
+                //确认体力页面是否或者推兔页面是否出现
                 return ScStageDecision();
             }
 
@@ -213,7 +213,7 @@ namespace FlowerMaster.Helpers
             if (DataUtil.Config.sysConfig.pushType == 3)
             {
                 CoDepartPrevious();
-                //确认体力页面是否或者推图页面是否出现
+                //确认体力页面是否或者推兔页面是否出现
                 while (true)
                 {
                     //判断体力恢复是否出现
@@ -320,7 +320,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 开始推图
+        /// 开始推兔
         /// </summary>
         /// <param name="Node"></param>
         /// <returns></returns>
@@ -335,20 +335,20 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 推图过程中判定
+        /// 推兔过程中判定
         /// </summary>
         /// <param name="Node"></param>
         /// <param name="wait">开始前等待</param>
         private bool ScCombat()
         {
-            //如果出现弹窗，关闭并继续推图
+            //如果出现弹窗，关闭并继续推兔
             if (Col.Check(795, 205, 6, 90, 89) == true)
             {
                 Mou.Click(805, 205);
                 return false;
             }
 
-            //如果出现加战友，取消并继续推图
+            //如果出现加战友，取消并继续推兔
             else if (Col.Check(640, 240, 84, 61, 43) == true)
             {
                 Mou.Click(550, 430);
@@ -387,7 +387,7 @@ namespace FlowerMaster.Helpers
                 return true;
             }
             
-            //如果无事件，继续推图
+            //如果无事件，继续推兔
             else
             {
                 Thread.Sleep(delay);
@@ -671,7 +671,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 等待第一个可推图出现并点击
+        /// 等待第一个可推兔出现并点击
         /// </summary>
         /// <returns></returns>
         private void CoDepartFirst()
@@ -721,7 +721,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 等待出击按钮出现并开始推图
+        /// 等待出击按钮出现并开始推兔
         /// </summary>
         /// <returns></returns>
         private void CoMisssionLaunch()
