@@ -66,6 +66,8 @@ namespace FlowerMaster.Helpers
                 ScDepart();
                 while (ScCombat() == false) { }
 
+                CoHomeReturn();
+
                 if (Col.Check(625, 70, 243, 212, 0) == true &&
                     DataUtil.Config.sysConfig.raidOther == true)
                 {
@@ -354,7 +356,7 @@ namespace FlowerMaster.Helpers
             }
 
             //如果在主页，返还
-            else if (Col.Check(170, 40, 163, 148, 66) == true && 
+            else if (Col.Check(170, 40, 163, 148, 66) == true &&
                      Col.Check(5, 634, 71, 61, 21) == true)
             {
                 return true;
@@ -378,7 +380,7 @@ namespace FlowerMaster.Helpers
             }
 
             //如果出现特命，根据选择启动函数
-            else if (Col.Check(450, 400, 192, 89, 73) == true && 
+            else if (Col.Check(450, 400, 192, 89, 73) == true &&
                      Col.Check(590, 400, 35, 152, 149) == true)
             {
                 ScSpecial();
@@ -389,7 +391,7 @@ namespace FlowerMaster.Helpers
             else
             {
                 Thread.Sleep(delay);
-                Mou.Click(855, 545);
+                Mou.Click(845, 545);
                 return false;
             }
 
@@ -725,7 +727,7 @@ namespace FlowerMaster.Helpers
         private void CoMisssionLaunch()
         {
             while (Col.Check(730, 200, 213, 185, 132) == false) { Thread.Sleep(delay); }
-            Mou.Click(850, 555);
+            Mou.Click(845, 545);
             CoMaintainConfirm();
         }
 
@@ -859,7 +861,7 @@ namespace FlowerMaster.Helpers
             while (Col.Check(290, 400, 175, 74, 59) == false &&
                    Col.Check(5, 634, 71, 61, 21) == false)
             {
-                Mou.Click(855, 555);
+                Mou.Click(845, 545);
                 Thread.Sleep(delay);
             }
         }
