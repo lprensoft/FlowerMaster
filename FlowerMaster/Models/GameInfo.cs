@@ -206,8 +206,8 @@ namespace FlowerMaster.Models
         private void InitGameUrls()
         {
             _gameUrls = new Dictionary<int, string>();
-            _gameUrls.Add((int)ServersList.Japan, "http://pc-play.games.dmm.com/play/flower");
-            _gameUrls.Add((int)ServersList.JapanR18, "http://pc-play.games.dmm.co.jp/play/flower-x/");
+            _gameUrls.Add((int)ServersList.Japan, "https://pc-play.games.dmm.com/play/flower");
+            _gameUrls.Add((int)ServersList.JapanR18, "https://pc-play.games.dmm.co.jp/play/flower-x/");
             _gameUrls.Add((int)ServersList.American, "https://www.nutaku.com/games/flower-knight-girl-online/play/");
             _gameUrls.Add((int)ServersList.AmericanR18, "https://www.nutaku.net/games/flower-knight-girl/play/");
         }
