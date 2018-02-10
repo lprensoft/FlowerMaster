@@ -201,7 +201,7 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 初始化服务器游戏页列表
+        /// 初始化服务器游戏页列表 日本无法使用https
         /// </summary>
         private void InitGameUrls()
         {
