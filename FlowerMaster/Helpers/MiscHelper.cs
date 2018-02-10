@@ -544,7 +544,7 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 设置自动推图模式
+        /// 设置自动推兔模式
         /// </summary>
         /// <param name="modeSwitch">开关</param>
         public static void SetAutoGo(bool modeSwitch)
@@ -554,7 +554,7 @@ namespace FlowerMaster.Helpers
                 DataUtil.Game.isAuto = true;
                 //main.autoGoLastConf = 1 + 2000 / DataUtil.Config.sysConfig.autoGoTimeout;
                 main.timerAuto.Change(0, DataUtil.Config.sysConfig.autoGoTimeout);
-                AddLog("开始自动推图...", LogType.System);
+                AddLog("开始自动推兔...", LogType.System);
                 if (!main.Dispatcher.CheckAccess())
                 {
                     main.Dispatcher.Invoke(new Action(() =>
@@ -571,7 +571,7 @@ namespace FlowerMaster.Helpers
             {
                 DataUtil.Game.isAuto = false;
                 main.timerAuto.Change(Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
-                AddLog("自动推图已停止！", LogType.System);
+                AddLog("自动推兔已停止！", LogType.System);
                 if (!main.Dispatcher.CheckAccess())
                 {
                     main.Dispatcher.Invoke(new Action(() =>
