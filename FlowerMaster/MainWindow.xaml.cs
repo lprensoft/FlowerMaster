@@ -32,11 +32,11 @@ namespace FlowerMaster
 
         private Timer timerCheck = null; //提醒检查计时器
         private Timer timerClock = null; //时钟计时器
-        public Timer timerAuto = null; //自动推图定时器
-        public int autoGoLastConf = 0; //自动推图点击上次配置计数器
+        public Timer timerAuto = null; //自动推兔定时器
+        public int autoGoLastConf = 0; //自动推兔点击上次配置计数器
         public Timer timerNotify = null; //提醒计时器
 
-        public static int AutoPushS = -1; //自动推图2.0状态
+        public static int AutoPushS = -1; //自动推兔2.0状态
 
         private IntPtr webHandle = IntPtr.Zero;
 
@@ -256,7 +256,7 @@ namespace FlowerMaster
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSS;
             }
 
-            //自动推图2.0设置
+            //自动推兔2.0设置
             cbAutoType.SelectedIndex = DataUtil.Config.sysConfig.autoType;
             cbPushType.SelectedIndex = DataUtil.Config.sysConfig.pushType;
             tbPushTimes.Text = DataUtil.Config.sysConfig.pushTimes.ToString();
@@ -540,7 +540,7 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.hotKeyShift = chkHotKeyShift.IsChecked.HasValue ? (bool)chkHotKeyShift.IsChecked : false;
             DataUtil.Config.sysConfig.hotKey = tbHotKey.Text[0];
 
-            //自动推图设置
+            //自动推兔设置
             DataUtil.Config.sysConfig.autoType = cbAutoType.SelectedIndex;
             DataUtil.Config.sysConfig.pushType = cbPushType.SelectedIndex;
             DataUtil.Config.sysConfig.pushTimes = int.Parse(tbPushTimes.Text);
@@ -599,7 +599,7 @@ namespace FlowerMaster
 
 
         /// <summary>
-        /// 自动推图定时器
+        /// 自动推兔定时器
         /// </summary>
         /// <param name="data">对象参数</param>
         private void AutoClickMouse(object data)
@@ -687,6 +687,9 @@ namespace FlowerMaster
             }
         }
 
+        /// <summary>
+        /// 独立出的刷新游戏代码
+        /// </summary>
         private void Refresh()
         {
             MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
@@ -940,6 +943,7 @@ namespace FlowerMaster
             {
                 webHandle = mainWeb.Handle;
                 webHandle = CordCol.GetWebHandle(webHandle);
+                //独立出的获取句柄
                 //StringBuilder className = new StringBuilder(100);
                 //while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
                 //{
@@ -1058,7 +1062,7 @@ namespace FlowerMaster
         }
 
         /// <summary>
-        /// 自动推图2.0按钮事件
+        /// 自动推兔2.0按钮事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1066,13 +1070,13 @@ namespace FlowerMaster
         {
             if (AutoPushS >= 0)
             {
-                MessageBoxResult type = MessageBox.Show("请点击下面的按钮暂停", "推图中", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBoxResult type = MessageBox.Show("请点击下面的按钮暂停", "推兔中", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
-            //如果状态为0，启动推图功能
+            //如果状态为0，启动推兔功能
             else
             {
-                MessageBoxResult type = MessageBox.Show("点击OK开始自动推图\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                MessageBoxResult type = MessageBox.Show("点击OK开始自动推兔\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 if (type == MessageBoxResult.OK)
                 {
                     AutoPushS = AutoPushS + DataUtil.Config.sysConfig.delayTime;
@@ -1087,12 +1091,12 @@ namespace FlowerMaster
         }
 
         /// <summary>
-        /// 启动自动推图
+        /// 启动自动推兔
         /// </summary>
         private async void AutoPush()
         {
             IntPtr Han = GetWebHandle(mainWeb.Handle);
-            MiscHelper.AddLog("开始推图!", MiscHelper.LogType.System);
+            MiscHelper.AddLog("开始推兔!", MiscHelper.LogType.System);
             Nodes Node = new Nodes();
 
             Node.ScInitialize(Han);
@@ -1124,7 +1128,7 @@ namespace FlowerMaster
         }
 
         /// <summary>
-        /// 自动推图停止按钮
+        /// 自动推兔停止按钮
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
