@@ -221,6 +221,7 @@ namespace FlowerMaster.Helpers
                     {
                         //如果碎石失败，返回主页面
                         if (ScRefill() == false) return false;
+                        WaMainLoad();
                         CoDepartPrevious();
                         return true;
                     }
@@ -249,7 +250,7 @@ namespace FlowerMaster.Helpers
                 {
                     //如果碎石失败，返回主页面
                     if (ScRefill() == false) return false;
-
+                    WaMainLoad();
                     CoDepartFirst();
                     return true;
                 }
@@ -283,8 +284,8 @@ namespace FlowerMaster.Helpers
                 if (Col.Check(300, 400, 128, 128, 128) == false)
                 {
                     Mou.Click(300, 400);
-                    //等到确认框出现
-                    while (Col.Check(410, 400, 190, 88, 73) == false) { Thread.Sleep(delay); }
+
+                    WaConfirmWindow();
                     //确定喝药红字出现
                     if (Col.Check(341, 323, 255, 1, 1) == true)
                     {
@@ -304,8 +305,8 @@ namespace FlowerMaster.Helpers
             if (DataUtil.Config.sysConfig.stoneTrue == true)
             {
                 Mou.Click(650, 400);
-                //等确认窗口出现
-                while (Col.Check(410, 400, 190, 88, 73) == false) { Thread.Sleep(delay); }
+
+                WaConfirmWindow();
                 //确定碎石红字出现
                 if (Col.Check(341, 323, 255, 1, 1) == true)
                 {
@@ -497,14 +498,7 @@ namespace FlowerMaster.Helpers
                 {
                     Mou.Click(250, 350);
                 }
-
-                //while (Col.Check(600, 265, 28, 29, 19) == false)
-                //{
-                //    Mou.Click(250, 250);
-                //    Thread.Sleep(delay);
-                //    Mou.Click(250, 350);
-                //    Thread.Sleep(delay);
-                //}
+                
                 CoDepartFirst();
                 while (true)
                 {
@@ -922,6 +916,14 @@ namespace FlowerMaster.Helpers
         private void WaMainLoad()
         {
             while (Col.Check(5, 634, 71, 61, 21) == false) { Thread.Sleep(delay); }
+        }
+
+        /// <summary>
+        /// 等待体力恢复确认框出现
+        /// </summary>
+        private void WaConfirmWindow()
+        {
+            while (Col.Check(410, 400, 190, 88, 73) == false) { Thread.Sleep(delay); }
         }
     }
 }
