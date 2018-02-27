@@ -861,12 +861,12 @@
                                 VerticalAlignment="Top"
                                 Margin="25,265,0,0"
                                 Content="Raid：" Grid.ColumnSpan="1"/>
-                        <CheckBox x:Name="chkRaidOther"
+                        <CheckBox x:Name="chkRaidSelf"
                                 VerticalAlignment="Top"
                                 Margin="75,265,0,0"
                                 Height="25"
                                 Content="磨自己的Boss！" Grid.ColumnSpan="1" />
-                        <CheckBox x:Name="chkRaidSelf"
+                        <CheckBox x:Name="chkRaidOther"
                                 VerticalAlignment="Top"
                                 Margin="75,296,0,0"
                                 Height="25"
@@ -955,13 +955,18 @@
                         Content="自动设置：" Grid.Column="1"/>
                     <CheckBox x:Name="chkGameRestart"
                         VerticalAlignment="Top"
-                        Margin="50,205,0,0"
+                        Margin="50,175,0,0"
                         Height="25"
                         Content="掉线自动刷新" Grid.Column="1"/>
                     <Label Height="25"
                         VerticalAlignment="Top"
-                        Margin="50,235,0,0"
+                        Margin="50,205,0,0"
                         Content="需要使用设置中的账号登录界面" Grid.Column="1"/>
+                    <CheckBox x:Name="chkSpecialBlock"
+                        VerticalAlignment="Top"
+                        Margin="50,270,0,0"
+                        Height="25"
+                        Content="是否有导致一些推图按钮下推的活动(Y+84）" Grid.Column="1"/>
                 </Grid>
             </TabItem>
         </TabControl>

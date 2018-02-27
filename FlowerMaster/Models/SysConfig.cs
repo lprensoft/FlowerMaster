@@ -245,6 +245,11 @@ namespace FlowerMaster.Models
             /// </summary>
             public bool gameRestart;
 
+            /// <summary>
+            /// 是否有导致某些推图按钮下推的活动图标,增加y坐标84
+            /// </summary>
+            public bool specialBlock;
+
         }
         /// <summary>
         /// 系统配置结构体
@@ -410,6 +415,7 @@ namespace FlowerMaster.Models
             sysConfig.gardenTrue = true;
             sysConfig.actionPrep = false;
             sysConfig.gameRestart = false;
+            sysConfig.specialBlock = false;
         }
 
         /// <summary>
@@ -568,6 +574,7 @@ namespace FlowerMaster.Models
                     sysConfig.gardenTrue = xe.GetAttribute("GardenTrue") != "" ? bool.Parse(xe.GetAttribute("GardenTrue")) : sysConfig.gardenTrue;
                     sysConfig.actionPrep = xe.GetAttribute("ActionPrep") != "" ? bool.Parse(xe.GetAttribute("ActionPrep")) : sysConfig.actionPrep;
                     sysConfig.gameRestart = xe.GetAttribute("GameRestart") != "" ? bool.Parse(xe.GetAttribute("GameRestart")) : sysConfig.gameRestart;
+                    sysConfig.specialBlock = xe.GetAttribute("SpecialBlock") != "" ? bool.Parse(xe.GetAttribute("SpecialBlock")) : sysConfig.specialBlock;
                 }
             }
             catch{ }
@@ -669,6 +676,7 @@ namespace FlowerMaster.Models
                     autoPush.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     autoPush.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
                     autoPush.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
+                    autoPush.SetAttribute("SpecialBlock", sysConfig.specialBlock.ToString());
                     rootNode.AppendChild(autoPush);
 
                     xmlDoc.Save("config.xml");
@@ -812,6 +820,7 @@ namespace FlowerMaster.Models
                     xe.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     xe.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
                     xe.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
+                    xe.SetAttribute("SpecialBlock", sysConfig.specialBlock.ToString());
 
                     xmlDoc.Save("config.xml");
                 }
