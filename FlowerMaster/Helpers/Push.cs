@@ -766,16 +766,16 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 等待出击按钮出现并开始推兔
+        /// 在准备页面时，不停的点击出击按钮并确定是否弹出维护窗
         /// </summary>
         /// <returns></returns>
         private void CoMisssionLaunch()
         {
             while (Col.Check(730, 230, 201, 163, 109) == true)
             {
-                Thread.Sleep(delay);
                 Mou.Click(845, 545);
                 CoMaintainConfirm();
+                Thread.Sleep(delay);
             }
         }
 
@@ -800,17 +800,23 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 等待Boss列表加载完毕并攻击第一个
+        /// 等待Boss列表加载完毕并攻击第一个。
+        /// 在进入准备页面之前不停地点击第一个Boss的出击按钮。
         /// </summary>
         /// <returns></returns>
         private void CoBossFirst()
         {
             while (Col.Check(840, 250, 87, 73, 52) == false) { Thread.Sleep(delay); }
-            Mou.Click(840, 250);
+            while (Col.Check(730, 230, 201, 163, 109) == false)
+            {
+                Mou.Click(840, 250);
+                Thread.Sleep(delay);
+            }
         }
 
         /// <summary>
-        /// 在进入下一步之前不停地选择普通攻击Boss。因延迟关系使用绝对值延迟100.
+        /// 在进入下一步之前不停地选择普通攻击Boss。因延迟关系使用绝对值延迟100。
+        /// 并同时确定是否弹出维护窗
         /// </summary>
         /// <returns></returns>
         private void CoBossAttack()
@@ -820,8 +826,8 @@ namespace FlowerMaster.Helpers
                    Col.Check(630, 540, 0, 0, 0) == false)
             {
                 Mou.Click(750, 555);
-                Thread.Sleep(100);
                 CoMaintainConfirm();
+                Thread.Sleep(100);
             }
         }
 
