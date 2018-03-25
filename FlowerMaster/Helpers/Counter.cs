@@ -30,7 +30,7 @@ namespace FlowerMaster.Helpers
 
         public void Reset()
         {
-            Current = -1;
+            Current = 0;
         }
 
         public int Value()

@@ -43,6 +43,8 @@
             <ComboBoxItem Content="日服-R18版"/>
             <ComboBoxItem Content="美服-通常版"/>
             <ComboBoxItem Content="美服-R18版"/>
+            <ComboBoxItem Content="日服-繁体版"/>
+            <ComboBoxItem Content="日服-繁体R18"/>
         </ComboBox>
         <Label Grid.Column="0"
                Grid.Row="0"
