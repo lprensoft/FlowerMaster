@@ -71,6 +71,8 @@ namespace FlowerMaster.Helpers
 
                 CoHomeReturn();
 
+                PushTimes.Decrease();
+
                 if (Col.Check(625, 70, 243, 212, 0) == true &&
                     DataUtil.Config.sysConfig.raidOther == true)
                 {
@@ -105,7 +107,6 @@ namespace FlowerMaster.Helpers
                     } 
                 }
 
-                PushTimes.Decrease();
             }
 
             while (PushTimes.Value() > 0 &&
@@ -436,7 +437,7 @@ namespace FlowerMaster.Helpers
                 }
             }
 
-            CoBossFirst();
+            CoBossEnter();
             CoMisssionLaunch();
             while (Col.Check(550, 600, 227, 210, 175) == false) { Thread.Sleep(delay); }
             CoBossAttack();
@@ -823,17 +824,40 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 等待Boss列表加载完毕并攻击第一个。
-        /// 在进入准备页面之前不停地点击第一个Boss的出击按钮。
+        /// 等待Boss列表加载完毕并攻击第1/2/3个。
+        /// 在进入准备页面之前不停地点击Boss的出击按钮。
+        /// 每个Boss间距148
         /// </summary>
         /// <returns></returns>
-        private void CoBossFirst()
+        private void CoBossEnter()
         {
             while (Col.Check(870, 260, 80, 26, 17) == false) { Thread.Sleep(delay); }
-            while (Col.Check(730, 230, 201, 163, 109) == false)
+
+            if (Col.Check(510, 270, 249, 248, 240) == true)
             {
-                Mou.Click(840, 250);
-                Thread.Sleep(delay);
+                while (Col.Check(730, 230, 201, 163, 109) == false)
+                {
+                    Mou.Click(840, 250);
+                    Thread.Sleep(delay);
+                } 
+            }
+
+            else if(Col.Check(510, 418, 249, 248, 240) == true)
+            {
+                while (Col.Check(730, 230, 201, 163, 109) == false)
+                {
+                    Mou.Click(840, 398);
+                    Thread.Sleep(delay);
+                }
+            }
+
+            else
+            {
+                while (Col.Check(730, 230, 201, 163, 109) == false)
+                {
+                    Mou.Click(840, 546);
+                    Thread.Sleep(delay);
+                }
             }
         }
 
