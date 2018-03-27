@@ -739,6 +739,7 @@ namespace FlowerMaster.Helpers
             if (sblock == false)
             {
                 while (Col.Check(218, 383, 214, 202, 162) == true ||
+                       Col.Check(218, 383, 217, 206, 169) == true ||
                        Col.Check(218, 383, 218, 217, 166) == true ||
                        Col.Check(218, 383, 244, 168, 173) == true)
                 {
@@ -755,6 +756,7 @@ namespace FlowerMaster.Helpers
             else
             {
                 while (Col.Check(218, 467, 214, 202, 162) == true ||
+                       Col.Check(218, 467, 217, 206, 169) == true ||
                        Col.Check(218, 467, 218, 217, 166) == true ||
                        Col.Check(218, 467, 244, 168, 173) == true)
                 {
