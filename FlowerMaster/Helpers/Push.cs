@@ -412,7 +412,7 @@ namespace FlowerMaster.Helpers
             else
             {
                 Thread.Sleep(delay);
-                Mou.Click(845, 545);
+                Mou.Click(850, 530);
                 return false;
             }
 
@@ -793,7 +793,7 @@ namespace FlowerMaster.Helpers
         {
             while (Col.Check(730, 230, 201, 163, 109) == true)
             {
-                Mou.Click(845, 545);
+                Mou.Click(850, 530);
                 CoMaintainConfirm();
                 Thread.Sleep(delay);
             }
@@ -965,7 +965,7 @@ namespace FlowerMaster.Helpers
                    Col.Check(5, 634, 71, 61, 21) == false &&
                    Col.Check(290, 400, 175, 74, 59) == false)
             {
-                Mou.Click(845, 545);
+                Mou.Click(850, 530);
                 Thread.Sleep(delay);
             }
         }
