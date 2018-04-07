@@ -777,9 +777,13 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoAssistSelect()
         {
-            while (Col.Check(730, 230, 201, 163, 109) == false)
+            while (Col.Check(730, 210, 213, 185, 132) == false)
             {
-                while (Col.Check(934, 200, 55, 46, 5) == false) { Thread.Sleep(delay); }
+                while (Col.Check(934, 200, 55, 46, 5) == false)
+                {
+                    Thread.Sleep(delay);
+                    if (Col.Check(730, 210, 213, 185, 132) == true) break;
+                }
                 Mou.Click(600, 250);
                 Thread.Sleep(delay);
             }
@@ -791,7 +795,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoMisssionLaunch()
         {
-            while (Col.Check(730, 230, 201, 163, 109) == true)
+            while (Col.Check(730, 210, 213, 185, 132) == true)
             {
                 Mou.Click(850, 530);
                 CoMaintainConfirm();
