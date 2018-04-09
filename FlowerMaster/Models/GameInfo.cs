@@ -127,6 +127,8 @@ namespace FlowerMaster.Models
             JapanR18 = 1,
             American = 2,
             AmericanR18 = 3,
+            TradChinese = 4,
+            TradChineseR18 = 5,
         };
 
         /// <summary>
@@ -198,18 +200,22 @@ namespace FlowerMaster.Models
             _gameServers.Add((int)ServersList.JapanR18, "https://www.dmm.co.jp/netgame_s/flower-x/");
             _gameServers.Add((int)ServersList.American, "https://www.nutaku.com/games/flower-knight-girl-online/");
             _gameServers.Add((int)ServersList.AmericanR18, "https://www.nutaku.net/games/flower-knight-girl/");
+            _gameServers.Add((int)ServersList.TradChinese, "http://pc-play.games.dmm.com/play/flower_Gro/");
+            _gameServers.Add((int)ServersList.TradChineseR18, "http://pc-play.games.dmm.co.jp/play/flower-x_Gro/");
         }
 
         /// <summary>
-        /// 初始化服务器游戏页列表
+        /// 初始化服务器游戏页列表 日本无法使用https
         /// </summary>
         private void InitGameUrls()
         {
             _gameUrls = new Dictionary<int, string>();
-            _gameUrls.Add((int)ServersList.Japan, "https://www.dmm.com/netgame/social/-/gadgets/=/app_id=738496/");
-            _gameUrls.Add((int)ServersList.JapanR18, "https://www.dmm.co.jp/netgame/social/-/gadgets/=/app_id=329993/");
+            _gameUrls.Add((int)ServersList.Japan, "http://pc-play.games.dmm.com/play/flower");
+            _gameUrls.Add((int)ServersList.JapanR18, "http://pc-play.games.dmm.co.jp/play/flower-x/");
             _gameUrls.Add((int)ServersList.American, "https://www.nutaku.com/games/flower-knight-girl-online/play/");
-            _gameUrls.Add((int)ServersList.AmericanR18, "https://www.nutaku.net/games/flower-knight-girl/play/");
+            _gameUrls.Add((int)ServersList.AmericanR18, "http://pc-play.games.dmm.co.jp/play/flower-x_Gro/");
+            _gameUrls.Add((int)ServersList.TradChinese, "http://pc-play.games.dmm.com/play/flower_Gro/");
+            _gameUrls.Add((int)ServersList.TradChineseR18, "http://pc-play.games.dmm.co.jp/play/flower-x_Gro/");
         }
 
         /// <summary>
@@ -529,7 +535,7 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 是否在自动推图
+        /// 是否在自动推兔
         /// </summary>
         public bool isAuto
         {
@@ -544,7 +550,7 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 是否可以自动推图
+        /// 是否可以自动推兔
         /// </summary>
         public bool canAuto
         {

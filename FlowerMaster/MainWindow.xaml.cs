@@ -32,11 +32,11 @@ namespace FlowerMaster
 
         private Timer timerCheck = null; //提醒检查计时器
         private Timer timerClock = null; //时钟计时器
-        public Timer timerAuto = null; //自动推图定时器
-        public int autoGoLastConf = 0; //自动推图点击上次配置计数器
+        public Timer timerAuto = null; //自动推兔定时器
+        public int autoGoLastConf = 0; //自动推兔点击上次配置计数器
         public Timer timerNotify = null; //提醒计时器
 
-        public static int AutoPushS = -1; //自动推图2.0状态
+        private readonly Counter PushTimes = Counter.Instance; //自动推兔2.0状态
 
         private IntPtr webHandle = IntPtr.Zero;
 
@@ -115,6 +115,9 @@ namespace FlowerMaster
             timerClock = new Timer(new TimerCallback(tickServerTime), this, 0, 1000);
             timerAuto = new Timer(new TimerCallback(AutoClickMouse), this, Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
             timerNotify = new Timer(new TimerCallback(closeNotify), this, Timeout.Infinite, 10000);
+
+            //默认推兔状态
+            PushTimes.Reset();
 
             dgDaliy.ItemsSource = DataUtil.Game.daliyInfo;
             dgMainExp.ItemsSource = DataUtil.Game.expTable;
@@ -256,7 +259,7 @@ namespace FlowerMaster
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSS;
             }
 
-            //自动推图2.0设置
+            //自动推兔2.0设置
             cbAutoType.SelectedIndex = DataUtil.Config.sysConfig.autoType;
             cbPushType.SelectedIndex = DataUtil.Config.sysConfig.pushType;
             tbPushTimes.Text = DataUtil.Config.sysConfig.pushTimes.ToString();
@@ -276,6 +279,8 @@ namespace FlowerMaster
             chkActionPrep.IsChecked = DataUtil.Config.sysConfig.actionPrep;
 
             chkGameRestart.IsChecked = DataUtil.Config.sysConfig.gameRestart;
+
+            chkSpecialBlock.IsChecked = DataUtil.Config.sysConfig.specialBlock;
 
         }
 
@@ -540,7 +545,7 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.hotKeyShift = chkHotKeyShift.IsChecked.HasValue ? (bool)chkHotKeyShift.IsChecked : false;
             DataUtil.Config.sysConfig.hotKey = tbHotKey.Text[0];
 
-            //自动推图设置
+            //自动推兔设置
             DataUtil.Config.sysConfig.autoType = cbAutoType.SelectedIndex;
             DataUtil.Config.sysConfig.pushType = cbPushType.SelectedIndex;
             DataUtil.Config.sysConfig.pushTimes = int.Parse(tbPushTimes.Text);
@@ -560,6 +565,8 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.actionPrep = chkActionPrep.IsChecked.HasValue ? (bool)chkActionPrep.IsChecked : false;
 
             DataUtil.Config.sysConfig.gameRestart = chkGameRestart.IsChecked.HasValue ? (bool)chkGameRestart.IsChecked : false;
+
+            DataUtil.Config.sysConfig.specialBlock = chkSpecialBlock.IsChecked.HasValue ? (bool)chkSpecialBlock.IsChecked : false;
 
 
             DataUtil.Config.sysConfig.capFormat = (SysConfig.ScreenShotFormat)cbCapFormat.SelectedIndex;
@@ -599,7 +606,7 @@ namespace FlowerMaster
 
 
         /// <summary>
-        /// 自动推图定时器
+        /// 自动推兔定时器
         /// </summary>
         /// <param name="data">对象参数</param>
         private void AutoClickMouse(object data)
@@ -686,7 +693,10 @@ namespace FlowerMaster
                 Refresh();
             }
         }
-
+        
+        /// <summary>
+        /// 独立出的刷新游戏代码
+        /// </summary>
         private void Refresh()
         {
             MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
@@ -940,6 +950,7 @@ namespace FlowerMaster
             {
                 webHandle = mainWeb.Handle;
                 webHandle = CordCol.GetWebHandle(webHandle);
+                //独立出的获取句柄
                 //StringBuilder className = new StringBuilder(100);
                 //while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
                 //{
@@ -1058,41 +1069,37 @@ namespace FlowerMaster
         }
 
         /// <summary>
-        /// 自动推图2.0按钮事件
+        /// 自动推兔2.0按钮事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnPush_Click(object sender, RoutedEventArgs e)
         {
-            if (AutoPushS >= 0)
+            if (PushTimes.Value() > 0)
             {
-                MessageBoxResult type = MessageBox.Show("请点击下面的按钮暂停", "推图中", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("请点击下面的按钮暂停", "推兔中", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
-            //如果状态为0，启动推图功能
+            //如果状态为0，启动推兔功能
             else
             {
-                MessageBoxResult type = MessageBox.Show("点击OK开始自动推图\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                MessageBoxResult type = MessageBox.Show("点击OK开始自动推兔\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 if (type == MessageBoxResult.OK)
                 {
-                    AutoPushS = AutoPushS + DataUtil.Config.sysConfig.delayTime;
+                    PushTimes.Load(DataUtil.Config.sysConfig.pushTimes);
                     AutoPush();
-                }
-                else
-                {
-                    return;
                 }
             }
             
         }
 
         /// <summary>
-        /// 启动自动推图
+        /// 启动自动推兔
         /// </summary>
         private async void AutoPush()
         {
             IntPtr Han = GetWebHandle(mainWeb.Handle);
-            MiscHelper.AddLog("开始推图!", MiscHelper.LogType.System);
+            MiscHelper.AddLog("开始推兔!", MiscHelper.LogType.System);
             Nodes Node = new Nodes();
 
             Node.ScInitialize(Han);
@@ -1102,7 +1109,7 @@ namespace FlowerMaster
             while (PushThread.IsAlive == true)
             {
                 await Task.Delay(1000);
-                if (AutoPushS < 0)
+                if (PushTimes.Value() == 0)
                 {
                     PushThread.Abort();
                 }
@@ -1124,16 +1131,16 @@ namespace FlowerMaster
         }
 
         /// <summary>
-        /// 自动推图停止按钮
+        /// 自动推兔停止按钮
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnPush_Set(object sender, RoutedEventArgs e)
         {
-            if(AutoPushS > 0)
+            if(PushTimes.Value() > 0)
             {
-                AutoPushS = -1;
-                MessageBoxResult type = MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                PushTimes.Reset();
+                MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             }
         }
         

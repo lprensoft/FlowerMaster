@@ -15,7 +15,7 @@ namespace FlowerMaster.Models
     class SysConfig
     {
         /// <summary>
-        /// 自动推图定时器触发时间间隔（毫秒）
+        /// 自动推兔定时器触发时间间隔（毫秒）
         /// </summary>
         public const int AUTO_GO_TIMEOUT = 330;
 
@@ -97,15 +97,15 @@ namespace FlowerMaster.Models
             public bool logGacha;
 
             /// <summary>
-            /// 进图后自动推图
+            /// 进图后自动推兔
             /// </summary>
             public bool autoGoInMaps;
             /// <summary>
-            /// 自动推图间隔时间
+            /// 自动推兔间隔时间
             /// </summary>
             private int _autoGoTimeout;
             /// <summary>
-            /// 自动推图间隔时间
+            /// 自动推兔间隔时间
             /// </summary>
             public int autoGoTimeout
             {
@@ -182,17 +182,17 @@ namespace FlowerMaster.Models
             /// </summary>
             public string userCSSAmerican;
 
-            //自动推图2.0系列设置
+            //自动推兔2.0系列设置
             /// <summary>
             /// 自动模式
             /// </summary>
             public int autoType;
             /// <summary>
-            /// 推图模式
+            /// 推兔模式
             /// </summary>
             public int pushType;
             /// <summary>
-            /// 推图次数
+            /// 推兔次数
             /// </summary>
             public int pushTimes;
 
@@ -244,6 +244,11 @@ namespace FlowerMaster.Models
             /// 是否自动重启游戏
             /// </summary>
             public bool gameRestart;
+
+            /// <summary>
+            /// 是否有导致某些推图按钮下推的活动图标,增加y坐标84
+            /// </summary>
+            public bool specialBlock;
 
         }
         /// <summary>
@@ -395,7 +400,7 @@ namespace FlowerMaster.Models
             sysConfig.userCSS = DefaultCSSJapan;
             sysConfig.userCSSAmerican = DefaultCSSAmerican;
 
-            //自动推图2.0初始化
+            //自动推兔2.0初始化
             sysConfig.autoType = 0;
             sysConfig.pushType = 1;
             sysConfig.pushTimes = 9999;
@@ -410,6 +415,7 @@ namespace FlowerMaster.Models
             sysConfig.gardenTrue = true;
             sysConfig.actionPrep = false;
             sysConfig.gameRestart = false;
+            sysConfig.specialBlock = false;
         }
 
         /// <summary>
@@ -549,7 +555,7 @@ namespace FlowerMaster.Models
                     sysConfig.userCSSAmerican = xe.GetAttribute("CssStyle") != "" ? xe.GetAttribute("CssStyle") : DefaultCSSAmerican;
                 }
 
-                //自动推图2.0
+                //自动推兔2.0
                 xn = xmlDoc.SelectSingleNode("/Config/AutoPush");
                 xe = (XmlElement)xn;
                 if (xe != null)
@@ -568,6 +574,7 @@ namespace FlowerMaster.Models
                     sysConfig.gardenTrue = xe.GetAttribute("GardenTrue") != "" ? bool.Parse(xe.GetAttribute("GardenTrue")) : sysConfig.gardenTrue;
                     sysConfig.actionPrep = xe.GetAttribute("ActionPrep") != "" ? bool.Parse(xe.GetAttribute("ActionPrep")) : sysConfig.actionPrep;
                     sysConfig.gameRestart = xe.GetAttribute("GameRestart") != "" ? bool.Parse(xe.GetAttribute("GameRestart")) : sysConfig.gameRestart;
+                    sysConfig.specialBlock = xe.GetAttribute("SpecialBlock") != "" ? bool.Parse(xe.GetAttribute("SpecialBlock")) : sysConfig.specialBlock;
                 }
             }
             catch{ }
@@ -653,7 +660,7 @@ namespace FlowerMaster.Models
                     css.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
                     rootNode.AppendChild(cssA);
 
-                    //自动推图2.0
+                    //自动推兔2.0
                     XmlElement autoPush = xmlDoc.CreateElement("AutoPush");
                     autoPush.SetAttribute("AutoType", sysConfig.autoType.ToString());
                     autoPush.SetAttribute("PushType", sysConfig.pushType.ToString());
@@ -669,6 +676,7 @@ namespace FlowerMaster.Models
                     autoPush.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     autoPush.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
                     autoPush.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
+                    autoPush.SetAttribute("SpecialBlock", sysConfig.specialBlock.ToString());
                     rootNode.AppendChild(autoPush);
 
                     xmlDoc.Save("config.xml");
@@ -790,7 +798,7 @@ namespace FlowerMaster.Models
                     }
                     xe.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
 
-                    //自动推图2.0
+                    //自动推兔2.0
                     xn = xmlDoc.SelectSingleNode("/Config/AutoPush");
                     xe = (XmlElement)xn;
                     if (xe == null)
@@ -812,6 +820,7 @@ namespace FlowerMaster.Models
                     xe.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     xe.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
                     xe.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
+                    xe.SetAttribute("SpecialBlock", sysConfig.specialBlock.ToString());
 
                     xmlDoc.Save("config.xml");
                 }

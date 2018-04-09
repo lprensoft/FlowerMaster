@@ -186,6 +186,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\Color.cs" />
+    <Compile Include="Helpers\Counter.cs" />
     <Compile Include="Helpers\Mouse.cs" />
     <Compile Include="Tools\CordWindow.xaml.cs">
       <DependentUpon>CordWindow.xaml</DependentUpon>

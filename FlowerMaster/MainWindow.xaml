@@ -114,7 +114,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,0,-2,0"
-                            ToolTip="自动推图"
+                            ToolTip="自动推兔"
                             Click="btnAuto_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="19"
@@ -205,7 +205,7 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
                         Margin="0,250,-2,0"
-                        ToolTip="自动推图2.0"
+                        ToolTip="自动推兔2.0"
                         Click="btnPush_Click"
                         Style="{DynamicResource MetroCircleButtonStyle}" >
                         <Rectangle Width="16"
@@ -223,7 +223,7 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
                         Margin="0,325,-2,0"
-                        ToolTip="暂停自动推图"
+                        ToolTip="暂停自动推兔"
                         Click="btnPush_Set"
                         Style="{DynamicResource MetroCircleButtonStyle}" >
                         <Rectangle Width="16"
@@ -292,6 +292,8 @@
                                 <ComboBoxItem Content="日服-R18版"/>
                                 <ComboBoxItem Content="美服-通常版"/>
                                 <ComboBoxItem Content="美服-R18版"/>
+                                <ComboBoxItem Content="日服-繁体版"/>
+                                <ComboBoxItem Content="日服-繁体R18"/>
                             </ComboBox>
                             <Label VerticalAlignment="Top"
                            Margin="25,115,0,0"
@@ -443,11 +445,11 @@
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="5,535,0,0"
-                           Content="自动推图"/>
+                           Content="自动推兔"/>
                             <CheckBox x:Name="chkAutoGo"
                               VerticalAlignment="Top"
                               Margin="25,570,0,0"
-                              Content="进入副本后自动推图"/>
+                              Content="进入副本后自动推兔"/>
                             <Label Height="25"
                            VerticalAlignment="Top"
                            Margin="25,600,0,0"
@@ -778,7 +780,7 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="推图">
+            <TabItem Header="推兔">
                 <Grid Background="#FF0F0F0F">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
@@ -791,7 +793,7 @@
                                 Height="30"
                                 VerticalAlignment="Top"
                                 Margin="5,0,0,0"
-                                Content="推图设置" Grid.ColumnSpan="1"/>
+                                Content="推兔设置" Grid.ColumnSpan="1"/>
                         <Label VerticalAlignment="Top"
                                 Margin="25,35,0,0"
                                 Content="自动模式：" Grid.ColumnSpan="1" Height="26"/>
@@ -800,12 +802,12 @@
                                 HorizontalAlignment="Left"
                                 Margin="110,35,0,0"
                                 Width="120" Grid.ColumnSpan="1" Height="26">
-                            <ComboBoxItem Content="推图"/>
+                            <ComboBoxItem Content="推兔"/>
                             <ComboBoxItem Content="主页待机"/>
                         </ComboBox>
                         <Label VerticalAlignment="Top"
                                 Margin="25,70,0,0"
-                                Content="推图模式：" Grid.ColumnSpan="1" Height="26"/>
+                                Content="推兔模式：" Grid.ColumnSpan="1" Height="26"/>
                         <ComboBox x:Name="cbPushType"
                                 VerticalAlignment="Top" 
                                 HorizontalAlignment="Left"
@@ -825,7 +827,7 @@
                         <Label Margin="25,105,0,0"
                                 Height="25"
                                 VerticalAlignment="Top"
-                                Content="推图次数：" Grid.ColumnSpan="1"/>
+                                Content="推兔次数：" Grid.ColumnSpan="1"/>
                         <TextBox x:Name="tbPushTimes"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"
@@ -861,12 +863,12 @@
                                 VerticalAlignment="Top"
                                 Margin="25,265,0,0"
                                 Content="Raid：" Grid.ColumnSpan="1"/>
-                        <CheckBox x:Name="chkRaidOther"
+                        <CheckBox x:Name="chkRaidSelf"
                                 VerticalAlignment="Top"
                                 Margin="75,265,0,0"
                                 Height="25"
                                 Content="磨自己的Boss！" Grid.ColumnSpan="1" />
-                        <CheckBox x:Name="chkRaidSelf"
+                        <CheckBox x:Name="chkRaidOther"
                                 VerticalAlignment="Top"
                                 Margin="75,296,0,0"
                                 Height="25"
@@ -955,13 +957,18 @@
                         Content="自动设置：" Grid.Column="1"/>
                     <CheckBox x:Name="chkGameRestart"
                         VerticalAlignment="Top"
-                        Margin="50,205,0,0"
+                        Margin="50,175,0,0"
                         Height="25"
                         Content="掉线自动刷新" Grid.Column="1"/>
                     <Label Height="25"
                         VerticalAlignment="Top"
-                        Margin="50,235,0,0"
+                        Margin="50,205,0,0"
                         Content="需要使用设置中的账号登录界面" Grid.Column="1"/>
+                    <CheckBox x:Name="chkSpecialBlock"
+                        VerticalAlignment="Top"
+                        Margin="50,270,0,0"
+                        Height="25"
+                        Content="是否有导致一些推图按钮下推的活动(Y+84）" Grid.Column="1"/>
                 </Grid>
             </TabItem>
         </TabControl>
