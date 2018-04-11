@@ -52,6 +52,9 @@ namespace FlowerMaster.Helpers
                 case (int)GameInfo.ServersList.Japan:
                 case (int)GameInfo.ServersList.JapanR18:
                     return "日服";
+                case (int)GameInfo.ServersList.TradChinese:
+                case (int)GameInfo.ServersList.TradChineseR18:
+                    return "繁中服";
                 default:
                     return "日服";
             }
