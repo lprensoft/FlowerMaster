@@ -64,7 +64,6 @@ namespace FlowerMaster
         /// <summary>
         /// 获取当前鼠标坐标与像素并输出到窗口
         /// </summary>
-        /// <param name="Handle">表层Handle（坐标）</param>
         /// <param name="ActHand">底层Handle（像素）</param>
         private void GetCord(IntPtr ActHand)
         {
@@ -77,8 +76,6 @@ namespace FlowerMaster
             int b;
             a = Pointy.X - lprect.Left;
             b = Pointy.Y - lprect.Top;
-
-            IntPtr c = ActHand;
 
             System.Drawing.Color colorout = CordCol.GetPixelColor(ActHand, Pointy.X - lprect.Left, Pointy.Y - lprect.Top);
 
