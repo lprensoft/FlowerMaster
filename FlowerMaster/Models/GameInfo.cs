@@ -196,12 +196,12 @@ namespace FlowerMaster.Models
         private void InitGameServers()
         {
             _gameServers = new Dictionary<int, string>();
-            _gameServers.Add((int)ServersList.Japan, "https://www.dmm.com/netgame_s/flower/");
-            _gameServers.Add((int)ServersList.JapanR18, "https://www.dmm.co.jp/netgame_s/flower-x/");
+            _gameServers.Add((int)ServersList.Japan, "http://games.dmm.com/detail/flower/");
+            _gameServers.Add((int)ServersList.JapanR18, "http://games.dmm.co.jp/detail/flower-x/");
             _gameServers.Add((int)ServersList.American, "https://www.nutaku.com/games/flower-knight-girl-online/");
             _gameServers.Add((int)ServersList.AmericanR18, "https://www.nutaku.net/games/flower-knight-girl/");
-            _gameServers.Add((int)ServersList.TradChinese, "http://pc-play.games.dmm.com/play/flower_Gro/");
-            _gameServers.Add((int)ServersList.TradChineseR18, "http://pc-play.games.dmm.co.jp/play/flower-x_Gro/");
+            _gameServers.Add((int)ServersList.TradChinese, "http://games.dmm.com/detail/flower_Gro/");
+            _gameServers.Add((int)ServersList.TradChineseR18, "http://games.dmm.co.jp/detail/flower-x_Gro/");
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace FlowerMaster.Models
             _gameUrls.Add((int)ServersList.Japan, "http://pc-play.games.dmm.com/play/flower");
             _gameUrls.Add((int)ServersList.JapanR18, "http://pc-play.games.dmm.co.jp/play/flower-x/");
             _gameUrls.Add((int)ServersList.American, "https://www.nutaku.com/games/flower-knight-girl-online/play/");
-            _gameUrls.Add((int)ServersList.AmericanR18, "http://pc-play.games.dmm.co.jp/play/flower-x_Gro/");
+            _gameUrls.Add((int)ServersList.AmericanR18, "https://www.nutaku.net/games/flower-knight-girl/play/");
             _gameUrls.Add((int)ServersList.TradChinese, "http://pc-play.games.dmm.com/play/flower_Gro/");
             _gameUrls.Add((int)ServersList.TradChineseR18, "http://pc-play.games.dmm.co.jp/play/flower-x_Gro/");
         }
@@ -228,6 +228,8 @@ namespace FlowerMaster.Models
             _gameNewsUrls.Add((int)ServersList.JapanR18, "https://s3-ap-northeast-1.amazonaws.com/flower-help/index.html");
             _gameNewsUrls.Add((int)ServersList.American, "https://cdn.flowerknight.nutaku.net/index.html");
             _gameNewsUrls.Add((int)ServersList.AmericanR18, "https://cdn.flowerknight.nutaku.net/index.html");
+            _gameNewsUrls.Add((int)ServersList.TradChinese, "https://cf.fkg.dmmgames.com/help/index.html");
+            _gameNewsUrls.Add((int)ServersList.TradChineseR18, "https://cf.fkg.dmmgames.com/help/index.html");
         }
 
         /// <summary>

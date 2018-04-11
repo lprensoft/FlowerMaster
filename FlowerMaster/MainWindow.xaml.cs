@@ -382,7 +382,8 @@ namespace FlowerMaster
             {
                 PacketHelper.ProcessPacket(s);
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18)
+            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18 ||
+                    DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChinese || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChineseR18)
             {
                 if (s.Request.PathAndQuery.IndexOf("/social/rpc") != -1)
                 {
