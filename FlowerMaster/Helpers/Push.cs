@@ -628,7 +628,7 @@ namespace FlowerMaster.Helpers
             while (Col.Check(380, 615, 34, 34, 34) == false &&
                    Col.Check(380, 615, 23, 23, 23) == false)
             {
-                if (Col.Check(375, 610, 234, 234, 234) == true)
+                if (Col.Check(380, 615, 68, 0, 0) == true)
                 {
                     Mou.Click(380, 615);
                 }
