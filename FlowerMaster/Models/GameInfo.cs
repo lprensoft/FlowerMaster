@@ -426,13 +426,13 @@ namespace FlowerMaster.Models
         public void InitDaliyInfo()
         {
             _daliyInfo = new ObservableCollection<DaliyInfo>();
-            _daliyInfo.Add(new DaliyInfo() { day = "星期日", eventStage = "狗粮本" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期一", eventStage = "斩（红）进化龙本" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期二", eventStage = "打（蓝）进化龙本" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期三", eventStage = "狗粮本" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期四", eventStage = "突（黄）进化龙本" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期五", eventStage = "魔（紫）进化龙本" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期六", eventStage = "金币本" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期日", eventStage = "狗粮" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期一", eventStage = "斩（红）进化龙" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期二", eventStage = "打（蓝）进化龙" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期三", eventStage = "狗粮" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期四", eventStage = "突（黄）进化龙" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期五", eventStage = "魔（紫）进化龙" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期六", eventStage = "金币" });
         }
 
         /// <summary>
