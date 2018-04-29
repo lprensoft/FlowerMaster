@@ -816,8 +816,8 @@
                                 Width="120" Grid.ColumnSpan="1" Height="26">
                             <ComboBoxItem Content="主线"/>
                             <ComboBoxItem Content="活动"/>
-                            <ComboBoxItem Content="水影"/>
                             <ComboBoxItem Content="上一次图"/>
+                            <!--<ComboBoxItem Content="水影"/>-->
                         </ComboBox>
                         <Label FontWeight="Bold"
                                 FontSize="16px"
