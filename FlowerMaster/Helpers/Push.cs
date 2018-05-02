@@ -77,8 +77,7 @@ namespace FlowerMaster.Helpers
                     DataUtil.Config.sysConfig.raidOther == true)
                 {
                     CoHomeReturn();
-                    Mou.Click(355, 160);
-                    ScAttackRaid();
+                    ScGranRaid();
                 }
 
                 if (DataUtil.Config.sysConfig.sellTrue == true)
@@ -120,8 +119,8 @@ namespace FlowerMaster.Helpers
                 if (Col.Check(625, 70, 243, 212, 0) == true &&
                     DataUtil.Config.sysConfig.raidOther == true)
                 {
-                    Mou.Click(355, 160);
-                    ScAttackRaid();
+                    CoHomeReturn();
+                    ScGranRaid();
                 }
 
                 if (DataUtil.Config.sysConfig.exploreTrue == true)
@@ -407,6 +406,15 @@ namespace FlowerMaster.Helpers
                 ScSpecial();
                 return true;
             }
+
+            //如果出现眷属的自动Boss弹窗，关闭并判定推图结束
+            else if (Col.Check(340, 390, 253, 156, 142) == true &&
+                     Col.Check(460, 390, 253, 155, 141) == true &&
+                     Col.Check(510, 390, 101, 218, 215) == true)
+            {
+                Mou.Click(550, 400);
+                return true;
+            }
             
             //如果无事件，继续推兔
             else
@@ -416,6 +424,23 @@ namespace FlowerMaster.Helpers
                 return false;
             }
 
+        }
+        
+        /// <summary>
+        /// 点击Raid按钮，确定目前是眷属战或者普通Raid，并根据结果继续
+        /// </summary>
+        private void ScGranRaid()
+        {
+            Mou.Click(355, 160);
+            while (Col.Check(500, 300, 119, 82, 69) == false &&
+                   Col.Check(200, 170, 212, 184, 131) == false)
+            { Thread.Sleep(delay); }
+
+            if (Col.Check(500, 300, 119, 82, 69) == true)
+            {
+                ScGranBoss();
+            }
+            else ScAttackRaid();
         }
 
         /// <summary>
@@ -496,6 +521,27 @@ namespace FlowerMaster.Helpers
             CoBossAssist();
             //等待并取消弹窗
             CoPrevent();
+
+            return;
+        }
+
+        /// <summary>
+        /// 眷属战Boss时特用脚本，使用全部Boss点攻击眷属Boss
+        /// </summary>
+        private void ScGranBoss()
+        {
+            CoGranEnter();
+            CoMisssionLaunch();
+            CoGranStart();
+
+            //眷属战结束前不停的点击跳过
+            while (Col.Check(780, 85, 2, 85, 86) == false)
+            {
+                Mou.Click(910, 430);
+                Thread.Sleep(delay);
+            }
+
+            Mou.Click(780, 85);
 
             return;
         }
@@ -785,12 +831,12 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 在准备页面时，不停的点击出击按钮并确定是否弹出维护窗
+        /// 在准备页面或者维护窗口出现时，不停的点击出击按钮并确定是否弹出维护窗
         /// </summary>
         /// <returns></returns>
         private void CoMisssionLaunch()
         {
-            while (Col.Check(730, 210, 213, 185, 132) == true)
+            while (Col.Check(425, 200, 213, 185, 133) == true)
             {
                 Mou.Click(850, 530);
                 CoMaintainConfirm();
@@ -892,6 +938,33 @@ namespace FlowerMaster.Helpers
                 Mou.Click(290, 400);
                 Thread.Sleep(delay);
             }
+        }
+
+        /// <summary>
+        /// 在眷属战页面，进入队伍确认之前不停地点击出击按钮
+        /// </summary>
+        private void CoGranEnter()
+        {
+            while (Col.Check(425, 200, 213, 185, 133) == false)
+            {
+                Mou.Click(750, 480);
+                Thread.Sleep(delay);
+            }
+        }
+
+        /// <summary>
+        /// 等待弹窗出现，选择最大Boss点消耗并开始
+        /// </summary>
+        private void CoGranStart()
+        {
+            while (Col.Check(425, 200, 154, 32, 18) == false) { Thread.Sleep(delay); }
+            while (Col.Check(590, 310, 138, 138, 138) == false)
+            {
+                Mou.Click(590, 310);
+                Thread.Sleep(delay);
+            }
+            Mou.Click(400, 500);
+            return;
         }
 
         /// <summary>
