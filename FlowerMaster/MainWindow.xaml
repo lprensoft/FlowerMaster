@@ -816,8 +816,8 @@
                                 Width="120" Grid.ColumnSpan="1" Height="26">
                             <ComboBoxItem Content="主线"/>
                             <ComboBoxItem Content="活动"/>
-                            <ComboBoxItem Content="水影"/>
                             <ComboBoxItem Content="上一次图"/>
+                            <!--<ComboBoxItem Content="水影"/>-->
                         </ComboBox>
                         <Label FontWeight="Bold"
                                 FontSize="16px"
@@ -969,7 +969,7 @@
                         VerticalAlignment="Top"
                         Margin="50,270,0,0"
                         Height="25"
-                        Content="是否有导致一些推图按钮下推的活动(Y+84）" Grid.Column="1"/>
+                        Content="是否有导致一些推图按钮下推的活动，如眷属(Y+84）" Grid.Column="1"/>
                 </Grid>
             </TabItem>
         </TabControl>

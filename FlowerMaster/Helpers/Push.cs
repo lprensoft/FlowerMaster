@@ -77,8 +77,7 @@ namespace FlowerMaster.Helpers
                     DataUtil.Config.sysConfig.raidOther == true)
                 {
                     CoHomeReturn();
-                    Mou.Click(355, 160);
-                    ScAttackRaid();
+                    ScGranRaid();
                 }
 
                 if (DataUtil.Config.sysConfig.sellTrue == true)
@@ -120,8 +119,8 @@ namespace FlowerMaster.Helpers
                 if (Col.Check(625, 70, 243, 212, 0) == true &&
                     DataUtil.Config.sysConfig.raidOther == true)
                 {
-                    Mou.Click(355, 160);
-                    ScAttackRaid();
+                    CoHomeReturn();
+                    ScGranRaid();
                 }
 
                 if (DataUtil.Config.sysConfig.exploreTrue == true)
@@ -169,12 +168,12 @@ namespace FlowerMaster.Helpers
             //进入主线推兔页面
             if (DataUtil.Config.sysConfig.pushType == 0)
             {
-                while (Col.Check(218, 242, 213, 200, 159) == false)
+                while (Col.Check(218, 241, 241, 237, 222) == false)
                 {
                     Mou.Click(300, 140);
                     Thread.Sleep(delay);
 ;                }
-                while (Col.Check(218, 242, 213, 200, 159) == false) { Thread.Sleep(delay); }
+                while (Col.Check(218, 241, 241, 237, 222) == false) { Thread.Sleep(delay); }
                 Mou.Click(300, 260);
             }
 
@@ -183,7 +182,7 @@ namespace FlowerMaster.Helpers
             {
                 if (sblock == false)
                 {
-                    while (Col.Check(218, 325, 214, 202, 163) == false)
+                    while (Col.Check(218, 325, 241, 237, 222) == false)
                     {
                         Mou.Click(400, 140);
                         Thread.Sleep(delay);
@@ -193,7 +192,7 @@ namespace FlowerMaster.Helpers
                 //适配额外的格子
                 else
                 {
-                    while (Col.Check(218, 409, 214, 202, 163) == false)
+                    while (Col.Check(218, 409, 241, 237, 222) == false)
                     {
                         Mou.Click(400, 140);
                         Thread.Sleep(delay);
@@ -202,23 +201,23 @@ namespace FlowerMaster.Helpers
                 }
             }
 
-            //进图水影推兔页面
-            if (DataUtil.Config.sysConfig.pushType == 2)
-            {
-                while (Col.Check(470, 275, 249, 247, 240) == false)
-                {
-                    Mou.Click(590, 140);
-                    Thread.Sleep(delay);
-                }
-                while (Col.Check(620, 275, 249, 247, 240) == true)
-                {
-                    Mou.Click(600, 250);
-                    Thread.Sleep(delay);
-                }
-            }
+            ////进入水影推兔页面
+            //if (DataUtil.Config.sysConfig.pushType == 2)
+            //{
+            //    while (Col.Check(620, 275, 249, 247, 240) == false)
+            //    {
+            //        Mou.Click(590, 140);
+            //        Thread.Sleep(delay);
+            //    }
+            //    while (Col.Check(620, 275, 249, 247, 240) == true)
+            //    {
+            //        Mou.Click(600, 250);
+            //        Thread.Sleep(delay);
+            //    }
+            //}
             
             //尝试进入队友选择
-            if (DataUtil.Config.sysConfig.pushType != 3)
+            if (DataUtil.Config.sysConfig.pushType != 2)
             {
                 CoDepartFirst();
                 //确认体力页面是否或者推兔页面是否出现
@@ -226,7 +225,7 @@ namespace FlowerMaster.Helpers
             }
 
             //进入上一次推的图
-            if (DataUtil.Config.sysConfig.pushType == 3)
+            if (DataUtil.Config.sysConfig.pushType == 2)
             {
                 CoDepartPrevious();
                 //确认体力页面是否或者推兔页面是否出现
@@ -407,6 +406,15 @@ namespace FlowerMaster.Helpers
                 ScSpecial();
                 return true;
             }
+
+            //如果出现眷属的自动Boss弹窗，关闭并判定推图结束
+            else if (Col.Check(340, 390, 253, 156, 142) == true &&
+                     Col.Check(460, 390, 253, 155, 141) == true &&
+                     Col.Check(510, 390, 101, 218, 215) == true)
+            {
+                Mou.Click(550, 400);
+                return true;
+            }
             
             //如果无事件，继续推兔
             else
@@ -416,6 +424,23 @@ namespace FlowerMaster.Helpers
                 return false;
             }
 
+        }
+        
+        /// <summary>
+        /// 点击Raid按钮，确定目前是眷属战或者普通Raid，并根据结果继续
+        /// </summary>
+        private void ScGranRaid()
+        {
+            Mou.Click(355, 160);
+            while (Col.Check(500, 300, 119, 82, 69) == false &&
+                   Col.Check(200, 170, 212, 184, 131) == false)
+            { Thread.Sleep(delay); }
+
+            if (Col.Check(500, 300, 119, 82, 69) == true)
+            {
+                ScGranBoss();
+            }
+            else ScAttackRaid();
         }
 
         /// <summary>
@@ -501,6 +526,27 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
+        /// 眷属战Boss时特用脚本，使用全部Boss点攻击眷属Boss
+        /// </summary>
+        private void ScGranBoss()
+        {
+            CoGranEnter();
+            CoMisssionLaunch();
+            CoGranStart();
+
+            //眷属战结束前不停的点击跳过
+            while (Col.Check(780, 85, 2, 85, 86) == false)
+            {
+                Mou.Click(910, 430);
+                Thread.Sleep(delay);
+            }
+
+            Mou.Click(780, 85);
+
+            return;
+        }
+
+        /// <summary>
         /// 特命脚本 包含进战过程
         /// </summary>
         private void ScSpecial()
@@ -513,17 +559,17 @@ namespace FlowerMaster.Helpers
                 {
                     Mou.Click(400, 400);
                 }
-                while (Col.Check(218, 240, 212, 199, 157) == false && 
-                       Col.Check(218, 325, 214, 202, 163) == false)
+                while (Col.Check(218, 241, 241, 237, 222) == false && 
+                       Col.Check(218, 325, 241, 237, 222) == false)
                 { Thread.Sleep(delay); }
 
                 //根据可以进入的图点击进图
-                if(Col.Check(218, 240, 212, 199, 157) == true)
+                if(Col.Check(218, 241, 241, 237, 222) == true)
                 {
                     Mou.Click(250, 250);
                 }
 
-                if (Col.Check(218, 325, 214, 202, 163) == true)
+                if (Col.Check(218, 325, 241, 237, 222) == true)
                 {
                     Mou.Click(250, 350);
                 }
@@ -738,10 +784,8 @@ namespace FlowerMaster.Helpers
         {
             if (sblock == false)
             {
-                while (Col.Check(218, 383, 214, 202, 162) == true ||
-                       Col.Check(218, 383, 217, 206, 169) == true ||
-                       Col.Check(218, 383, 218, 217, 166) == true ||
-                       Col.Check(218, 383, 244, 168, 173) == true)
+                while (Col.Check(600, 375, 97, 79, 32) == true ||
+                       Col.Check(600, 375, 95, 79, 40) == true)
                 {
                     while (Col.Check(934, 200, 55, 46, 5) == false &&
                         Col.Check(730, 230, 201, 163, 109) == false &&
@@ -755,10 +799,7 @@ namespace FlowerMaster.Helpers
             //适配额外的格子
             else
             {
-                while (Col.Check(218, 467, 214, 202, 162) == true ||
-                       Col.Check(218, 467, 217, 206, 169) == true ||
-                       Col.Check(218, 467, 218, 217, 166) == true ||
-                       Col.Check(218, 467, 244, 168, 173) == true)
+                while (Col.Check(600, 459, 97, 79, 32) == true)
                 {
                     while (Col.Check(934, 200, 55, 46, 5) == false &&
                         Col.Check(730, 230, 201, 163, 109) == false &&
@@ -790,12 +831,12 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 在准备页面时，不停的点击出击按钮并确定是否弹出维护窗
+        /// 在准备页面或者维护窗口出现时，不停的点击出击按钮并确定是否弹出维护窗
         /// </summary>
         /// <returns></returns>
         private void CoMisssionLaunch()
         {
-            while (Col.Check(730, 210, 213, 185, 132) == true)
+            while (Col.Check(425, 200, 213, 185, 133) == true)
             {
                 Mou.Click(850, 530);
                 CoMaintainConfirm();
@@ -900,6 +941,33 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
+        /// 在眷属战页面，进入队伍确认之前不停地点击出击按钮
+        /// </summary>
+        private void CoGranEnter()
+        {
+            while (Col.Check(425, 200, 213, 185, 133) == false)
+            {
+                Mou.Click(750, 480);
+                Thread.Sleep(delay);
+            }
+        }
+
+        /// <summary>
+        /// 等待弹窗出现，选择最大Boss点消耗并开始
+        /// </summary>
+        private void CoGranStart()
+        {
+            while (Col.Check(425, 200, 154, 32, 18) == false) { Thread.Sleep(delay); }
+            while (Col.Check(590, 310, 138, 138, 138) == false)
+            {
+                Mou.Click(590, 310);
+                Thread.Sleep(delay);
+            }
+            Mou.Click(400, 500);
+            return;
+        }
+
+        /// <summary>
         /// 等待特命弹窗出现并选择取消
         /// </summary>
         /// <returns></returns>
@@ -980,8 +1048,11 @@ namespace FlowerMaster.Helpers
         private void CoMaintainConfirm()
         {
             if(DataUtil.Game.serverTime.Hour == 3 &&
-               DataUtil.Game.serverTime.Minute >= 40)
+               DataUtil.Game.serverTime.Minute >= 39 &&
+               DataUtil.Game.serverTime.Second >= 59)
             {
+                //延迟一秒等弹窗出现
+                Thread.Sleep(1000);
                 while (Col.Check(550, 330, 72, 55, 50) == true)
                 {
                     Mou.Click(410, 400);
