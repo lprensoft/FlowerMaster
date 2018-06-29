@@ -95,13 +95,22 @@ namespace FlowerMaster.Helpers
             pack.requestUrl = s.Request.PathAndQuery;
             pack.rawData = s.Response.BodyAsString;
 
+            while (pack.rawData.Substring(0, 1) == "\n")
+            {
+                pack.rawData = pack.rawData.Substring(1);
+            }
+
             if (s.Request.PathAndQuery.IndexOf("/api/v1/") != -1)
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("/api/") + 8);
                 pack.funcApi = s.Request.PathAndQuery.Substring(s.Request.PathAndQuery.IndexOf("/api/") + 7);
                 if (pack.rawData.Substring(0, 1) != "[" && pack.rawData.Substring(0, 1) != "{")
                 {
-                    pack.rawData = DecryptData(s.Response.Body);
+                    try
+                    {
+                        pack.rawData = DecryptData(s.Response.Body);
+                    }
+                    catch { }
                 }
             }
             else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18 ||
