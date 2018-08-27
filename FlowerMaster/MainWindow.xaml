@@ -114,7 +114,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,0,-2,0"
-                            ToolTip="自动推兔"
+                            ToolTip="自动推图"
                             Click="btnAuto_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="19"
@@ -445,11 +445,11 @@
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="5,535,0,0"
-                           Content="自动推兔"/>
+                           Content="自动推图"/>
                             <CheckBox x:Name="chkAutoGo"
                               VerticalAlignment="Top"
                               Margin="25,570,0,0"
-                              Content="进入副本后自动推兔"/>
+                              Content="进入副本后自动推图"/>
                             <Label Height="25"
                            VerticalAlignment="Top"
                            Margin="25,600,0,0"
