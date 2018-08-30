@@ -382,7 +382,7 @@ namespace FlowerMaster.Helpers
 
             //如果在主页，返还
             else if (Col.Check(170, 40, 163, 148, 66) == true &&
-                     Col.Check(5, 634, 71, 61, 21) == true)
+                     Col.Check(5, 5, 166, 161, 139) == true)
             {
                 return true;
             }
@@ -424,8 +424,8 @@ namespace FlowerMaster.Helpers
             //如果无事件，继续推兔
             else
             {
+                Mou.Click(830, 550);
                 Thread.Sleep(delay);
-                Mou.Click(850, 530);
                 return false;
             }
 
@@ -460,10 +460,16 @@ namespace FlowerMaster.Helpers
             {
                 Thread.Sleep(delay);
                 WaMainLoad();
-                if (Col.Check(870, 260, 80, 26, 17) == false)
+
+                //循环确认三个Boss，如果没有还没打的Boss的话，回主页
+                for (int i = 0; i < 3; i++)
                 {
-                    CoHomeReturn();
-                    return;
+                    if ((Col.Check(870, 260 + 148*i, 80, 26, 17) == false &&
+                         Col.Check(510, 122 + 148*i, 249, 248, 240) == false))
+                    {
+                        CoHomeReturn();
+                        return;
+                    }
                 }
             }
 
@@ -802,16 +808,16 @@ namespace FlowerMaster.Helpers
             //适配额外的格子
             else
             {
-                while (Col.Check(250, 469, 249, 248, 240) == true ||
-                       Col.Check(600, 459, 95, 79, 40) == true)
+                while (Col.Check(250, 469, 249, 248, 240) == false &&
+                       Col.Check(600, 459, 95, 79, 40) == false)
+                { Thread.Sleep(delay); }
+
+                while (Col.Check(934, 200, 55, 46, 5) == false &&
+                    Col.Check(922, 229, 205, 167, 111) == false &&
+                    Col.Check(320, 320, 176, 31, 69) == false)
                 {
-                    while (Col.Check(934, 200, 55, 46, 5) == false &&
-                        Col.Check(922, 229, 205, 167, 111) == false &&
-                        Col.Check(320, 320, 176, 31, 69) == false)
-                    {
-                        Mou.Click(250, 484);
-                        Thread.Sleep(delay);
-                    }
+                    Mou.Click(250, 484);
+                    Thread.Sleep(delay);
                 }
             }
         }
@@ -842,7 +848,7 @@ namespace FlowerMaster.Helpers
         {
             while (Col.Check(425, 200, 213, 185, 133) == true)
             {
-                Mou.Click(850, 530);
+                Mou.Click(830, 550);
                 CoMaintainConfirm();
                 Thread.Sleep(delay);
             }
@@ -882,10 +888,13 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoBossEnter()
         {
+            //进入Boss页面之前开始等待
             while (Col.Check(870, 260, 80, 26, 17) == false) { Thread.Sleep(delay); }
 
+            //确认第3个Boss没有在【参战中】
             if (Col.Check(510, 270, 249, 248, 240) == true)
             {
+                //进入队友选择页面之前选择第1个Boss
                 while (Col.Check(922, 229, 205, 167, 111) == false)
                 {
                     Mou.Click(840, 250);
@@ -893,8 +902,10 @@ namespace FlowerMaster.Helpers
                 } 
             }
 
-            else if(Col.Check(510, 418, 249, 248, 240) == true)
+            //确认第2个Boss没有在【参战中】
+            else if (Col.Check(510, 418, 249, 248, 240) == true)
             {
+                //进入队友选择页面之前选择第2个Boss
                 while (Col.Check(922, 229, 205, 167, 111) == false)
                 {
                     Mou.Click(840, 398);
@@ -902,8 +913,10 @@ namespace FlowerMaster.Helpers
                 }
             }
 
+            //前两个Boss都在参战中，直接进入第3个Boss
             else
             {
+                //进入队友选择页面之前选择第3个Boss
                 while (Col.Check(922, 229, 205, 167, 111) == false)
                 {
                     Mou.Click(840, 546);
@@ -1040,7 +1053,7 @@ namespace FlowerMaster.Helpers
                    Col.Check(5, 634, 71, 61, 21) == false &&
                    Col.Check(290, 400, 175, 74, 59) == false)
             {
-                Mou.Click(850, 530);
+                Mou.Click(830, 550);
                 Thread.Sleep(delay);
             }
         }
