@@ -168,11 +168,13 @@ namespace FlowerMaster.Helpers
             //进入主线推兔页面
             if (DataUtil.Config.sysConfig.pushType == 0)
             {
-                while (Col.Check(218, 241, 241, 237, 222) == false)
+                while (Col.Check(300, 125, 207, 180, 122) == false)
                 {
                     Mou.Click(300, 140);
                     Thread.Sleep(delay);
-;                }
+                }
+                while (Col.Check(200, 225, 75, 70, 52) == false) { Thread.Sleep(delay); }
+                Mou.Click(300, 260);
                 while (Col.Check(218, 241, 241, 237, 222) == false) { Thread.Sleep(delay); }
                 Mou.Click(300, 260);
             }
@@ -436,10 +438,12 @@ namespace FlowerMaster.Helpers
         /// </summary>
         private void ScGranRaid()
         {
-            Mou.Click(355, 160);
             while (Col.Check(500, 300, 119, 82, 69) == false &&
                    Col.Check(200, 170, 212, 184, 131) == false)
-            { Thread.Sleep(delay); }
+            {
+                Mou.Click(355, 160);
+                Thread.Sleep(delay);
+            }
 
             if (Col.Check(500, 300, 119, 82, 69) == true)
             {
