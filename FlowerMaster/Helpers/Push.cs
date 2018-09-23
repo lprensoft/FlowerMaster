@@ -573,20 +573,37 @@ namespace FlowerMaster.Helpers
                 {
                     Mou.Click(400, 400);
                 }
-                while (Col.Check(218, 241, 241, 237, 222) == false && 
-                       Col.Check(218, 325, 241, 237, 222) == false)
+                while (Col.Check(280, 210, 143, 118, 93) == false)
                 { Thread.Sleep(delay); }
 
+
                 //根据可以进入的图点击进图
-                if(Col.Check(218, 241, 241, 237, 222) == true)
+                bool Found = false;
+                int i = 0;
+                while (Found == false)
                 {
-                    Mou.Click(250, 250);
+                    if (i == 6)
+                    {
+                        CoSpecialExit();
+                        return;
+                    }
+                    if (Col.Check(218, 241 + 84 * i, 241, 237, 222) == true)
+                    {
+                        Mou.Click(250, 241 + 84 * i);
+                        Found = true;
+                    }
+                    i++;
                 }
 
-                if (Col.Check(218, 325, 241, 237, 222) == true)
-                {
-                    Mou.Click(250, 350);
-                }
+                //if(Col.Check(218, 241, 241, 237, 222) == true)
+                //{
+                //    Mou.Click(250, 250);
+                //}
+
+                //if (Col.Check(218, 325, 241, 237, 222) == true)
+                //{
+                //    Mou.Click(250, 350);
+                //}
                 
                 CoDepartFirst();
                 while (true)
