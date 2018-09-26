@@ -335,7 +335,7 @@ namespace FlowerMaster.Models
         /// 默认抽取日服Flash的CSS样式
         /// </summary>
         public const string DefaultCSSJapan = "body {\r\n    margin:0;\r\n    overflow:hidden;\r\n}\r\n\r\n#game_frame {\r\n    position:fixe" +
-                    "d;\r\n    left:50%;\r\n    top:0px;\r\n    margin-left:-480px;\r\n    z-index:1;\r\n}\r\n\r\n" +
+                    "d;\r\n    left:50%;\r\n    top:0px;\r\n    margin-left:-640px;\r\n    z-index:1;\r\n}\r\n\r\n" +
                     ".area-pickupgame,.area-menu,.menu-item\r\n{\r\n    display:none!important;\r\n}";
         /// <summary>
         /// 默认抽取美服Flash的CSS样式
