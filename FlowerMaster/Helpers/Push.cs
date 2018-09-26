@@ -232,7 +232,8 @@ namespace FlowerMaster.Helpers
                 while (true)
                 {
                     //判断体力恢复是否出现
-                    if (Col.Check(320, 320, 176, 31, 69) == true)
+                    if (Col.Check(320, 320, 176, 31, 69) == true &&
+                        Col.Check(320, 225, 209, 192, 82) == true)
                     {
                         //如果碎石失败，返回主页面
                         if (ScRefill() == false) return false;
@@ -243,7 +244,7 @@ namespace FlowerMaster.Helpers
 
                     //判断队友选择是否出现
                     if (Col.Check(934, 200, 55, 46, 5) == true ||
-                        Col.Check(730, 230, 201, 163, 109) == true)
+                        Col.Check(922, 229, 205, 167, 111) == true)
                     {
                         return true;
                     }
@@ -261,7 +262,8 @@ namespace FlowerMaster.Helpers
             while (true)
             {
                 //判断体力恢复是否出现
-                if (Col.Check(320, 320, 176, 31, 69) == true)
+                if (Col.Check(320, 320, 176, 31, 69) == true &&
+                    Col.Check(320, 225, 209, 192, 82) == true)
                 {
                     //如果碎石失败，返回主页面
                     if (ScRefill() == false) return false;
@@ -272,7 +274,7 @@ namespace FlowerMaster.Helpers
 
                 //判断队友选择是否出现
                 if (Col.Check(934, 200, 55, 46, 5) == true ||
-                    Col.Check(730, 230, 201, 163, 109) == true)
+                    Col.Check(922, 229, 205, 167, 111) == true)
                 {
                     return true;
                 }
@@ -319,13 +321,16 @@ namespace FlowerMaster.Helpers
             //碎石头
             if (DataUtil.Config.sysConfig.stoneTrue == true)
             {
-                Mou.Click(650, 400);
-
-                WaConfirmWindow();
-                //确定碎石红字出现
-                if (Col.Check(341, 323, 255, 1, 1) == true)
+                while (Col.Check(410, 460, 201, 97, 82) == false)
                 {
-                    Mou.Click(410, 400);
+                    Mou.Click(650, 400);
+                    Thread.Sleep(delay);
+                }
+
+                //确定碎石红字出现
+                if (Col.Check(312, 400, 255, 1, 1) == true)
+                {
+                    Mou.Click(410, 460);
                     CoPrevent();
                     return true;
                 }
@@ -377,7 +382,7 @@ namespace FlowerMaster.Helpers
 
             //如果在主页，返还
             else if (Col.Check(170, 40, 163, 148, 66) == true &&
-                     Col.Check(5, 634, 71, 61, 21) == true)
+                     Col.Check(5, 5, 166, 161, 139) == true)
             {
                 return true;
             }
@@ -419,8 +424,8 @@ namespace FlowerMaster.Helpers
             //如果无事件，继续推兔
             else
             {
+                Mou.Click(830, 550);
                 Thread.Sleep(delay);
-                Mou.Click(850, 530);
                 return false;
             }
 
@@ -455,10 +460,16 @@ namespace FlowerMaster.Helpers
             {
                 Thread.Sleep(delay);
                 WaMainLoad();
-                if (Col.Check(870, 260, 80, 26, 17) == false)
+
+                //循环确认三个Boss，如果没有还没打的Boss的话，回主页
+                for (int i = 0; i < 3; i++)
                 {
-                    CoHomeReturn();
-                    return;
+                    if ((Col.Check(870, 260 + 148*i, 80, 26, 17) == false &&
+                         Col.Check(510, 122 + 148*i, 249, 248, 240) == false))
+                    {
+                        CoHomeReturn();
+                        return;
+                    }
                 }
             }
 
@@ -471,11 +482,10 @@ namespace FlowerMaster.Helpers
             while (true)
             {
                 //无Boss点 要求碎石
-                if (Col.Check(500, 305, 58, 39, 35) == true || 
-                    Col.Check(500, 297, 58, 39, 35) == true)
+                if (Col.Check(397, 400, 255, 1, 1) == true)
                 {
                     //取消碎石
-                    Mou.Click(550, 400);
+                    Mou.Click(550, 460);
                     while (Col.Check(255, 135, 43, 24, 0) == false) { Thread.Sleep(delay); }
                     //请求援助
                     Mou.Click(220, 130);
@@ -579,7 +589,8 @@ namespace FlowerMaster.Helpers
                 {
                     Thread.Sleep(delay);
                     //判断体力恢复是否出现
-                    if (Col.Check(320, 320, 176, 31, 69) == true)
+                    if (Col.Check(320, 320, 176, 31, 69) == true &&
+                        Col.Check(320, 225, 209, 192, 82) == true)
                     {
                         //如果碎石失败，返回主页面
                         if (ScRefill() == false) return;
@@ -590,7 +601,7 @@ namespace FlowerMaster.Helpers
 
                     //判断队友选择是否出现
                     if (Col.Check(934, 200, 55, 46, 5) == true ||
-                        Col.Check(730, 230, 201, 163, 109) == true)
+                        Col.Check(922, 229, 205, 167, 111) == true)
                     {
                         break;
                     }
@@ -763,51 +774,50 @@ namespace FlowerMaster.Helpers
         private void CoDepartFirst()
         {
             while (Col.Check(600, 265, 28, 29, 19) == false) { Thread.Sleep(delay); }
-            //while (Col.Check(600, 265, 28, 29, 19) == true)
-            //{
-                if (Col.Check(934, 200, 55, 46, 5) == false &&
-                    Col.Check(730, 230, 201, 163, 109) == false &&
-                    Col.Check(320, 320, 176, 31, 69) == false)
-                {
-                    Mou.Click(430, 245);
-                    Thread.Sleep(delay);
-                }
+            if (Col.Check(934, 200, 55, 46, 5) == false &&
+                Col.Check(922, 229, 205, 167, 111) == false &&
+                Col.Check(320, 320, 176, 31, 69) == false)
+            {
+                Mou.Click(430, 245);
                 Thread.Sleep(delay);
-            //}
+            }
+            Thread.Sleep(delay);
         }
 
         /// <summary>
         /// 确认上一次图可点，在进入选队友、出击、或者体力恢复之前不停点上一次图
-        /// 三个可接受的颜色/坐标组合：正常图，正常图变色，高难度图
+        /// 三个可接受的颜色/坐标组合：正常图，正常图变色，眷属图
         /// </summary>
         private void CoDepartPrevious()
         {
             if (sblock == false)
             {
-                while (Col.Check(600, 375, 97, 79, 32) == true ||
-                       Col.Check(600, 375, 95, 79, 40) == true)
+                while (Col.Check(600, 375, 97, 79, 32) == false &&
+                       Col.Check(600, 375, 95, 79, 40) == false &&
+                       Col.Check(600, 375, 89, 72, 28) == false)
+                { Thread.Sleep(delay); }
+
+                while (Col.Check(934, 200, 55, 46, 5) == false &&
+                    Col.Check(922, 229, 205, 167, 111) == false &&
+                    Col.Check(320, 320, 176, 31, 69) == false)
                 {
-                    while (Col.Check(934, 200, 55, 46, 5) == false &&
-                        Col.Check(730, 230, 201, 163, 109) == false &&
-                        Col.Check(320, 320, 176, 31, 69) == false)
-                    {
-                        Mou.Click(250, 400);
-                        Thread.Sleep(delay);
-                    }
+                    Mou.Click(250, 400);
+                    Thread.Sleep(delay);
                 }
             }
             //适配额外的格子
             else
             {
-                while (Col.Check(600, 459, 97, 79, 32) == true)
+                while (Col.Check(250, 469, 249, 248, 240) == false &&
+                       Col.Check(600, 459, 95, 79, 40) == false)
+                { Thread.Sleep(delay); }
+
+                while (Col.Check(934, 200, 55, 46, 5) == false &&
+                    Col.Check(922, 229, 205, 167, 111) == false &&
+                    Col.Check(320, 320, 176, 31, 69) == false)
                 {
-                    while (Col.Check(934, 200, 55, 46, 5) == false &&
-                        Col.Check(730, 230, 201, 163, 109) == false &&
-                        Col.Check(320, 320, 176, 31, 69) == false)
-                    {
-                        Mou.Click(250, 484);
-                        Thread.Sleep(delay);
-                    }
+                    Mou.Click(250, 484);
+                    Thread.Sleep(delay);
                 }
             }
         }
@@ -818,12 +828,12 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoAssistSelect()
         {
-            while (Col.Check(730, 210, 213, 185, 132) == false)
+            while (Col.Check(922, 229, 205, 167, 111) == false)
             {
                 while (Col.Check(934, 200, 55, 46, 5) == false)
                 {
                     Thread.Sleep(delay);
-                    if (Col.Check(730, 210, 213, 185, 132) == true) break;
+                    if (Col.Check(922, 229, 205, 167, 111) == true) break;
                 }
                 Mou.Click(600, 250);
                 Thread.Sleep(delay);
@@ -838,7 +848,7 @@ namespace FlowerMaster.Helpers
         {
             while (Col.Check(425, 200, 213, 185, 133) == true)
             {
-                Mou.Click(850, 530);
+                Mou.Click(830, 550);
                 CoMaintainConfirm();
                 Thread.Sleep(delay);
             }
@@ -878,29 +888,36 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoBossEnter()
         {
+            //进入Boss页面之前开始等待
             while (Col.Check(870, 260, 80, 26, 17) == false) { Thread.Sleep(delay); }
 
+            //确认第3个Boss没有在【参战中】
             if (Col.Check(510, 270, 249, 248, 240) == true)
             {
-                while (Col.Check(730, 230, 201, 163, 109) == false)
+                //进入队友选择页面之前选择第1个Boss
+                while (Col.Check(922, 229, 205, 167, 111) == false)
                 {
                     Mou.Click(840, 250);
                     Thread.Sleep(delay);
                 } 
             }
 
-            else if(Col.Check(510, 418, 249, 248, 240) == true)
+            //确认第2个Boss没有在【参战中】
+            else if (Col.Check(510, 418, 249, 248, 240) == true)
             {
-                while (Col.Check(730, 230, 201, 163, 109) == false)
+                //进入队友选择页面之前选择第2个Boss
+                while (Col.Check(922, 229, 205, 167, 111) == false)
                 {
                     Mou.Click(840, 398);
                     Thread.Sleep(delay);
                 }
             }
 
+            //前两个Boss都在参战中，直接进入第3个Boss
             else
             {
-                while (Col.Check(730, 230, 201, 163, 109) == false)
+                //进入队友选择页面之前选择第3个Boss
+                while (Col.Check(922, 229, 205, 167, 111) == false)
                 {
                     Mou.Click(840, 546);
                     Thread.Sleep(delay);
@@ -915,8 +932,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoBossAttack()
         {
-            while (Col.Check(500, 305, 58, 39, 35) == false &&
-                   Col.Check(500, 297, 58, 39, 35) == false &&
+            while (Col.Check(397, 400, 255, 1, 1) == false &&
                    Col.Check(630, 540, 0, 0, 0) == false)
             {
                 Mou.Click(750, 555);
@@ -1037,7 +1053,7 @@ namespace FlowerMaster.Helpers
                    Col.Check(5, 634, 71, 61, 21) == false &&
                    Col.Check(290, 400, 175, 74, 59) == false)
             {
-                Mou.Click(850, 530);
+                Mou.Click(830, 550);
                 Thread.Sleep(delay);
             }
         }
