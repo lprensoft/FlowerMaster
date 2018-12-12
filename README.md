@@ -19,7 +19,7 @@
 * 每日副本日历功能。
 * 模拟扭蛋等辅助工具。
 * 一键清理缓存、Cookies功能。
-* 多个游戏服务器支持，通吃日服、美服。
+* 多个游戏服务器支持，通吃日服、繁中服、美服。
 * 多开支持。
 * 更多功能正在不断开发中……
 
@@ -27,9 +27,11 @@
 
 * Windows 7/8/10
 
+* 需要IE浏览器组件和Flash插件For IE的支持，如果禁用了IE或者Flash For IE，或者他们二者的配置不正确，会导致不能载入页面或游戏界面
+
 * [.NET Framework 4.5.2](https://www.microsoft.com/zh-CN/download/details.aspx?id=42642)以上版本
 
-Windows 8以上系统已经自带。
+Windows 8.1以上系统已经自带。
 Windows 7系统需要自行下载安装。
 
 ### 开发语言和环境
