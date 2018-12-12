@@ -25,14 +25,12 @@
 
 ### 运行环境
 
-* Windows 7/8/10
+* Windows 7/8/10操作系统。
 
-* 需要IE浏览器组件和Flash插件For IE的支持，如果禁用了IE或者Flash For IE，或者他们二者的配置不正确，会导致不能载入页面或游戏界面
+* 需要IE浏览器和[Flash插件For IE](https://get.adobe.com/flashplayer/)的支持，如果禁用了IE或者Flash For IE，或者他们二者的配置不正确，会导致不能载入页面或游戏界面。
 
-* [.NET Framework 4.5.2](https://www.microsoft.com/zh-CN/download/details.aspx?id=42642)以上版本
-
-Windows 8.1以上系统已经自带。
-Windows 7系统需要自行下载安装。
+* [.NET Framework 4.5.2](https://www.microsoft.com/zh-CN/download/details.aspx?id=42642)以上版本，Windows 8.1以上系统已经自带，
+Windows 7请点击下载安装。
 
 ### 开发语言和环境
 
