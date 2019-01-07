@@ -160,7 +160,7 @@ namespace FlowerMaster.Helpers
             CoHomeDepart();
 
             //等待出击页面加载结束
-            while (Col.Check(210, 290, 249, 248, 240) == false) { Thread.Sleep(delay); }
+            while (Col.Check(220, 300, 249, 248, 240) == false) { Thread.Sleep(delay); }
 
 
             //根据选择点击出击页面
@@ -770,8 +770,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoHomeDepart()
         {
-            while (Col.Check(600, 400, 28, 29, 19) == false &&
-                   Col.Check(210, 290, 249, 248, 240) == false)
+            while (Col.Check(600, 375, 156, 138, 124) == false)
             {
                 Mou.Click(80, 155);
                 Thread.Sleep(delay);
@@ -813,9 +812,9 @@ namespace FlowerMaster.Helpers
         {
             if (sblock == false)
             {
-                while (Col.Check(600, 375, 97, 79, 32) == false &&
-                       Col.Check(600, 375, 95, 79, 40) == false &&
-                       Col.Check(600, 375, 89, 72, 28) == false)
+                while (Col.Check(600, 395, 97, 79, 32) == false &&
+                       Col.Check(600, 395, 95, 79, 40) == false &&
+                       Col.Check(600, 395, 89, 72, 28) == false)
                 { Thread.Sleep(delay); }
 
                 while (Col.Check(934, 200, 55, 46, 5) == false &&
