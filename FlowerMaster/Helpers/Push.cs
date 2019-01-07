@@ -770,7 +770,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoHomeDepart()
         {
-            while (Col.Check(600, 375, 156, 138, 124) == false)
+            while (Col.Check(700, 200, 136, 110, 82) == false)
             {
                 Mou.Click(80, 155);
                 Thread.Sleep(delay);
@@ -814,7 +814,10 @@ namespace FlowerMaster.Helpers
             {
                 while (Col.Check(600, 395, 97, 79, 32) == false &&
                        Col.Check(600, 395, 95, 79, 40) == false &&
-                       Col.Check(600, 395, 89, 72, 28) == false)
+                       Col.Check(600, 395, 89, 72, 28) == false &&
+                       Col.Check(600, 375, 97, 79, 32) == false &&
+                       Col.Check(600, 375, 95, 79, 40) == false &&
+                       Col.Check(600, 375, 89, 72, 28) == false)
                 { Thread.Sleep(delay); }
 
                 while (Col.Check(934, 200, 55, 46, 5) == false &&
