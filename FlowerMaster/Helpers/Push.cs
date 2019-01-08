@@ -160,7 +160,7 @@ namespace FlowerMaster.Helpers
             CoHomeDepart();
 
             //等待出击页面加载结束
-            while (Col.Check(210, 290, 249, 248, 240) == false) { Thread.Sleep(delay); }
+            while (Col.Check(220, 300, 249, 248, 240) == false) { Thread.Sleep(delay); }
 
 
             //根据选择点击出击页面
@@ -168,11 +168,13 @@ namespace FlowerMaster.Helpers
             //进入主线推兔页面
             if (DataUtil.Config.sysConfig.pushType == 0)
             {
-                while (Col.Check(218, 241, 241, 237, 222) == false)
+                while (Col.Check(300, 125, 207, 180, 122) == false)
                 {
                     Mou.Click(300, 140);
                     Thread.Sleep(delay);
-;                }
+                }
+                while (Col.Check(200, 225, 75, 70, 52) == false) { Thread.Sleep(delay); }
+                Mou.Click(300, 260);
                 while (Col.Check(218, 241, 241, 237, 222) == false) { Thread.Sleep(delay); }
                 Mou.Click(300, 260);
             }
@@ -436,10 +438,12 @@ namespace FlowerMaster.Helpers
         /// </summary>
         private void ScGranRaid()
         {
-            Mou.Click(355, 160);
             while (Col.Check(500, 300, 119, 82, 69) == false &&
                    Col.Check(200, 170, 212, 184, 131) == false)
-            { Thread.Sleep(delay); }
+            {
+                Mou.Click(355, 160);
+                Thread.Sleep(delay);
+            }
 
             if (Col.Check(500, 300, 119, 82, 69) == true)
             {
@@ -482,7 +486,7 @@ namespace FlowerMaster.Helpers
             while (true)
             {
                 //无Boss点 要求碎石
-                if (Col.Check(397, 400, 255, 1, 1) == true)
+                if (Col.Check(330, 455, 232, 130, 115) == true)
                 {
                     //取消碎石
                     Mou.Click(550, 460);
@@ -569,20 +573,37 @@ namespace FlowerMaster.Helpers
                 {
                     Mou.Click(400, 400);
                 }
-                while (Col.Check(218, 241, 241, 237, 222) == false && 
-                       Col.Check(218, 325, 241, 237, 222) == false)
+                while (Col.Check(280, 210, 143, 118, 93) == false)
                 { Thread.Sleep(delay); }
 
+
                 //根据可以进入的图点击进图
-                if(Col.Check(218, 241, 241, 237, 222) == true)
+                bool Found = false;
+                int i = 0;
+                while (Found == false)
                 {
-                    Mou.Click(250, 250);
+                    if (i == 6)
+                    {
+                        CoSpecialExit();
+                        return;
+                    }
+                    if (Col.Check(218, 241 + 84 * i, 241, 237, 222) == true)
+                    {
+                        Mou.Click(250, 241 + 84 * i);
+                        Found = true;
+                    }
+                    i++;
                 }
 
-                if (Col.Check(218, 325, 241, 237, 222) == true)
-                {
-                    Mou.Click(250, 350);
-                }
+                //if(Col.Check(218, 241, 241, 237, 222) == true)
+                //{
+                //    Mou.Click(250, 250);
+                //}
+
+                //if (Col.Check(218, 325, 241, 237, 222) == true)
+                //{
+                //    Mou.Click(250, 350);
+                //}
                 
                 CoDepartFirst();
                 while (true)
@@ -749,8 +770,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoHomeDepart()
         {
-            while (Col.Check(600, 400, 28, 29, 19) == false &&
-                   Col.Check(210, 290, 249, 248, 240) == false)
+            while (Col.Check(700, 200, 136, 110, 82) == false)
             {
                 Mou.Click(80, 155);
                 Thread.Sleep(delay);
@@ -792,7 +812,10 @@ namespace FlowerMaster.Helpers
         {
             if (sblock == false)
             {
-                while (Col.Check(600, 375, 97, 79, 32) == false &&
+                while (Col.Check(600, 395, 97, 79, 32) == false &&
+                       Col.Check(600, 395, 95, 79, 40) == false &&
+                       Col.Check(600, 395, 89, 72, 28) == false &&
+                       Col.Check(600, 375, 97, 79, 32) == false &&
                        Col.Check(600, 375, 95, 79, 40) == false &&
                        Col.Check(600, 375, 89, 72, 28) == false)
                 { Thread.Sleep(delay); }
