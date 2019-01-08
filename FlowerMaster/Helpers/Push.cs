@@ -486,7 +486,7 @@ namespace FlowerMaster.Helpers
             while (true)
             {
                 //无Boss点 要求碎石
-                if (Col.Check(397, 400, 255, 1, 1) == true)
+                if (Col.Check(330, 455, 232, 130, 115) == true)
                 {
                     //取消碎石
                     Mou.Click(550, 460);
