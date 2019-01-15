@@ -784,6 +784,7 @@ namespace FlowerMaster.Helpers
         private void CoHomeTeam()
         {
             WaMainLoad();
+            Thread.Sleep(1000);
             Mou.Click(85, 210);
         }
 
@@ -1056,7 +1057,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoHomeReturn()
         {
-            while (Col.Check(437, 177, 211, 209, 205) == false )
+            while (Col.Check(437, 177, 211, 209, 205) == false)
             {
                 Mou.Click(80, 80);
                 Thread.Sleep(delay / 2);
