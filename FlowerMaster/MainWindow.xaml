@@ -963,8 +963,13 @@
                         Content="掉线自动刷新" Grid.Column="1"/>
                     <Label Height="25"
                         VerticalAlignment="Top"
-                        Margin="50,205,0,0"
+                        Margin="50,195,0,0"
                         Content="需要使用设置中的账号登录界面" Grid.Column="1"/>
+                    <CheckBox x:Name="chkForcedRestart"
+                        VerticalAlignment="Top"
+                        Margin="50,225,0,0"
+                        Height="25"
+                        Content="是否每日四点钟强行刷新" Grid.Column="1"/>
                     <CheckBox x:Name="chkSpecialBlock"
                         VerticalAlignment="Top"
                         Margin="50,270,0,0"

@@ -279,6 +279,7 @@ namespace FlowerMaster
             chkActionPrep.IsChecked = DataUtil.Config.sysConfig.actionPrep;
 
             chkGameRestart.IsChecked = DataUtil.Config.sysConfig.gameRestart;
+            chkForcedRestart.IsChecked = DataUtil.Config.sysConfig.forcedRestart;
 
             chkSpecialBlock.IsChecked = DataUtil.Config.sysConfig.specialBlock;
 
@@ -566,6 +567,7 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.actionPrep = chkActionPrep.IsChecked.HasValue ? (bool)chkActionPrep.IsChecked : false;
 
             DataUtil.Config.sysConfig.gameRestart = chkGameRestart.IsChecked.HasValue ? (bool)chkGameRestart.IsChecked : false;
+            DataUtil.Config.sysConfig.forcedRestart = chkForcedRestart.IsChecked.HasValue ? (bool)chkForcedRestart.IsChecked : false;
 
             DataUtil.Config.sysConfig.specialBlock = chkSpecialBlock.IsChecked.HasValue ? (bool)chkSpecialBlock.IsChecked : false;
 
@@ -1114,8 +1116,13 @@ namespace FlowerMaster
                 {
                     PushThread.Abort();
                 }
-                if (DataUtil.Game.isOnline == false &&
-                    DataUtil.Config.sysConfig.gameRestart == true)
+                if ((DataUtil.Game.isOnline == false && 
+                     DataUtil.Config.sysConfig.gameRestart == true) 
+                     || 
+                    (DataUtil.Config.sysConfig.forcedRestart == true &&
+                     DateTime.UtcNow.ToString("HH:mm") == "19:00" && 
+                     DateTime.UtcNow.Second > 20 &&
+                     DateTime.UtcNow.Second < 23))
                 {
                     PushThread.Abort();
                     Refresh();
@@ -1124,6 +1131,7 @@ namespace FlowerMaster
                     while (Col.Check(437, 177, 211, 209, 205) == false)
                     {
                         Mou.Click(800, 200);
+                        Mou.Click(800, 150);
                         await Task.Delay(1000);
                     }
                     AutoPush();

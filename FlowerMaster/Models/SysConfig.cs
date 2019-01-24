@@ -246,6 +246,11 @@ namespace FlowerMaster.Models
             public bool gameRestart;
 
             /// <summary>
+            /// 是否每日四点强制重启
+            /// </summary>
+            public bool forcedRestart;
+
+            /// <summary>
             /// 是否有导致某些推图按钮下推的活动图标,增加y坐标84
             /// </summary>
             public bool specialBlock;
@@ -415,6 +420,7 @@ namespace FlowerMaster.Models
             sysConfig.gardenTrue = true;
             sysConfig.actionPrep = false;
             sysConfig.gameRestart = false;
+            sysConfig.forcedRestart = false;
             sysConfig.specialBlock = false;
         }
 
@@ -574,6 +580,7 @@ namespace FlowerMaster.Models
                     sysConfig.gardenTrue = xe.GetAttribute("GardenTrue") != "" ? bool.Parse(xe.GetAttribute("GardenTrue")) : sysConfig.gardenTrue;
                     sysConfig.actionPrep = xe.GetAttribute("ActionPrep") != "" ? bool.Parse(xe.GetAttribute("ActionPrep")) : sysConfig.actionPrep;
                     sysConfig.gameRestart = xe.GetAttribute("GameRestart") != "" ? bool.Parse(xe.GetAttribute("GameRestart")) : sysConfig.gameRestart;
+                    sysConfig.forcedRestart = xe.GetAttribute("ForcedRestart") != "" ? bool.Parse(xe.GetAttribute("ForcedRestart")) : sysConfig.forcedRestart;
                     sysConfig.specialBlock = xe.GetAttribute("SpecialBlock") != "" ? bool.Parse(xe.GetAttribute("SpecialBlock")) : sysConfig.specialBlock;
                 }
             }
@@ -676,6 +683,7 @@ namespace FlowerMaster.Models
                     autoPush.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     autoPush.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
                     autoPush.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
+                    autoPush.SetAttribute("ForcedRestart", sysConfig.forcedRestart.ToString());
                     autoPush.SetAttribute("SpecialBlock", sysConfig.specialBlock.ToString());
                     rootNode.AppendChild(autoPush);
 
@@ -820,6 +828,7 @@ namespace FlowerMaster.Models
                     xe.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
                     xe.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
                     xe.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
+                    xe.SetAttribute("ForcedRestart", sysConfig.forcedRestart.ToString());
                     xe.SetAttribute("SpecialBlock", sysConfig.specialBlock.ToString());
 
                     xmlDoc.Save("config.xml");
