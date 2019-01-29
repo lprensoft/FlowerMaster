@@ -486,8 +486,9 @@ namespace FlowerMaster.Helpers
             while (true)
             {
                 //无Boss点 要求碎石
-                if (Col.Check(330, 455, 232, 130, 115) == true)
+                if (Col.Check(400, 455, 231, 129, 114) == true)
                 {
+                    Thread.Sleep(100);
                     //取消碎石
                     Mou.Click(550, 460);
                     while (Col.Check(255, 135, 43, 24, 0) == false) { Thread.Sleep(delay); }
@@ -784,8 +785,15 @@ namespace FlowerMaster.Helpers
         private void CoHomeTeam()
         {
             WaMainLoad();
-            Thread.Sleep(1000);
-            Mou.Click(85, 210);
+            while (Col.Check(200, 225, 167, 211, 226) == false)
+            {
+                if (Col.Check(200, 225, 167, 211, 226) == false &&
+                    Col.Check(200, 225, 0, 0, 0) == false)
+                {
+                    Mou.Click(80, 205);
+                }
+                Thread.Sleep(delay);
+            }
         }
 
         /// <summary>
@@ -956,7 +964,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoBossAttack()
         {
-            while (Col.Check(330, 455, 232, 130, 115) == false &&
+            while (Col.Check(400, 455, 231, 129, 114) == false &&
                    Col.Check(630, 540, 0, 0, 0) == false)
             {
                 Mou.Click(750, 555);
@@ -1088,8 +1096,7 @@ namespace FlowerMaster.Helpers
         private void CoMaintainConfirm()
         {
             if(DataUtil.Game.serverTime.Hour == 3 &&
-               DataUtil.Game.serverTime.Minute >= 39 &&
-               DataUtil.Game.serverTime.Second >= 59)
+               DataUtil.Game.serverTime.Minute >= 40)
             {
                 //延迟一秒等弹窗出现
                 Thread.Sleep(1000);

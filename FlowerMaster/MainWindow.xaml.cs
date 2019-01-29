@@ -1130,8 +1130,9 @@ namespace FlowerMaster
                     Mouse Mou = Mouse.Instance;
                     while (Col.Check(437, 177, 211, 209, 205) == false)
                     {
-                        Mou.Click(800, 200);
+                        Mou.Click(677, 633);
                         Mou.Click(800, 150);
+                        Mou.Click(800, 200);
                         await Task.Delay(1000);
                     }
                     AutoPush();
