@@ -1031,8 +1031,11 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoTeamSell()
         {
-            while (Col.Check(201, 235, 130, 184, 201) == false) { Thread.Sleep(delay); }
-            Mou.Click(535, 137);
+            while (Col.Check(530, 130, 225, 190, 131) == false)
+            {
+                Thread.Sleep(delay);
+                Mou.Click(535, 137);
+            }
         }
 
         /// <summary>
