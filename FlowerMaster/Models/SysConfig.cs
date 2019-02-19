@@ -15,7 +15,7 @@ namespace FlowerMaster.Models
     class SysConfig
     {
         /// <summary>
-        /// 自动推兔定时器触发时间间隔（毫秒）
+        /// 自动推图定时器触发时间间隔（毫秒）
         /// </summary>
         public const int AUTO_GO_TIMEOUT = 330;
 
@@ -97,15 +97,15 @@ namespace FlowerMaster.Models
             public bool logGacha;
 
             /// <summary>
-            /// 进图后自动推兔
+            /// 进图后自动推图
             /// </summary>
             public bool autoGoInMaps;
             /// <summary>
-            /// 自动推兔间隔时间
+            /// 自动推图间隔时间
             /// </summary>
             private int _autoGoTimeout;
             /// <summary>
-            /// 自动推兔间隔时间
+            /// 自动推图间隔时间
             /// </summary>
             public int autoGoTimeout
             {
@@ -191,6 +191,10 @@ namespace FlowerMaster.Models
             /// 推兔模式
             /// </summary>
             public int pushType;
+            /// <summary>
+            /// 活动特命目标
+            /// </summary>
+            public int specTarget;
             /// <summary>
             /// 推兔次数
             /// </summary>
@@ -408,6 +412,7 @@ namespace FlowerMaster.Models
             //自动推兔2.0初始化
             sysConfig.autoType = 0;
             sysConfig.pushType = 1;
+            sysConfig.specTarget = 1;
             sysConfig.pushTimes = 9999;
             sysConfig.potionTrue = true;
             sysConfig.stoneTrue = false;
@@ -568,6 +573,7 @@ namespace FlowerMaster.Models
                 {
                     sysConfig.autoType = xe.GetAttribute("AutoType") != "" ? int.Parse(xe.GetAttribute("AutoType")) : sysConfig.autoType;
                     sysConfig.pushType = xe.GetAttribute("PushType") != "" ? int.Parse(xe.GetAttribute("PushType")) : sysConfig.pushType;
+                    sysConfig.specTarget = xe.GetAttribute("specTarget") != "" ? int.Parse(xe.GetAttribute("specTarget")) : sysConfig.specTarget;
                     sysConfig.pushTimes = xe.GetAttribute("PushTimes") != "" ? int.Parse(xe.GetAttribute("PushTimes")) : sysConfig.pushTimes;
                     sysConfig.potionTrue = xe.GetAttribute("PotionTrue") != "" ? bool.Parse(xe.GetAttribute("PotionTrue")) : sysConfig.potionTrue;
                     sysConfig.stoneTrue = xe.GetAttribute("StoneTrue") != "" ? bool.Parse(xe.GetAttribute("StoneTrue")) : sysConfig.stoneTrue;
@@ -671,6 +677,7 @@ namespace FlowerMaster.Models
                     XmlElement autoPush = xmlDoc.CreateElement("AutoPush");
                     autoPush.SetAttribute("AutoType", sysConfig.autoType.ToString());
                     autoPush.SetAttribute("PushType", sysConfig.pushType.ToString());
+                    autoPush.SetAttribute("specTarget", sysConfig.specTarget.ToString());
                     autoPush.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
                     autoPush.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
                     autoPush.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
@@ -816,6 +823,7 @@ namespace FlowerMaster.Models
                     }
                     xe.SetAttribute("AutoType", sysConfig.autoType.ToString());
                     xe.SetAttribute("PushType", sysConfig.pushType.ToString());
+                    xe.SetAttribute("specTarget", sysConfig.specTarget.ToString());
                     xe.SetAttribute("PushTimes", sysConfig.pushTimes.ToString());
                     xe.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
                     xe.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());

@@ -89,6 +89,7 @@ namespace FlowerMaster.Helpers
                 if (DataUtil.Config.sysConfig.exploreTrue == true)
                 {
                     CoHomeReturn();
+                    WaMainLoad();
                     if (Col.Check(258, 163, 99, 99, 99) == false &&
                        (Col.Check(520, 75, 50, 41, 37) == true ||
                         Col.Check(520, 77, 83, 81, 76) == true))
@@ -201,6 +202,58 @@ namespace FlowerMaster.Helpers
                     }
                     Mou.Click(300, 414);
                 }
+            }
+
+            //进入活动特命-投票道具页面
+            if (DataUtil.Config.sysConfig.pushType == 3)
+            {
+                //重新回到主页
+                CoHomeReturn();
+                //在进入活动页面之前 - 这里取要是背景变成了默认背景那就进入了 - 不停的点活动所在处的地址
+                while (Col.Check(140, 615, 84, 126, 21) == false)
+                {
+                    Mou.Click(375, 405);
+                    Thread.Sleep(delay);
+                }
+                //这里选择要推的...四个if...
+                while (Col.Check(805, 210, 111, 115, 91) == false)
+                {
+                    if (DataUtil.Config.sysConfig.specTarget == 0) Mou.Click(570, 415);
+                    if (DataUtil.Config.sysConfig.specTarget == 1) Mou.Click(810, 415);
+                    if (DataUtil.Config.sysConfig.specTarget == 2) Mou.Click(570, 550);
+                    if (DataUtil.Config.sysConfig.specTarget == 3) Mou.Click(810, 550);
+                    Thread.Sleep(delay);
+                }
+                //开启特命 - 如果推图次数>=5000则一次一次推,如果小于5000则最大化再推
+                if (PushTimes.Value() < 5000)
+                { Mou.Click(600, 320); }
+                Thread.Sleep(delay);
+                Mou.Click(410, 465);
+
+                //等待特命出现
+                while (Col.Check(805, 210, 180, 184, 146) == false)
+                {
+                    //无聊点击加快特命出现时间
+                    Mou.Click(805, 210);
+                    Thread.Sleep(delay);
+                }
+
+                //从进入特命图那搬来的代码...不知道会不会崩掉
+                //确认开始特命副本
+                while (Col.Check(445, 406, 61, 20, 13) == true)
+                { Mou.Click(400, 400); }
+                while (Col.Check(280, 210, 143, 118, 93) == false)
+                { Thread.Sleep(delay); }
+
+
+                //根据可以进入的图点击进图
+                for (int i = 0; i < 6; i++)
+                { 
+                    if (Col.Check(218, 282 + 84 * i, 248, 246, 239) == true)
+                    { Mou.Click(218, 282 + 84 * i); }
+                    i++;
+                }
+
             }
 
             ////进入水影推兔页面
@@ -588,9 +641,9 @@ namespace FlowerMaster.Helpers
                         CoSpecialExit();
                         return;
                     }
-                    if (Col.Check(218, 241 + 84 * i, 241, 237, 222) == true)
+                    if (Col.Check(218, 282 + 84 * i, 248, 246, 239) == true)
                     {
-                        Mou.Click(250, 241 + 84 * i);
+                        Mou.Click(218, 282 + 84 * i);
                         Found = true;
                     }
                     i++;
@@ -773,7 +826,8 @@ namespace FlowerMaster.Helpers
         {
             while (Col.Check(400, 235, 171, 102, 43) == false)
             {
-                Mou.Click(80, 155);
+                if (Col.Check(400, 235, 0, 0, 0) == false)
+                { Mou.Click(80, 155); }
                 Thread.Sleep(delay);
             }
         }
@@ -840,8 +894,7 @@ namespace FlowerMaster.Helpers
             //适配额外的格子
             else
             {
-                while (Col.Check(250, 469, 249, 248, 240) == false &&
-                       Col.Check(600, 459, 95, 79, 40) == false)
+                while (Col.Check(600, 459, 156, 139, 126) == false)
                 { Thread.Sleep(delay); }
 
                 while (Col.Check(934, 200, 55, 46, 5) == false &&
