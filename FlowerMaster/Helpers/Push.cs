@@ -701,7 +701,8 @@ namespace FlowerMaster.Helpers
         {
             CoHomeTeam();
             CoTeamSell();
-            while (Col.Check(650, 605, 155, 134, 119) == true) { Thread.Sleep(delay); }
+            while (Col.Check(325, 300, 143, 115, 86) == true) { Thread.Sleep(delay); }
+            WaMainLoad();
             CoSellAll();
 
             //判定是否有花可卖
