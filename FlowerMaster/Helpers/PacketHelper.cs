@@ -185,6 +185,7 @@ namespace FlowerMaster.Helpers
                 {
 #if DEBUG
                     LogsHelper.LogDebug("【请求】" + pack.funcApi + "\r\n【响应】" + pack.rawData + "\r\n================================================================");
+                    LogsHelper.LogDebug("【时间】" + DateTime.UtcNow);
 #endif
                     //更新服务器时间
                     if (pack.data["serverTime"] != null)

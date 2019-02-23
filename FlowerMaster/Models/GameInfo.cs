@@ -537,7 +537,7 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 是否在自动推兔
+        /// 是否在自动推图
         /// </summary>
         public bool isAuto
         {
@@ -552,7 +552,7 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 是否可以自动推兔
+        /// 是否可以自动推图
         /// </summary>
         public bool canAuto
         {

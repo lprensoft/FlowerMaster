@@ -32,8 +32,8 @@ namespace FlowerMaster
 
         private Timer timerCheck = null; //提醒检查计时器
         private Timer timerClock = null; //时钟计时器
-        public Timer timerAuto = null; //自动推兔定时器
-        public int autoGoLastConf = 0; //自动推兔点击上次配置计数器
+        public Timer timerAuto = null; //自动推图定时器
+        public int autoGoLastConf = 0; //自动推图点击上次配置计数器
         public Timer timerNotify = null; //提醒计时器
 
         private readonly Counter PushTimes = Counter.Instance; //自动推兔2.0状态
@@ -262,6 +262,7 @@ namespace FlowerMaster
             //自动推兔2.0设置
             cbAutoType.SelectedIndex = DataUtil.Config.sysConfig.autoType;
             cbPushType.SelectedIndex = DataUtil.Config.sysConfig.pushType;
+            cbSpecTarget.SelectedIndex = DataUtil.Config.sysConfig.specTarget;
             tbPushTimes.Text = DataUtil.Config.sysConfig.pushTimes.ToString();
 
             chkPotionTrue.IsChecked = DataUtil.Config.sysConfig.potionTrue;
@@ -279,6 +280,7 @@ namespace FlowerMaster
             chkActionPrep.IsChecked = DataUtil.Config.sysConfig.actionPrep;
 
             chkGameRestart.IsChecked = DataUtil.Config.sysConfig.gameRestart;
+            chkForcedRestart.IsChecked = DataUtil.Config.sysConfig.forcedRestart;
 
             chkSpecialBlock.IsChecked = DataUtil.Config.sysConfig.specialBlock;
 
@@ -549,6 +551,7 @@ namespace FlowerMaster
             //自动推兔设置
             DataUtil.Config.sysConfig.autoType = cbAutoType.SelectedIndex;
             DataUtil.Config.sysConfig.pushType = cbPushType.SelectedIndex;
+            DataUtil.Config.sysConfig.specTarget = cbSpecTarget.SelectedIndex;
             DataUtil.Config.sysConfig.pushTimes = int.Parse(tbPushTimes.Text);
 
             DataUtil.Config.sysConfig.potionTrue = chkPotionTrue.IsChecked.HasValue ? (bool)chkPotionTrue.IsChecked : false;
@@ -566,6 +569,7 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.actionPrep = chkActionPrep.IsChecked.HasValue ? (bool)chkActionPrep.IsChecked : false;
 
             DataUtil.Config.sysConfig.gameRestart = chkGameRestart.IsChecked.HasValue ? (bool)chkGameRestart.IsChecked : false;
+            DataUtil.Config.sysConfig.forcedRestart = chkForcedRestart.IsChecked.HasValue ? (bool)chkForcedRestart.IsChecked : false;
 
             DataUtil.Config.sysConfig.specialBlock = chkSpecialBlock.IsChecked.HasValue ? (bool)chkSpecialBlock.IsChecked : false;
 
@@ -607,7 +611,7 @@ namespace FlowerMaster
 
 
         /// <summary>
-        /// 自动推兔定时器
+        /// 自动推图定时器
         /// </summary>
         /// <param name="data">对象参数</param>
         private void AutoClickMouse(object data)
@@ -1114,8 +1118,13 @@ namespace FlowerMaster
                 {
                     PushThread.Abort();
                 }
-                if (DataUtil.Game.isOnline == false &&
-                    DataUtil.Config.sysConfig.gameRestart == true)
+                if ((DataUtil.Game.isOnline == false && 
+                     DataUtil.Config.sysConfig.gameRestart == true) 
+                     || 
+                    (DataUtil.Config.sysConfig.forcedRestart == true &&
+                     DateTime.UtcNow.ToString("HH:mm") == "19:00" && 
+                     DateTime.UtcNow.Second > 20 &&
+                     DateTime.UtcNow.Second < 23))
                 {
                     PushThread.Abort();
                     Refresh();
@@ -1123,6 +1132,8 @@ namespace FlowerMaster
                     Mouse Mou = Mouse.Instance;
                     while (Col.Check(437, 177, 211, 209, 205) == false)
                     {
+                        Mou.Click(677, 633);
+                        Mou.Click(800, 150);
                         Mou.Click(800, 200);
                         await Task.Delay(1000);
                     }
@@ -1144,6 +1155,22 @@ namespace FlowerMaster
                 MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             }
         }
-        
+
+        /// <summary>
+        /// 检测推图类型并且决定是否显示特命目标
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbPushType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbPushType.SelectedIndex == 3)
+            {
+                cbSpecTarget.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                cbSpecTarget.Visibility = Visibility.Hidden;
+            }
+        }
     }
 }

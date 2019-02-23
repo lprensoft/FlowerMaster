@@ -810,6 +810,7 @@
                                 Margin="25,70,0,0"
                                 Content="推兔模式：" Grid.ColumnSpan="1" Height="26"/>
                         <ComboBox x:Name="cbPushType"
+                                  SelectionChanged="cbPushType_SelectionChanged"
                                 VerticalAlignment="Top" 
                                 HorizontalAlignment="Left"
                                 Margin="110,70,0,0"
@@ -817,7 +818,18 @@
                             <ComboBoxItem Content="主线"/>
                             <ComboBoxItem Content="活动"/>
                             <ComboBoxItem Content="上一次图"/>
+                            <ComboBoxItem Content="活动特命-投票道具"/>
                             <!--<ComboBoxItem Content="水影"/>-->
+                        </ComboBox>
+                        <ComboBox x:Name="cbSpecTarget"
+                                VerticalAlignment="Top" 
+                                HorizontalAlignment="Left"
+                                Margin="230,70,0,0"
+                                Width="45" Grid.ColumnSpan="1" Height="26">
+                            <ComboBoxItem Content="经验"/>
+                            <ComboBoxItem Content="金币"/>
+                            <ComboBoxItem Content="花肥"/>
+                            <ComboBoxItem Content="装肥"/>
                         </ComboBox>
                         <Label FontWeight="Bold"
                                 FontSize="16px"
@@ -963,8 +975,13 @@
                         Content="掉线自动刷新" Grid.Column="1"/>
                     <Label Height="25"
                         VerticalAlignment="Top"
-                        Margin="50,205,0,0"
+                        Margin="50,195,0,0"
                         Content="需要使用设置中的账号登录界面" Grid.Column="1"/>
+                    <CheckBox x:Name="chkForcedRestart"
+                        VerticalAlignment="Top"
+                        Margin="50,225,0,0"
+                        Height="25"
+                        Content="是否每日四点钟强行刷新" Grid.Column="1"/>
                     <CheckBox x:Name="chkSpecialBlock"
                         VerticalAlignment="Top"
                         Margin="50,270,0,0"
