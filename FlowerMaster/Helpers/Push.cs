@@ -539,7 +539,7 @@ namespace FlowerMaster.Helpers
             while (true)
             {
                 //无Boss点 要求碎石
-                if (Col.Check(400, 455, 231, 129, 114) == true)
+                if (Col.Check(380, 470, 32, 32, 32) == true)
                 {
                     Thread.Sleep(100);
                     //取消碎石
@@ -857,7 +857,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoDepartFirst()
         {
-            while (Col.Check(600, 265, 28, 29, 19) == false) { Thread.Sleep(delay); }
+            while (Col.Check(600, 278, 28, 29, 19) == false) { Thread.Sleep(delay); }
             if (Col.Check(934, 200, 55, 46, 5) == false &&
                 Col.Check(922, 229, 205, 167, 111) == false &&
                 Col.Check(320, 320, 176, 31, 69) == false)
@@ -1018,7 +1018,7 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoBossAttack()
         {
-            while (Col.Check(400, 455, 231, 129, 114) == false &&
+            while (Col.Check(380, 470, 32, 32, 32) == false &&
                    Col.Check(630, 540, 0, 0, 0) == false)
             {
                 Mou.Click(750, 555);
