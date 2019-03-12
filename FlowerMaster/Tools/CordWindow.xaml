@@ -16,8 +16,8 @@
     <Grid>
         <TextBlock x:Name="text1"  FontSize="14" FontWeight="ExtraBold" FontFamily="Arial" TextWrapping="Wrap" Margin="0,0,96,35"/>
         <TextBlock x:Name="text2"  FontSize="14" FontWeight="ExtraBold" FontFamily="Arial" TextWrapping="Wrap" Margin="0,34,96,0" RenderTransformOrigin="0.502,1.261"/>
-        <TextBox x:Name="XBox" Margin="96,0,48,35" Height="34"/>
-        <TextBox x:Name="YBox" Margin="144,0,0,35" Height="34"/>
+        <TextBox x:Name="XBox" Margin="96,0,48,35" Height="34" />
+        <TextBox x:Name="YBox" Margin="144,0,0,35" Height="34" />
         <TextBlock x:Name="Output"  FontSize="14" FontWeight="ExtraBold" FontFamily="Arial" TextWrapping="Wrap" Margin="96,34,0,0" RenderTransformOrigin="0.502,1.261"/>
     </Grid>
 

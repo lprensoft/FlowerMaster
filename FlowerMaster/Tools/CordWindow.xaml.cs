@@ -14,6 +14,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
+
 
 namespace FlowerMaster
 {
@@ -81,8 +83,8 @@ namespace FlowerMaster
 
             Dispatcher.Invoke(() =>
             {
-                int Xin = Int32.Parse(XBox.Text);
-                int Yin = Int32.Parse(YBox.Text);
+                Int32.TryParse(XBox.Text, out int Xin);
+                Int32.TryParse(YBox.Text, out int Yin);
                 System.Drawing.Color colorin = CordCol.GetPixelColor(ActHand, Xin, Yin);
                 text1.Text = "( " + a + ", " + b + ")";
                 text2.Text = colorout.R.ToString() + " " + colorout.G.ToString() + " " + colorout.B.ToString();
@@ -108,5 +110,6 @@ namespace FlowerMaster
             aTimer.Elapsed += (s, e) => GetCord(Handle);
             aTimer.Enabled = true;
         }
+
     }
 }

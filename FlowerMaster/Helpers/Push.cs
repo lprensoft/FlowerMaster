@@ -161,7 +161,7 @@ namespace FlowerMaster.Helpers
             CoHomeDepart();
 
             //等待出击页面加载结束
-            while (Col.Check(220, 300, 249, 248, 240) == false) { Thread.Sleep(delay); }
+            while (Col.Check(200, 320, 240, 236, 221) == false) { Thread.Sleep(delay); }
 
 
             //根据选择点击出击页面
@@ -758,12 +758,12 @@ namespace FlowerMaster.Helpers
         {
             //查看是否有花园虫，并收获
             Mou.Click(435, 150);
-            while (Col.Check(380, 615, 34, 34, 34) == false &&
-                   Col.Check(380, 615, 23, 23, 23) == false)
+            while (Col.Check(300, 615, 31, 31, 31) == false &&
+                   Col.Check(300, 615, 21, 21, 21) == false)
             {
-                if (Col.Check(380, 615, 68, 0, 0) == true)
+                if (Col.Check(300, 615, 73, 13, 8) == true)
                 {
-                    Mou.Click(380, 615);
+                    Mou.Click(300, 615);
                 }
                 Thread.Sleep(delay);
             }
