@@ -758,12 +758,12 @@ namespace FlowerMaster.Helpers
         {
             //查看是否有花园虫，并收获
             Mou.Click(435, 150);
-            while (Col.Check(300, 615, 31, 31, 31) == false &&
-                   Col.Check(300, 615, 21, 21, 21) == false)
+            while (Col.Check(335, 620, 27, 27, 27) == false &&
+                   Col.Check(335, 620, 19, 19, 19) == false)
             {
-                if (Col.Check(300, 615, 73, 13, 8) == true)
+                if (Col.Check(335, 620, 111, 0, 6) == true)
                 {
-                    Mou.Click(300, 615);
+                    Mou.Click(335, 620);
                 }
                 Thread.Sleep(delay);
             }
