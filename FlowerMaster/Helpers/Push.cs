@@ -710,7 +710,7 @@ namespace FlowerMaster.Helpers
             {
                 while (Col.Check(150, 620, 139, 42, 37) == false) { Thread.Sleep(delay); }
                 //没花 点击取消
-                if (Col.Check(420, 560, 51, 51, 51) == true)
+                if (Col.Check(420, 560, 57, 57, 57) == true)
                 {
                     Mou.Click(810, 65);
                     return;
