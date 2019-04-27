@@ -1181,7 +1181,7 @@ namespace FlowerMaster.Helpers
         /// </summary>
         private void WaConfirmWindow()
         {
-            while (Col.Check(410, 400, 190, 88, 73) == false) { Thread.Sleep(delay); }
+            while (Col.Check(410, 400, 192, 78, 73) == false) { Thread.Sleep(delay); }
         }
     }
 }
