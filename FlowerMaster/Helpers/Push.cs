@@ -287,8 +287,8 @@ namespace FlowerMaster.Helpers
                 while (true)
                 {
                     //判断体力恢复是否出现
-                    if (Col.Check(320, 320, 176, 31, 69) == true &&
-                        Col.Check(320, 225, 209, 192, 82) == true)
+                    if (Col.Check(320, 320, 172, 30, 61) == true &&
+                        Col.Check(320, 225, 219, 197, 89) == true)
                     {
                         //如果碎石失败，返回主页面
                         if (ScRefill() == false) return false;
@@ -317,8 +317,8 @@ namespace FlowerMaster.Helpers
             while (true)
             {
                 //判断体力恢复是否出现
-                if (Col.Check(320, 320, 176, 31, 69) == true &&
-                    Col.Check(320, 225, 209, 192, 82) == true)
+                if (Col.Check(320, 320, 172, 30, 61) == true &&
+                    Col.Check(320, 225, 219, 197, 89) == true)
                 {
                     //如果碎石失败，返回主页面
                     if (ScRefill() == false) return false;
@@ -664,8 +664,8 @@ namespace FlowerMaster.Helpers
                 {
                     Thread.Sleep(delay);
                     //判断体力恢复是否出现
-                    if (Col.Check(320, 320, 176, 31, 69) == true &&
-                        Col.Check(320, 225, 209, 192, 82) == true)
+                    if (Col.Check(320, 320, 172, 30, 61) == true &&
+                        Col.Check(320, 225, 219, 197, 89) == true)
                     {
                         //如果碎石失败，返回主页面
                         if (ScRefill() == false) return;
@@ -792,7 +792,7 @@ namespace FlowerMaster.Helpers
             Mou.Click(80, 360);
             while (Col.Check(300, 380, 202, 165, 144) == false) { Thread.Sleep(delay); }
             Mou.Click(300, 380);
-            while (Col.Check(320, 320, 176, 31, 69) == false) { Thread.Sleep(delay); }
+            while (Col.Check(320, 320, 172, 30, 61) == false) { Thread.Sleep(delay); }
             ScRefill();
 
         }
@@ -808,9 +808,9 @@ namespace FlowerMaster.Helpers
         /// </summary>
         private void CoPrevent()
         {
-            while (Col.Check(795, 205, 7, 96, 87) == false) { Thread.Sleep(delay); }
+            while (Col.Check(795, 205, 7, 96, 79) == false) { Thread.Sleep(delay); }
             while (Col.Check(5, 634, 71, 61, 21) == false &&
-                   Col.Check(795, 205, 7, 96, 87) == true)
+                   Col.Check(795, 205, 7, 96, 79) == true)
             {
                 Mou.Click(805, 205);
                 Thread.Sleep(delay);
@@ -860,7 +860,7 @@ namespace FlowerMaster.Helpers
             while (Col.Check(600, 278, 28, 29, 19) == false) { Thread.Sleep(delay); }
             if (Col.Check(934, 200, 55, 46, 5) == false &&
                 Col.Check(922, 229, 205, 167, 111) == false &&
-                Col.Check(320, 320, 176, 31, 69) == false)
+                Col.Check(320, 320, 172, 30, 61) == false)
             {
                 Mou.Click(430, 245);
                 Thread.Sleep(delay);
@@ -881,12 +881,13 @@ namespace FlowerMaster.Helpers
                        Col.Check(600, 395, 89, 72, 28) == false &&
                        Col.Check(600, 375, 97, 79, 32) == false &&
                        Col.Check(600, 375, 95, 79, 40) == false &&
-                       Col.Check(600, 375, 89, 72, 28) == false)
+                       Col.Check(600, 375, 89, 72, 28) == false &&
+                       Col.Check(600, 375, 156, 138, 124) == false)
                 { Thread.Sleep(delay); }
 
                 while (Col.Check(934, 200, 55, 46, 5) == false &&
                     Col.Check(922, 229, 205, 167, 111) == false &&
-                    Col.Check(320, 320, 176, 31, 69) == false)
+                    Col.Check(320, 320, 172, 30, 61) == false)
                 {
                     Mou.Click(250, 400);
                     Thread.Sleep(delay);
@@ -900,7 +901,7 @@ namespace FlowerMaster.Helpers
 
                 while (Col.Check(934, 200, 55, 46, 5) == false &&
                     Col.Check(922, 229, 205, 167, 111) == false &&
-                    Col.Check(320, 320, 176, 31, 69) == false)
+                    Col.Check(320, 320, 172, 30, 61) == false)
                 {
                     Mou.Click(250, 484);
                     Thread.Sleep(delay);
@@ -1181,7 +1182,7 @@ namespace FlowerMaster.Helpers
         /// </summary>
         private void WaConfirmWindow()
         {
-            while (Col.Check(410, 400, 192, 78, 73) == false) { Thread.Sleep(delay); }
+            while (Col.Check(410, 400, 187, 90, 76) == false) { Thread.Sleep(delay); }
         }
     }
 }
