@@ -64,7 +64,7 @@ namespace FlowerMaster.Models
                 }
                 catch
                 {
-                    MiscHelper.AddLog("角色信息加载出错，请检查cards.xml文件是否损坏！", MiscHelper.LogType.System);
+                    MiscHelper.AddLog("角色訊息載入錯誤，請檢查cards.xml文件是否損毀！", MiscHelper.LogType.System);
                 }
             }
         }
@@ -131,7 +131,7 @@ namespace FlowerMaster.Models
                     {
                         if (showRank && c.rare >= 5 && c.rank >= 0)
                         {
-                            return c.id > 400000 ? "★" + c.rare.ToString() + c.name + "[" + c.rank.ToString() + "级]" : "★" + c.rare.ToString() + c.name + "[" + c.rank.ToString() + "档]";
+                            return c.id > 400000 ? "★" + c.rare.ToString() + c.name + "[" + c.rank.ToString() + "級]" : "★" + c.rare.ToString() + c.name + "[" + c.rank.ToString() + "檔]";
                         }
                         else
                         {

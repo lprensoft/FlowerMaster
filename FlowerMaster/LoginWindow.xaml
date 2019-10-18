@@ -3,11 +3,10 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      xmlns:local="clr-namespace:FlowerMaster"
                       mc:Ignorable="d"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       GlowBrush="{DynamicResource AccentColorBrush}"
-                      Title="游戏登录"
+                      Title="遊戲登入"
                       WindowStartupLocation="CenterScreen"
                       ResizeMode="NoResize"
                       Height="220"
@@ -28,7 +27,7 @@
                HorizontalAlignment="Right"
                Margin="0,20,5,0"
                Height="25"
-               Content="选择服务器："/>
+               Content="選擇伺服器："/>
         <ComboBox x:Name="cbGameServer"
                   Grid.Row="0"
                   Grid.Column="1"
@@ -43,8 +42,8 @@
             <ComboBoxItem Content="日服-R18版"/>
             <ComboBoxItem Content="美服-通常版"/>
             <ComboBoxItem Content="美服-R18版"/>
-            <ComboBoxItem Content="日服-繁体版"/>
-            <ComboBoxItem Content="日服-繁体R18"/>
+            <ComboBoxItem Content="日服-繁中版"/>
+            <ComboBoxItem Content="日服-繁中R18"/>
         </ComboBox>
         <Label Grid.Column="0"
                Grid.Row="0"
@@ -52,7 +51,7 @@
                VerticalAlignment="Top"
                HorizontalAlignment="Right"
                Margin="0,50,5,0"
-               Content="游戏账号："/>
+               Content="遊戲帳號："/>
         <ComboBox x:Name="cbUsername"
                   Grid.Row="0"
                   Grid.Column="1"
@@ -73,16 +72,16 @@
                Height="25"
                Margin="160,50,0,0"
                Foreground="Yellow"
-               ToolTip="删除所选的账号"
+               ToolTip="刪除所選的帳號"
                MouseDown="lbDelete_MouseDown"
-               Content="删除"/>
+               Content="刪除"/>
         <Label Grid.Column="0"
                Grid.Row="0"
                Height="25"
                VerticalAlignment="Top"
                HorizontalAlignment="Right"
                Margin="0,80,5,0"
-               Content="游戏密码："/>
+               Content="遊戲密碼："/>
         <PasswordBox x:Name="tbPassword"
                     Grid.Row="0"
                      Grid.Column="1"
@@ -99,7 +98,7 @@
                   HorizontalAlignment="Left"
                   Margin="5,115,0,0"
                   IsChecked="True"
-                  Content="记住用户名和密码"/>
+                  Content="記住帳號和密碼"/>
         <Button x:Name="btnLogin"
                 Grid.Row="1"
                 Grid.Column="1"
@@ -110,6 +109,6 @@
                 Width="100"
                 IsDefault="True"
                 Click="btnLogin_Click"
-                Content="登录"/>
+                Content="登入"/>
     </Grid>
 </Controls:MetroWindow>

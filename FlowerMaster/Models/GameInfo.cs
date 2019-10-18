@@ -196,8 +196,8 @@ namespace FlowerMaster.Models
         private void InitGameServers()
         {
             _gameServers = new Dictionary<int, string>();
-            _gameServers.Add((int)ServersList.Japan, "http://games.dmm.com/detail/flower/");
-            _gameServers.Add((int)ServersList.JapanR18, "http://games.dmm.co.jp/detail/flower-x/");
+            _gameServers.Add((int)ServersList.Japan, "https://games.dmm.com/detail/flower/");
+            _gameServers.Add((int)ServersList.JapanR18, "https://games.dmm.co.jp/detail/flower-x/");
             _gameServers.Add((int)ServersList.American, "https://www.nutaku.com/games/flower-knight-girl-online/");
             _gameServers.Add((int)ServersList.AmericanR18, "https://www.nutaku.net/games/flower-knight-girl/");
             _gameServers.Add((int)ServersList.TradChinese, "http://games.dmm.com/detail/flower_Gro/");
@@ -205,12 +205,12 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 初始化服务器游戏页列表 日本无法使用https
+        /// 初始化服务器游戏页列表
         /// </summary>
         private void InitGameUrls()
         {
             _gameUrls = new Dictionary<int, string>();
-            _gameUrls.Add((int)ServersList.Japan, "http://pc-play.games.dmm.com/play/flower");
+            _gameUrls.Add((int)ServersList.Japan, "http://pc-play.games.dmm.com/play/flower/");
             _gameUrls.Add((int)ServersList.JapanR18, "http://pc-play.games.dmm.co.jp/play/flower-x/");
             _gameUrls.Add((int)ServersList.American, "https://www.nutaku.com/games/flower-knight-girl-online/play/");
             _gameUrls.Add((int)ServersList.AmericanR18, "https://www.nutaku.net/games/flower-knight-girl/play/");
@@ -418,7 +418,7 @@ namespace FlowerMaster.Models
                     player.BP = player.maxBP;
                     player.SP = player.maxSP;
                 }
-                MiscHelper.AddLog("升级了！你的等级提升到" + player.lv.ToString() + "级", MiscHelper.LogType.Levelup);
+                MiscHelper.AddLog("升級了！你的等級提升到 " + player.lv.ToString() + " 等", MiscHelper.LogType.Levelup);
             }
         }
 
@@ -428,13 +428,13 @@ namespace FlowerMaster.Models
         public void InitDaliyInfo()
         {
             _daliyInfo = new ObservableCollection<DaliyInfo>();
-            _daliyInfo.Add(new DaliyInfo() { day = "星期日", eventStage = "狗粮" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期一", eventStage = "斩（红）进化龙" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期二", eventStage = "打（蓝）进化龙" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期日", eventStage = "狗糧" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期一", eventStage = "斬（紅）進化龍" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期二", eventStage = "打（藍）進化龍" });
             _daliyInfo.Add(new DaliyInfo() { day = "星期三", eventStage = "狗粮" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期四", eventStage = "突（黄）进化龙" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期五", eventStage = "魔（紫）进化龙" });
-            _daliyInfo.Add(new DaliyInfo() { day = "星期六", eventStage = "金币" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期四", eventStage = "突（黃）進化龍" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期五", eventStage = "魔（紫）進化龍" });
+            _daliyInfo.Add(new DaliyInfo() { day = "星期六", eventStage = "金幣" });
         }
 
         /// <summary>
@@ -467,7 +467,7 @@ namespace FlowerMaster.Models
                 }
                 catch
                 {
-                    MiscHelper.AddLog("关卡经验信息加载出错，请检查stages.xml文件是否损坏！", MiscHelper.LogType.System);
+                    MiscHelper.AddLog("關卡經驗訊息載入失敗，請檢查stages.xml文件是否損毀！", MiscHelper.LogType.System);
                 }
             }
         }
@@ -537,7 +537,7 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 是否在自动推图
+        /// 是否在自动推兔
         /// </summary>
         public bool isAuto
         {
@@ -552,7 +552,7 @@ namespace FlowerMaster.Models
         }
 
         /// <summary>
-        /// 是否可以自动推图
+        /// 是否可以自动推兔
         /// </summary>
         public bool canAuto
         {

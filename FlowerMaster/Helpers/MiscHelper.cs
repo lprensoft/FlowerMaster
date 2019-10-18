@@ -13,6 +13,14 @@ using FlowerMaster.Models;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.IO.Compression;
+using System.Windows.Media.Imaging;
+using System.Windows;
+using System.Windows.Forms;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using Point = System.Drawing.Point;
+using System.Linq;
+using Size = System.Drawing.Size;
+using CefSharp;
 
 namespace FlowerMaster.Helpers
 {
@@ -161,10 +169,10 @@ namespace FlowerMaster.Helpers
             {
                 main.gameLog.Dispatcher.Invoke(new Action(() =>
                 {
-                    string logs = "进行了一次扭蛋，获得：";
+                    string logs = "進行了一次抽卡，獲得：";
                     Paragraph p = new Paragraph();
                     Run timeText = new Run() { Text = DateTime.Now.ToString("HH:mm:ss") + " ", Foreground = new SolidColorBrush(Colors.Gray) };
-                    Run log = new Run() { Text = "进行了一次扭蛋，获得：", Foreground = new SolidColorBrush(Colors.Yellow) };
+                    Run log = new Run() { Text = "進行了一次抽卡，獲得：", Foreground = new SolidColorBrush(Colors.Yellow) };
                     p.Inlines.Add(timeText);
                     p.Inlines.Add(log);
                     p.LineHeight = 3;
@@ -218,10 +226,10 @@ namespace FlowerMaster.Helpers
             }
             else
             {
-                string logs = "进行了一次扭蛋，获得：";
+                string logs = "進行了一次抽卡，獲得：";
                 Paragraph p = new Paragraph();
                 Run timeText = new Run() { Text = DateTime.Now.ToString("HH:mm:ss") + " ", Foreground = new SolidColorBrush(Colors.Gray) };
-                Run log = new Run() { Text = "进行了一次扭蛋，获得：", Foreground = new SolidColorBrush(Colors.Yellow) };
+                Run log = new Run() { Text = "進行了一次抽卡，獲得：", Foreground = new SolidColorBrush(Colors.Yellow) };
                 p.Inlines.Add(timeText);
                 p.Inlines.Add(log);
                 p.LineHeight = 3;
@@ -283,19 +291,19 @@ namespace FlowerMaster.Helpers
         {
             if (item["itemId"].ToString() == "10")
             {
-                return "中级装备种子" + item["point"].ToString() + "，";
+                return "中級裝備種子" + item["point"].ToString() + "，";
             }
             else if (item["itemId"].ToString() == "11")
             {
-                return "上级装备种子" + item["point"].ToString() + "，";
+                return "上級裝備種子" + item["point"].ToString() + "，";
             }
             else if (item["itemId"].ToString() == "89")
             {
-                return "50%体力药" + item["point"].ToString() + "，";
+                return "50%體力藥" + item["point"].ToString() + "，";
             }
             else if (item["itemId"].ToString() == "101")
             {
-                return "生命结晶" + item["point"].ToString() + "，";
+                return "生命結晶" + item["point"].ToString() + "，";
             }
             else if (item["itemId"].ToString() == "144")
             {
@@ -303,11 +311,11 @@ namespace FlowerMaster.Helpers
             }
             else if (item["itemId"].ToString() == "171")
             {
-                return "团长币" + item["point"].ToString() + "，";
+                return "團長幣" + item["point"].ToString() + "，";
             }
             else if (item["itemId"].ToString() == "205")
             {
-                return "特务勋章" + item["point"].ToString() + "，";
+                return "特務勳章" + item["point"].ToString() + "，";
             }
             else if (item["itemId"].ToString() == "206")
             {
@@ -331,7 +339,7 @@ namespace FlowerMaster.Helpers
             }
             else if (item["itemId"].ToString() == "274")
             {
-                return "庭院币" + item["point"].ToString() + "，";
+                return "庭院幣" + item["point"].ToString() + "，";
             }
             else
             {
@@ -340,59 +348,14 @@ namespace FlowerMaster.Helpers
         }
 
         /// <summary>
-        /// 设置IE组件屏蔽错误
+        /// 鼠标左键点击（坐标）
         /// </summary>
-        /// <param name="webBrowser">IE组件</param>
-        /// <param name="hide">是否屏蔽</param>
-        public static void SuppressScriptErrors(System.Windows.Controls.WebBrowser webBrowser, bool hide)
+        /// <param name="x">x-横向坐标</param>
+        /// <param name="y">y-竖向坐标</param>
+        public static void MouseLeftClick(int x, int y)
         {
-            webBrowser.Navigating += (s, e) =>
-            {
-                var fiComWebBrowser = typeof(System.Windows.Controls.WebBrowser).GetField("_axIWebBrowser2", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                if (fiComWebBrowser == null)
-                    return;
-
-                object objComWebBrowser = fiComWebBrowser.GetValue(webBrowser);
-                if (objComWebBrowser == null)
-                    return;
-
-                objComWebBrowser.GetType().InvokeMember("Silent", System.Reflection.BindingFlags.SetProperty, null, objComWebBrowser, new object[] { hide });
-            };
-        }
-
-        /// <summary>
-        /// 更改IE组件模拟版本
-        /// </summary>
-        public static void SetIEConfig()
-        {
-            string exeName = Process.GetCurrentProcess().ProcessName + ".exe";
-            string ieVer = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer", "svcVersion", "");
-            if (ieVer == null || ieVer == "")
-            {
-                ieVer = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer", "Version", "");
-            }
-            if (ieVer != null && ieVer != "")
-            {
-                string[] verInfo = ieVer.Split('.');
-                int setValue = 9999;
-                switch (verInfo[0])
-                {
-                    case "11":
-                        setValue = 11001;
-                        break;
-                    case "10":
-                        setValue = 10001;
-                        break;
-                    case "9":
-                        setValue = 9999;
-                        break;
-                    case "8":
-                        setValue = 8888;
-                        break;
-                }
-                Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
-                    exeName, setValue, RegistryValueKind.DWord);
-            }
+            main.mainWeb.GetBrowser().GetHost().SendMouseClickEvent(x, y, MouseButtonType.Left, false, 1, CefEventFlags.None);
+            main.mainWeb.GetBrowser().GetHost().SendMouseClickEvent(x, y, MouseButtonType.Left, true, 1, CefEventFlags.None);
         }
 
         /// <summary>
@@ -400,128 +363,68 @@ namespace FlowerMaster.Helpers
         /// </summary>
         public static void ScreenShot()
         {
-            if (!Directory.Exists("screenshot"))
-            {
-                Directory.CreateDirectory("screenshot");
-            }
-            string path = @"screenshot\" + LogsHelper.GetServerName() + "_" + LogsHelper.GetFilePlayerName() + "_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff") + "." + DataUtil.Config.sysConfig.capFormat.ToString().ToLower();
-
-            var document = main.mainWeb.Document as HTMLDocument;
-            if (document == null)
-            {
-                return;
-            }
-
-            if (document.url.Contains(".swf?"))
-            {
-                var viewObject = document.getElementsByTagName("embed").item(0, 0) as IViewObject;
-                if (viewObject == null)
-                {
-                    return;
-                }
-
-                var width = ((HTMLEmbed)viewObject).clientWidth;
-                var height = ((HTMLEmbed)viewObject).clientHeight;
-                TakeScreenshot(width, height, viewObject, path);
-            }
-            else
-            {
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
-                {
-                    var gameFrame = document.getElementById("externalContainer").document as HTMLDocument;
-                    if (gameFrame == null)
-                    {
-                        return;
-                    }
-
-                    IViewObject viewObject = null;
-                    int width = 0, height = 0;
-                    var swf = gameFrame.getElementById("externalswf");
-                    if (swf == null) return;
-                    Func<dynamic, bool> function = target =>
-                    {
-                        if (target == null) return false;
-                        viewObject = target as IViewObject;
-                        if (viewObject == null) return false;
-                        width = int.Parse(target.width);
-                        height = int.Parse(target.height);
-                        return true;
-                    };
-                    if (!function(swf as HTMLEmbed) && !function(swf as HTMLObjectElement)) return;
-
-                    TakeScreenshot(width, height, viewObject, path);
-                }
-                else
-                {
-                    var gameFrame = document.getElementById("game_frame").document as HTMLDocument;
-                    if (gameFrame == null)
-                    {
-                        return;
-                    }
-
-                    var frames = document.frames;
-                    for (var i = 0; i < frames.length; i++)
-                    {
-                        var item = frames.item(i);
-                        var provider = item as IServiceProvider;
-                        if (provider == null) continue;
-
-                        object ppvObject;
-                        provider.QueryService(typeof(IWebBrowserApp).GUID, typeof(IWebBrowser2).GUID, out ppvObject);
-                        var webBrowser = ppvObject as IWebBrowser2;
-
-                        var iframeDocument = webBrowser?.Document as HTMLDocument;
-                        if (iframeDocument == null) continue;
-
-                        IViewObject viewObject = null;
-                        int width = 0, height = 0;
-                        var swf = iframeDocument.getElementById("externalswf");
-                        if (swf == null) continue;
-                        Func<dynamic, bool> function = target =>
-                        {
-                            if (target == null) return false;
-                            viewObject = target as IViewObject;
-                            if (viewObject == null) return false;
-                            width = int.Parse(target.width);
-                            height = int.Parse(target.height);
-                            return true;
-                        };
-                        if (!function(swf as HTMLEmbed) && !function(swf as HTMLObjectElement)) continue;
-
-                        TakeScreenshot(width, height, viewObject, path);
-
-                        break;
-                    }
-                }
-            }
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + "." + DataUtil.Config.sysConfig.capFormat.ToString().ToLower();
+            CaptureScreen(main.mainWeb, path);
+            AddLog("截圖已經保存到" + path, LogType.System);
         }
 
         /// <summary>
-        /// 截图保存函数
+        /// 擷取Control的畫面到指定目錄
         /// </summary>
-        /// <param name="width">宽度</param>
-        /// <param name="height">高度</param>
-        /// <param name="viewObject">操作对象</param>
-        /// <param name="path">截图文件名</param>
-        private static void TakeScreenshot(int width, int height, IViewObject viewObject, string path)
+        /// <param name="source">Control</param>
+        /// <param name="path">目錄</param>
+        public static void CaptureScreen(Control source, string path)
         {
-            var image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            var rect = new RECT { left = 0, top = 0, width = width, height = height, };
-            var tdevice = new DVTARGETDEVICE { tdSize = 0, };
+            Bitmap bm = new Bitmap(source.Width, source.Height);
 
-            using (var graphics = Graphics.FromImage(image))
+            using (Graphics g = Graphics.FromImage(bm))
             {
-                var hdc = graphics.GetHdc();
-                viewObject.Draw(1, 0, IntPtr.Zero, tdevice, IntPtr.Zero, hdc, rect, null, IntPtr.Zero, IntPtr.Zero);
-                graphics.ReleaseHdc(hdc);
+                g.CopyFromScreen(source.PointToScreen(new Point(0, 0)), new Point(0, 0), bm.Size);
             }
 
-            var format = Path.GetExtension(path) == ".jpg"
-                ? ImageFormat.Jpeg
-                : ImageFormat.Png;
+            bm.Save(path, DataUtil.Config.sysConfig.capFormat == SysConfig.ScreenShotFormat.PNG ? ImageFormat.Png : ImageFormat.Jpeg);
+        }
 
-            image.Save(path, format);
-            AddLog("截图已经保存到文件" + path, LogType.System);
+        /// <summary>
+        /// 擷取UIElement的畫面到指定目錄
+        /// </summary>
+        /// <param name="source">UIElement</param>
+        /// <param name="path">目錄</param>
+        public static void CaptureScreen(UIElement source, string path)
+        {
+            try
+            {
+                double Height, renderHeight, Width, renderWidth;
+
+                Height = renderHeight = source.RenderSize.Height;
+                Width = renderWidth = source.RenderSize.Width;
+
+                //Specification for target bitmap like width/height pixel etc.
+                RenderTargetBitmap renderTarget = new RenderTargetBitmap((int)renderWidth, (int)renderHeight, 96, 96, PixelFormats.Pbgra32);
+                //creates Visual Brush of UIElement
+                VisualBrush visualBrush = new VisualBrush(source);
+
+                DrawingVisual drawingVisual = new DrawingVisual();
+                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+                {
+                    //draws image of element
+                    drawingContext.DrawRectangle(visualBrush, null, new Rect(new System.Windows.Point(0, 0), new System.Windows.Point(Width, Height)));
+                }
+                //renders image
+                renderTarget.Render(drawingVisual);
+
+                //PNG encoder for creating PNG file
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(renderTarget));
+                using (FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write))
+                {
+                    encoder.Save(stream);
+                }
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show(e.ToString());
+            }
         }
 
         /// <summary>
@@ -534,12 +437,31 @@ namespace FlowerMaster.Helpers
             {
                 main.Dispatcher.Invoke(new Action(() =>
                 {
-                    main.btnMapInfo.Visibility = show ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+                    main.btnMapInfo.Visibility = show ? Visibility.Visible : Visibility.Hidden;
                 }));
             }
             else
             {
-                main.btnMapInfo.Visibility = show ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+                main.btnMapInfo.Visibility = show ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
+
+        /// <summary>
+        /// 控制显示主窗口停止推兔按鈕
+        /// </summary>
+        /// <param name="show">是否显示，默认显示</param>
+        public static void ShowPushSetButton(bool show = true)
+        {
+            if (!main.Dispatcher.CheckAccess())
+            {
+                main.Dispatcher.Invoke(new Action(() =>
+                {
+                    main.btnPushSet.Visibility = show ? Visibility.Visible : Visibility.Hidden;
+                }));
+            }
+            else
+            {
+                main.btnPushSet.Visibility = show ? Visibility.Visible : Visibility.Hidden;
             }
         }
 
@@ -552,9 +474,9 @@ namespace FlowerMaster.Helpers
             if (modeSwitch && !DataUtil.Game.isAuto && DataUtil.Game.canAuto)
             {
                 DataUtil.Game.isAuto = true;
-                //main.autoGoLastConf = 1 + 2000 / DataUtil.Config.sysConfig.autoGoTimeout;
+                main.autoGoLastConf = 1 + 2000 / DataUtil.Config.sysConfig.autoGoTimeout;
                 main.timerAuto.Change(0, DataUtil.Config.sysConfig.autoGoTimeout);
-                AddLog("开始自动推兔...", LogType.System);
+                AddLog("開始自動推兔...", LogType.System);
                 if (!main.Dispatcher.CheckAccess())
                 {
                     main.Dispatcher.Invoke(new Action(() =>
@@ -571,7 +493,7 @@ namespace FlowerMaster.Helpers
             {
                 DataUtil.Game.isAuto = false;
                 main.timerAuto.Change(Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
-                AddLog("自动推兔已停止！", LogType.System);
+                AddLog("自動推兔已停止！", LogType.System);
                 if (!main.Dispatcher.CheckAccess())
                 {
                     main.Dispatcher.Invoke(new Action(() =>
