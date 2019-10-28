@@ -1,6 +1,6 @@
 # 團長助理（FlowerMaster）
 
-團長助理（FlowerMaster）是DMM遊戲《美少女花騎士》瀏覽器應用程式。
+團長助理（FlowerMaster）是DMM遊戲《美少女花騎士》瀏覽器應用程式。<br>
 在載入遊戲的同時，對部分遊戲數據情報做出顯示，並提供記錄、提醒設置等一系列輔助功能。
 
 ### 下載地址
@@ -32,9 +32,10 @@
 
 * Windows 7/8/10作業系統。
 
-* [.NET Framework 4.5.2](https://www.microsoft.com/zh-CN/download/details.aspx?id=42642)以上版本，Windows 8.1以上系統已經自帶，
-Windows 7請點擊下載安裝。
+* [.NET Framework 4.5.2](https://www.microsoft.com/zh-CN/download/details.aspx?id=42642)以上版本<br>
+Windows 8.1以上系統已經自帶，Windows 7請點擊下載安裝。
 
 ### 開發語言和環境
 
-C# + WPF + CEFSharp開發。開發環境為Windows 10 Pro x64 + Visual Studio 2019。
+C# + WPF + CEFSharp開發。<br>
+開發環境為Windows 10 Pro x64 + Visual Studio 2019。
