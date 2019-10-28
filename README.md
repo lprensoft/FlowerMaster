@@ -1,37 +1,40 @@
-# 团长助理（FlowerMaster）
+# 團長助理（FlowerMaster）
 
-团长助理（FlowerMaster）是DMM游戏《美少女花骑士》适配的浏览器应用程序。
-在载入游戏的同时，对部分游戏数据情报做出显示，并提供日志记录、提醒设置等一系列辅助功能。
+團長助理（FlowerMaster）是DMM遊戲《美少女花騎士》瀏覽器應用程式。
+在載入遊戲的同時，對部分遊戲數據情報做出顯示，並提供記錄、提醒設置等一系列輔助功能。
 
-### 下载地址
+### 下載地址
 
-* [Github](https://github.com/lprensoft/FlowerMaster/releases)
-* [Baidu](http://pan.baidu.com/s/1jIpqEea)
+* [Google Drive](https://drive.google.com/open?id=1plFysxdU57-FUm_Mweeuu1R_6IZZhHYZ)
 
 ### 主要功能
 
-* 游戏日志与扭蛋日志记录功能。
-* 副本情报展示功能。
-* 点数恢复提醒功能。
+* 遊戲日誌與扭蛋日誌記錄功能。
+* 副本情報顯示功能。
+* 點數恢覆提醒功能。
 * 好友探秘功能。
-* 免去鼠标点击的自动推图功能。
-* 截图保存功能。
-* 每日副本日历功能。
-* 模拟扭蛋等辅助工具。
-* 一键清理缓存、Cookies功能。
-* 多个游戏服务器支持，通吃日服、繁中服、美服。
-* 多开支持。
-* 更多功能正在不断开发中……
+* 免去鼠標點擊的自動推圖功能。
+* 截圖保存功能。
+* 每日副本日曆功能。
+* 模擬扭蛋等輔助工具。
+* 一鍵清理暫存、Cookies功能。
+* 多個遊戲服務器支持，通吃日版、繁中版、美版。
+* 多開支持。
 
-### 运行环境
+### 運行環境
 
-* Windows 7/8/10操作系统。
+* Windows 7/8/10操作系統。
 
-* 需要IE浏览器和[Flash插件For IE](https://get.adobe.com/flashplayer/)的支持，如果禁用了IE或者Flash For IE，或者他们二者的配置不正确，会导致不能载入页面或游戏界面。
+* [.NET Framework 4.5.2](https://www.microsoft.com/zh-CN/download/details.aspx?id=42642)以上版本，Windows 8.1以上系統已經自帶，
+Windows 7請點擊下載安裝。
 
-* [.NET Framework 4.5.2](https://www.microsoft.com/zh-CN/download/details.aspx?id=42642)以上版本，Windows 8.1以上系统已经自带，
-Windows 7请点击下载安装。
+### 開發語言和環境
 
-### 开发语言和环境
+C# + WPF + CEFSharp開發。開發環境為Windows 10 Pro 64位 + Visual Studio 2019。
 
-C# + WPF开发。开发环境为Windows 10 Pro 64位 + Visual Studio 2017。
+### V2.1修正後的問題以及開發Log
+
+* 語言部分更動為繁中
+* 畫面支援日版16:9顯示
+* 推兔大幅改動 (故有部份的問題存在，並未詳細測試)
+* 關閉程式需要等待將近20秒才會完整關閉 (據朋友測試說可以秒關)
