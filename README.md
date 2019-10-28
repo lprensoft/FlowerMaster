@@ -30,7 +30,7 @@
 
 ### 運行環境
 
-* Windows 7/8/10操作系統。
+* Windows 7/8/10作業系統。
 
 * [.NET Framework 4.5.2](https://www.microsoft.com/zh-CN/download/details.aspx?id=42642)以上版本，Windows 8.1以上系統已經自帶，
 Windows 7請點擊下載安裝。
