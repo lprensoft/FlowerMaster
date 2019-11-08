@@ -65,7 +65,7 @@ namespace FlowerMaster.Helpers
 
                 if (PushTimes.Value() == 1)
                 {
-                    CoHomeReturn(); 
+                    CoHomeReturn();
                 }
 
                 PushTimes.Decrease();
@@ -242,6 +242,11 @@ namespace FlowerMaster.Helpers
 
                 //判断队友选择是否出现
                 if (Col.Check(260, 80, 5, 58, 33) == true || Col.Check(1080, 80, 92, 22, 12) == true)
+                {
+                    return true;
+                }
+
+                if (Col.Check(870, 550, 64, 20, 12) == true)
                 {
                     return true;
                 }
@@ -767,13 +772,12 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         private void CoAssistSelect()
         {
-            while (Col.Check(245, 150, 158, 147, 90) == false || 
-                (Col.Check(660, 150, 217, 205, 168) == false && Col.Check(660, 150, 206, 188, 115) == false))
+            while (Col.Check(870, 550, 64, 20, 12) == false)
             {
+                if (Col.Check(700, 150, 146, 118, 92) == true) Mou.Click(400, 150);
+                else Mou.Click(700, 150);
                 Thread.Sleep(delay);
             }
-
-            Mou.Click(700, 150);
         }
 
         /// <summary>
