@@ -39,7 +39,7 @@ namespace FlowerMaster.Helpers
             object objSessionManager;
             device.Activate(new Guid(ComIIDs.IAudioSessionManager2IID), (uint)CLSCTX.CLSCTX_INPROC_SERVER, IntPtr.Zero, out objSessionManager);
             var sessionManager = objSessionManager as IAudioSessionManager2;
-            if (sessionManager == null) throw new Exception("Session没有找到。");
+            if (sessionManager == null) throw new Exception("找不到Session。");
 
             IAudioSessionEnumerator sessions;
             sessionManager.GetSessionEnumerator(out sessions);
@@ -78,6 +78,5 @@ namespace FlowerMaster.Helpers
                 isMute = false;
             }
         }
-
     }
 }

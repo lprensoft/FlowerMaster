@@ -7,7 +7,7 @@
                       mc:Ignorable="d"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       GlowBrush="{DynamicResource AccentColorBrush}"
-                      Title="好友探秘"
+                      Title="好友觀察"
                       Height="500"
                       Width="900"
                       WindowStartupLocation="CenterScreen"
@@ -21,15 +21,15 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="好友" Width="100" IsReadOnly="True" Binding="{Binding name}"/>
                 <DataGridTextColumn Header="Lv" Width="47" IsReadOnly="True" Binding="{Binding lv}"/>
-                <DataGridTextColumn Header="总战力" Width="60" IsReadOnly="True" Binding="{Binding totalPower}"/>
-                <DataGridTextColumn Header="成为好友时间" Width="130" IsReadOnly="True" Binding="{Binding regTime}"/>
-                <DataGridTextColumn Header="最后登录时间" Width="130" IsReadOnly="True" Binding="{Binding lastTime}"/>
-                <DataGridTextColumn Header="副团长" Width="120" IsReadOnly="True" Binding="{Binding leader}"/>
-                <DataGridTextColumn Header="常用队角色1" Width="150" IsReadOnly="True" Binding="{Binding card1}"/>
-                <DataGridTextColumn Header="常用队角色2" Width="150" IsReadOnly="True" Binding="{Binding card2}"/>
-                <DataGridTextColumn Header="常用队角色3" Width="150" IsReadOnly="True" Binding="{Binding card3}"/>
-                <DataGridTextColumn Header="常用队角色4" Width="150" IsReadOnly="True" Binding="{Binding card4}"/>
-                <DataGridTextColumn Header="常用队角色5" Width="150" IsReadOnly="True" Binding="{Binding card5}"/>
+                <DataGridTextColumn Header="總戰力" Width="60" IsReadOnly="True" Binding="{Binding totalPower}"/>
+                <DataGridTextColumn Header="成為好友時間" Width="130" IsReadOnly="True" Binding="{Binding regTime}"/>
+                <DataGridTextColumn Header="最後登入時間" Width="130" IsReadOnly="True" Binding="{Binding lastTime}"/>
+                <DataGridTextColumn Header="副團長" Width="120" IsReadOnly="True" Binding="{Binding leader}"/>
+                <DataGridTextColumn Header="常用隊角色1" Width="150" IsReadOnly="True" Binding="{Binding card1}"/>
+                <DataGridTextColumn Header="常用隊角色2" Width="150" IsReadOnly="True" Binding="{Binding card2}"/>
+                <DataGridTextColumn Header="常用隊角色3" Width="150" IsReadOnly="True" Binding="{Binding card3}"/>
+                <DataGridTextColumn Header="常用隊角色4" Width="150" IsReadOnly="True" Binding="{Binding card4}"/>
+                <DataGridTextColumn Header="常用隊角色5" Width="150" IsReadOnly="True" Binding="{Binding card5}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -9,7 +9,7 @@
                       GlowBrush="{DynamicResource AccentColorBrush}"
                       WindowStartupLocation="CenterScreen"
                       Loaded="MetroWindow_Loaded"
-                      Title="查看游戏日志" Height="500" Width="800">
+                      Title="查看遊戲日誌" Height="500" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -19,7 +19,7 @@
                Margin="5,5,0,0"
                Height="30"
                VerticalAlignment="Top"
-               Content="选择账号："/>
+               Content="選擇帳號："/>
         <ComboBox x:Name="cbAccount"
                   Grid.Row="0"
                   HorizontalAlignment="Left"
@@ -32,7 +32,7 @@
                Margin="235,5,0,0"
                Height="30"
                VerticalAlignment="Top"
-               Content="选择日期："/>
+               Content="選擇日期："/>
         <ComboBox x:Name="cbDate"
                   Grid.Row="0"
                   HorizontalAlignment="Left"

@@ -7,7 +7,7 @@
                       mc:Ignorable="d"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       GlowBrush="{DynamicResource AccentColorBrush}"
-                      Title="模拟扭蛋"
+                      Title="模擬抽卡"
                       ResizeMode="CanMinimize"
                       Height="400"
                       Width="500"
@@ -30,7 +30,7 @@
                Grid.Row="2"
                Height="25"
                Margin="5,8,0,8"
-               Content="华灵石：500"/>
+               Content="華靈石：50000"/>
         <Button x:Name="btnSingle"
                 Grid.Row="2"
                 Height="25"
@@ -38,7 +38,7 @@
                 HorizontalAlignment="Left"
                 Margin="160,8,0,8"
                 Click="btnSingle_Click"
-                Content="1发入魂！"/>
+                Content="1發入魂！"/>
         <Button x:Name="btnMulti"
                 Grid.Row="2"
                 Height="25"
@@ -46,7 +46,7 @@
                 HorizontalAlignment="Left"
                 Margin="300,8,0,8"
                 Click="btnMulti_Click"
-                Content="11连玄学！"/>
+                Content="11連玄學！"/>
         <Label x:Name="lbResult"
                Grid.Row="1"
                Height="25"

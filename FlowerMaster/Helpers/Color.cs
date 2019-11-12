@@ -21,21 +21,13 @@ namespace FlowerMaster.Helpers
         private static readonly Lazy<Color> lazy = new Lazy<Color>(() => new Color());
         public static Color Instance { get { return lazy.Value; } }
         
-        private IntPtr WebHandle { get; set; }
-
         private Color()
         {
-        }
-
-        public void Load(IntPtr Handle)
-        {
-            WebHandle = Handle;
         }
 
         /// <summary>
         /// 配合While实现等待颜色出现，可用TorF辨别为判断颜色是否存在
         /// </summary>
-        /// <param name="WebHandle"></param>
         /// <param name="X"></param>
         /// <param name="Y"></param>
         /// <param name="Red"></param>
@@ -45,9 +37,11 @@ namespace FlowerMaster.Helpers
         /// <returns></returns>
         public bool Check(int X, int Y, int Red, int Green, int Blue)
         {
+            Point point = new Point(0, 0);
+            MiscHelper.main.mainWeb.Invoke(new Action(() => point = MiscHelper.main.mainWeb.PointToScreen(new Point(0, 0)) ));
 
             //判定颜色是否在容错范围内
-            System.Drawing.Color color = CordCol.GetPixelColor(WebHandle, X, Y);
+            System.Drawing.Color color = CordCol.GetPixelColor(point.X + X, point.Y + Y);
             if (color.R - 5 <= Red &&
                 color.R + 5 >= Red &&
                 color.G - 5 <= Green &&

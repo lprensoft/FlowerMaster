@@ -1,22 +1,18 @@
-﻿using System;
-using System.Text;
+﻿using CefSharp;
+using CefSharp.WinForms;
+using FlowerMaster.Helpers;
+using FlowerMaster.Models;
+using MahApps.Metro.Controls.Dialogs;
+using Nekoxy;
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using System.Drawing;
-using mshtml;
-using Nekoxy;
-using MahApps.Metro.Controls.Dialogs;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Interop;
 using System.Windows.Media;
-using FlowerMaster.Models;
-using FlowerMaster.Helpers;
-using FlowerMaster.Properties;
-using static FlowerMaster.CordCol;
 
 namespace FlowerMaster
 {
@@ -29,31 +25,33 @@ namespace FlowerMaster
         private bool styleSheetApplied = false;
         private bool loginSubmitted = false;
         private bool newsHadShown = false;
+        private bool isRefreshPage = false;
+        private string resultURL = "";
+        private readonly string catchPath = @"C:\ProgramData\FlowerMaster\Cache";
 
         private Timer timerCheck = null; //提醒检查计时器
         private Timer timerClock = null; //时钟计时器
         public Timer timerAuto = null; //自动推兔定时器
+        public Timer timerCalculation = null; //自动推兔定时器
         public int autoGoLastConf = 0; //自动推兔点击上次配置计数器
         public Timer timerNotify = null; //提醒计时器
+        public ChromiumWebBrowser mainWeb;
+        public bool isOpenCordWindow = false;
 
         private readonly Counter PushTimes = Counter.Instance; //自动推兔2.0状态
-
+        private MainWindow mainWindow;
         private IntPtr webHandle = IntPtr.Zero;
 
         //模拟鼠标操作相关API引入
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
         static extern bool PostMessage(IntPtr WindowHandle, uint Msg, IntPtr wParam, IntPtr lParam);
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-
 
         public MainWindow()
         {
             InitializeComponent();
+            mainWindow = this;
         }
-
+        
         /// <summary>
         /// 启用老板键
         /// </summary>
@@ -97,13 +95,7 @@ namespace FlowerMaster
         {
             MiscHelper.main = this;
             PacketHelper.mainWindow = this;
-            MiscHelper.SetIEConfig();
-
-            DataUtil.Config = new SysConfig();
-            DataUtil.Game = new GameInfo();
-            DataUtil.Cards = new CardInfo();
-            DataUtil.Config.LoadConfig();
-            DataUtil.Game.gameServer = DataUtil.Config.sysConfig.gameServer;
+            //MiscHelper.SetIEConfig();
 
             if (DataUtil.Config.sysConfig.enableHotKey) EnableHotKey();
 
@@ -114,6 +106,7 @@ namespace FlowerMaster
             timerCheck = new Timer(new TimerCallback(checkTimeLeft), this, 0, 1000);
             timerClock = new Timer(new TimerCallback(tickServerTime), this, 0, 1000);
             timerAuto = new Timer(new TimerCallback(AutoClickMouse), this, Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
+            timerCalculation = new Timer(new TimerCallback(CalculationCacheLength), null, 0, 1000 * 60 * 5); //1000 * 60 * 5
             timerNotify = new Timer(new TimerCallback(closeNotify), this, Timeout.Infinite, 10000);
 
             //默认推兔状态
@@ -122,13 +115,34 @@ namespace FlowerMaster
             dgDaliy.ItemsSource = DataUtil.Game.daliyInfo;
             dgMainExp.ItemsSource = DataUtil.Game.expTable;
 
-            ResizeWeb();
+            //ResizeWeb();
 
             InitProxy();
+            InitBrowser();
 
-            mainWeb.Navigate("about:blank");
-            MiscHelper.SuppressScriptErrors(mainWeb, true);
-            MiscHelper.AddLog("系统初始化完毕，等待登录游戏...", MiscHelper.LogType.System);
+            MiscHelper.AddLog("系統初始化完畢，等待登入遊戲...", MiscHelper.LogType.System);
+        }
+
+        private void InitBrowser()
+        {
+            mainWeb = new ChromiumWebBrowser("about:blank");
+            BrowserSettings config = new BrowserSettings();
+
+            config.FileAccessFromFileUrls = CefState.Disabled;
+            config.UniversalAccessFromFileUrls = CefState.Disabled;
+            config.WebSecurity = CefState.Enabled;
+            config.WebGl = CefState.Enabled;
+            config.ApplicationCache = CefState.Enabled;
+
+            mainWeb.BrowserSettings = config;
+            mainWeb.MenuHandler = new CefHandler.MenuHandler();
+            mainWeb.Dock = System.Windows.Forms.DockStyle.Fill;
+            //mainWeb.ClientSize = new System.Drawing.Size(1136, 640);
+            mainWeb.AllowDrop = false;
+            mainWeb.FrameLoadEnd += mainWeb_FrameLoadEnd;
+            mainWeb.IsBrowserInitializedChanged += MainWeb_IsBrowserInitializedChanged;
+
+            wfh.Child = mainWeb;
         }
 
         /// <summary>
@@ -140,27 +154,27 @@ namespace FlowerMaster
             if (!DataUtil.Game.isOnline || notifyIcon == null || !notifyIcon.Visible) return;
             if (DataUtil.Config.sysConfig.apTargetNotify > 0 && DataUtil.Game.player.AP == DataUtil.Config.sysConfig.apTargetNotify && DataUtil.Game.notifyRecord.lastAP < DataUtil.Game.player.AP)
             {
-                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 体力回复通知", "当前体力已经达到" + DataUtil.Config.sysConfig.apTargetNotify.ToString(), System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 體力回復通知", "目前體力已經達到" + DataUtil.Config.sysConfig.apTargetNotify.ToString(), System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.bpTargetNotify > 0 && DataUtil.Game.player.BP == DataUtil.Config.sysConfig.bpTargetNotify && DataUtil.Game.notifyRecord.lastBP < DataUtil.Game.player.BP)
             {
-                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 战点回复通知", "当前战点已经达到" + DataUtil.Config.sysConfig.bpTargetNotify.ToString(), System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 戰點回復通知", "目前戰點已經達到" + DataUtil.Config.sysConfig.bpTargetNotify.ToString(), System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.apFullNotify && DataUtil.Game.player.AP == DataUtil.Game.player.maxAP && DataUtil.Game.notifyRecord.lastAP < DataUtil.Game.player.maxAP)
             {
-                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 体力回复通知", "当前体力已经回复满了！", System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 體力回復通知", "目前體力已經回復滿了！", System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.bpFullNotify && DataUtil.Game.player.BP == DataUtil.Game.player.maxBP && DataUtil.Game.notifyRecord.lastBP < DataUtil.Game.player.maxBP)
             {
-                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 战点回复通知", "当前战点已经回复满了！", System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 戰點回復通知", "目前戰點已經回復滿了！", System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.spEveryNotify && DataUtil.Game.notifyRecord.lastSP < DataUtil.Game.player.SP && DataUtil.Game.notifyRecord.lastSP < DataUtil.Game.player.maxSP)
             {
-                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 探索回复通知", "当前探索点数回复了1点！", System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 探索回復通知", "目前探索點數回復了1點！", System.Windows.Forms.ToolTipIcon.Info);
             }
             if (DataUtil.Config.sysConfig.spFullNotify && DataUtil.Game.player.SP == DataUtil.Game.player.maxSP && DataUtil.Game.notifyRecord.lastSP < DataUtil.Game.player.maxSP)
             {
-                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 探索回复通知", "当前探索已经回复满了！", System.Windows.Forms.ToolTipIcon.Info);
+                MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 探索回復通知", "目前探索點數已經回復滿了！", System.Windows.Forms.ToolTipIcon.Info);
             }
             DataUtil.Game.notifyRecord.lastAP = DataUtil.Game.player.AP;
             DataUtil.Game.notifyRecord.lastBP = DataUtil.Game.player.BP;
@@ -178,10 +192,14 @@ namespace FlowerMaster
 
             DataUtil.Game.CalcPlayerGamePoint();
 
-            this.Dispatcher.Invoke(new Action(() =>
+            try
             {
-                stTime.Text = "服务器时间：" + DataUtil.Game.serverTime.ToString("yyyy-MM-dd HH:mm:ss");
-            }));
+                this.Dispatcher.Invoke(new Action(() =>
+                {
+                    stTime.Text = "伺服器時間：" + DataUtil.Game.serverTime.ToString("yyyy-MM-dd HH:mm:ss");
+                }));
+            }
+            catch (Exception) { }
         }
 
         /// <summary>
@@ -192,6 +210,18 @@ namespace FlowerMaster
         {
             timerNotify.Change(Timeout.Infinite, 10000);
             notifyIcon.Visible = false;
+        }
+
+        public void InvokeIfNeeded(Action action)
+        {
+            if (Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(action);
+            }
+            else
+            {
+                action.Invoke();
+            }
         }
 
         /// <summary>
@@ -234,6 +264,7 @@ namespace FlowerMaster
             chkGachaLog.IsChecked = DataUtil.Config.sysConfig.logGacha;
 
             chkAutoGo.IsChecked = DataUtil.Config.sysConfig.autoGoInMaps;
+            chkAutoReStart.IsChecked = DataUtil.Config.sysConfig.autoReStart;
             slAutoRate.Value = DataUtil.Config.sysConfig.autoGoTimeout;
 
             chkTitleChange.IsChecked = DataUtil.Config.sysConfig.changeTitle;
@@ -270,7 +301,7 @@ namespace FlowerMaster
             chkRaidOther.IsChecked = DataUtil.Config.sysConfig.raidOther;
             chkRaidSelf.IsChecked = DataUtil.Config.sysConfig.raidSelf;
             chkSpecialTrue.IsChecked = DataUtil.Config.sysConfig.specialTrue;
-            
+
             tbDelayTime.Text = DataUtil.Config.sysConfig.delayTime.ToString();
 
             chkSellTrue.IsChecked = DataUtil.Config.sysConfig.sellTrue;
@@ -291,7 +322,7 @@ namespace FlowerMaster
         public void InitTrayIcon(bool visible = true)
         {
             notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.Text = "团长助理";
+            notifyIcon.Text = "團長助理";
             notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
             notifyIcon.Visible = visible;
             notifyIcon.DoubleClick += new EventHandler(notifyIcon_DoubleClick);
@@ -301,11 +332,11 @@ namespace FlowerMaster
 
             System.Windows.Forms.MenuItem showItem = new System.Windows.Forms.MenuItem();
             showItem.DefaultItem = true;
-            showItem.Text = "显示窗口(&O)";
+            showItem.Text = "顯示視窗(&O)";
             showItem.Click += new EventHandler(notifyIcon_DoubleClick);
 
             System.Windows.Forms.MenuItem closeItem = new System.Windows.Forms.MenuItem();
-            closeItem.Text = "退出程序(&X)";
+            closeItem.Text = "退出程式(&X)";
             closeItem.Click += new EventHandler(delegate { this.Close(); });
 
             menu.MenuItems.Add(showItem);
@@ -319,8 +350,8 @@ namespace FlowerMaster
         /// </summary>
         private void InitProxy()
         {
-            HttpProxy.Shutdown();
-            HttpProxy.Startup(DataUtil.Config.localProxyPort, false, false);
+            //HttpProxy.Shutdown();
+            HttpProxy.Startup(DataUtil.Config.localProxyPort, false, true);
             HttpProxy.AfterSessionComplete += s => Task.Run(() => ProcessData(s));
             ApplyProxySettings();
         }
@@ -354,22 +385,22 @@ namespace FlowerMaster
         /// <summary>
         /// 根据DPI调整浏览器组件大小
         /// </summary>
-        private void ResizeWeb()
-        {
-            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
-            {
-                double oldWidth = mainWeb.Width;
-                double oldHeight = mainWeb.Height;
-                float dpiX = graphics.DpiX;
-                float dpiY = graphics.DpiY;
-                mainWeb.Width = mainWeb.Width * (96.0 / dpiX);
-                mainWeb.Height = mainWeb.Height * (96.0 / dpiY);
-                this.Width -= (oldWidth - mainWeb.Width);
-                this.Height -= (oldHeight - mainWeb.Height);
-                this.Top += (oldHeight - mainWeb.Height) / 2;
-                this.Left += (oldWidth - mainWeb.Width) / 2;
-            }
-        }
+        //private void ResizeWeb()
+        //{
+        //    using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+        //    {
+        //        double oldWidth = mainWeb.Width;
+        //        double oldHeight = mainWeb.Height;
+        //        float dpiX = graphics.DpiX;
+        //        float dpiY = graphics.DpiY;
+        //        mainWeb.Width = mainWeb.Width * (96.0 / dpiX);
+        //        mainWeb.Height = mainWeb.Height * (96.0 / dpiY);
+        //        this.Width -= (oldWidth - mainWeb.Width);
+        //        this.Height -= (oldHeight - mainWeb.Height);
+        //        this.Top += (oldHeight - mainWeb.Height) / 2;
+        //        this.Left += (oldWidth - mainWeb.Width) / 2;
+        //    }
+        //}
 
         /// <summary>
         /// 处理数据包
@@ -382,8 +413,7 @@ namespace FlowerMaster
             {
                 PacketHelper.ProcessPacket(s);
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18 ||
-                    DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChinese || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChineseR18)
+            else if (DataUtil.Game.gameServer != (int)GameInfo.ServersList.American && DataUtil.Game.gameServer != (int)GameInfo.ServersList.AmericanR18)
             {
                 if (s.Request.PathAndQuery.IndexOf("/social/rpc") != -1)
                 {
@@ -402,24 +432,8 @@ namespace FlowerMaster
                         btnNews.Visibility = Visibility.Visible;
                     }));
                 }
-                /*else if (s.Request.PathAndQuery.IndexOf("/news/news_") != -1 && s.Request.PathAndQuery.IndexOf(".html?") != -1)
-                {
-                    if (DataUtil.Config.sysConfig.showLoginNews && !newsHadShown)
-                    {
-                        newsHadShown = true;
-                        this.Dispatcher.Invoke(new Action(() =>
-                        {
-                            NewsWindow news = new NewsWindow();
-                            news.Show();
-                        }));
-                    }
-                    this.Dispatcher.Invoke(new Action(() =>
-                    {
-                        btnNews.Visibility = Visibility.Visible;
-                    }));
-                }*/
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
+            else 
             {
                 if (s.Request.PathAndQuery.IndexOf("/rpc?st=") != -1)
                 {
@@ -438,22 +452,6 @@ namespace FlowerMaster
                         btnNews.Visibility = Visibility.Visible;
                     }));
                 }
-                /*else if (s.Request.PathAndQuery.IndexOf("/news/news_") != -1 && s.Request.PathAndQuery.IndexOf(".html?") != -1 && s.Request.RequestLine.URI.IndexOf("http") != -1)
-                {
-                    if (DataUtil.Config.sysConfig.showLoginNews && !newsHadShown)
-                    {
-                        newsHadShown = true;
-                        this.Dispatcher.Invoke(new Action(() =>
-                        {
-                            NewsWindow news = new NewsWindow();
-                            news.Show();
-                        }));
-                    }
-                    this.Dispatcher.Invoke(new Action(() =>
-                    {
-                        btnNews.Visibility = Visibility.Visible;
-                    }));
-                }*/
             }
         }
 
@@ -502,6 +500,12 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.showLoginDialog = chkShowLogin.IsChecked.HasValue ? (bool)chkShowLogin.IsChecked : false;
             DataUtil.Config.sysConfig.showLoginNews = chkShowNews.IsChecked.HasValue ? (bool)chkShowNews.IsChecked : false;
             DataUtil.Config.sysConfig.gameServer = cbGameServer.SelectedIndex;
+
+            if (DataUtil.Config.sysConfig.showLoginDialog && cbLoginPage.SelectedIndex == 0)
+            {
+                await this.ShowMessageAsync("錯誤", "因為已開啟登入視窗，故啟動時載入將強制設定為登入頁面");
+                cbLoginPage.SelectedIndex = 1;
+            }
             DataUtil.Config.sysConfig.gameHomePage = cbLoginPage.SelectedIndex;
 
             if (rbNotUseProxy.IsChecked.HasValue && (bool)rbNotUseProxy.IsChecked)
@@ -532,6 +536,7 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.logGacha = chkGachaLog.IsChecked.HasValue ? (bool)chkGachaLog.IsChecked : false;
 
             DataUtil.Config.sysConfig.autoGoInMaps = chkAutoGo.IsChecked.HasValue ? (bool)chkAutoGo.IsChecked : false;
+            DataUtil.Config.sysConfig.autoReStart = chkAutoReStart.IsChecked.HasValue ? (bool)chkAutoReStart.IsChecked : false;
             DataUtil.Config.sysConfig.autoGoTimeout = (int)slAutoRate.Value;
 
             DataUtil.Config.sysConfig.changeTitle = chkTitleChange.IsChecked.HasValue ? (bool)chkTitleChange.IsChecked : false;
@@ -604,7 +609,18 @@ namespace FlowerMaster
 
             return true;
         }
+        
 
+        private void CalculationCacheLength(object data)
+        {
+            new Task(() =>
+            {
+                float length = 0f;
+                foreach (var item in Directory.GetFiles(catchPath, "*.*", SearchOption.AllDirectories))
+                    length += new FileInfo(item).Length / 1048576f;
+                mainWindow.Dispatcher.BeginInvoke(new Action(() => { lab_CacheLength.Content = $"快取大小: {Math.Round(length, 2).ToString()}MB"; }));
+            }).Start();            
+        }
 
         /// <summary>
         /// 自动推兔定时器
@@ -617,38 +633,8 @@ namespace FlowerMaster
                 timerAuto.Change(Timeout.Infinite, DataUtil.Config.sysConfig.autoGoTimeout);
                 return;
             }
-            int x = 855, y = 545;
-            if (autoGoLastConf > 0)
-            {
-                x = 765;
-                y = 475;
-                autoGoLastConf--;
-            }
-            /* 
-            临时暂停原本的鼠标按键功能
-            IntPtr lParam = (IntPtr)((y << 16) | x); //坐标信息
-            IntPtr wParam = IntPtr.Zero; // 附加的按键信息（如：Ctrl）
-            const uint downCode = 0x201; // 鼠标左键按下
-            const uint upCode = 0x202; // 鼠标左键抬起
-            PostMessage(webHandle, downCode, wParam, lParam); // 发送鼠标按键按下消息
-            PostMessage(webHandle, upCode, wParam, lParam); // 发送鼠标按键抬起消息
-            */
-            MouseLeftClick(x, y);
-        }
 
-        /// <summary>
-        /// 鼠标左键点击（坐标）
-        /// </summary>
-        /// <param name="x">x-横向坐标</param>
-        /// <param name="y">y-竖向坐标</param>
-        private void MouseLeftClick(int x, int y)
-        {
-            IntPtr lParam = (IntPtr)((y << 16) | x); //坐标信息
-            IntPtr wParam = IntPtr.Zero; // 附加的按键信息（如：Ctrl）
-            const uint downCode = 0x201; // 鼠标左键按下
-            const uint upCode = 0x202; // 鼠标左键抬起
-            PostMessage(webHandle, downCode, wParam, lParam); // 发送鼠标按键按下消息
-            PostMessage(webHandle, upCode, wParam, lParam); // 发送鼠标按键抬起消息
+            MiscHelper.MouseLeftClick(1030, 550); //日版座標
         }
 
         /// <summary>
@@ -659,7 +645,7 @@ namespace FlowerMaster
             DataUtil.Game.gameServer = DataUtil.Config.currentAccount.gameServer;
             DataUtil.Config.sysConfig.gameServer = DataUtil.Game.gameServer;
             DataUtil.Config.sysConfig.gameHomePage = 1;
-            mainWeb.Navigate(DataUtil.Game.gameUrl);
+            mainWeb.Load(DataUtil.Game.gameUrl);
         }
 
         /// <summary>
@@ -682,70 +668,70 @@ namespace FlowerMaster
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("确实要重新载入页面吗？", "操作确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (MessageBox.Show("確定要重新載入頁面嗎？", "操作確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                //MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
-                //styleSheetApplied = false;
-                //loginSubmitted = false;
-                //newsHadShown = false;
-                //DataUtil.Game.isOnline = false;
-                //DataUtil.Game.canAuto = false;
-                //mainWeb.Navigate(DataUtil.Game.gameUrl);
                 Refresh();
             }
         }
-        
+
         /// <summary>
         /// 独立出的刷新游戏代码
         /// </summary>
         private void Refresh()
         {
-            MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
+            MiscHelper.AddLog("正在重新載入遊戲頁面...", MiscHelper.LogType.System);
             styleSheetApplied = false;
             loginSubmitted = false;
             newsHadShown = false;
             DataUtil.Game.isOnline = false;
             DataUtil.Game.canAuto = false;
-            mainWeb.Navigate(DataUtil.Game.gameUrl);
+            isRefreshPage = true;
+            if (resultURL == "") mainWeb.Load(DataUtil.Game.gameUrl);
+            else mainWeb.Load(resultURL);
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             SystemInit();
-            if (DataUtil.Config.sysConfig.showLoginDialog)
-            {
-                DataUtil.Config.currentAccount = new SysConfig.AccountList();
-                LoginWindow login = new LoginWindow();
-                login.Owner = this;
-                login.ShowDialog();
-            }
-            else
-            {
-                mainWeb.Navigate(DataUtil.Game.gameUrl);
-            }
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (DataUtil.Config.sysConfig.exitConfirm && MessageBox.Show("是否确定要退出团长助理？", "退出确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            if (DataUtil.Config.sysConfig.exitConfirm && MessageBox.Show("確定要退出團長助理嗎？", "退出確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
             {
                 e.Cancel = true;
                 return;
             }
+
             timerCheck.Dispose();
             timerClock.Dispose();
             timerAuto.Dispose();
+
             if (DataUtil.Config.sysConfig.enableHotKey)
             {
                 IntPtr handle = new WindowInteropHelper(this).Handle;
                 HotKeyHelper.UnregisterHotKey(handle, HotKeyHelper.hotKeyId);
             }
+
             if (SoundHelper.isMute) SoundHelper.Mute();
+
             if (notifyIcon != null)
             {
                 notifyIcon.Dispose();
                 notifyIcon = null;
             }
+
+            try
+            {
+                mainWeb.GetBrowser().CloseBrowser(true);
+                Cef.Shutdown();
+            }
+            catch (Exception) { }
+
+            if (HttpProxy.IsInListening) HttpProxy.Shutdown();
+
+            Thread.Sleep(5000);
+            Environment.Exit(0);
         }
 
         private void MetroWindow_StateChanged(object sender, EventArgs e)
@@ -770,102 +756,96 @@ namespace FlowerMaster
             if (DataUtil.Config.sysConfig.miniToMute && SoundHelper.isMute && !SoundHelper.userMute) SoundHelper.Mute();
         }
 
-        private void mainWeb_LoadCompleted(object sender, NavigationEventArgs e)
+        private async void mainWeb_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
         {
-            if (styleSheetApplied) return;
-            var document = mainWeb.Document as HTMLDocument;
-            if (document == null) return;
+            if (styleSheetApplied || e.HttpStatusCode != 200) return;
 
-            //抽取Flash，应用CSS样式
-            IHTMLElement gameFrame = null;
-            if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
+            if (DataUtil.Game.gameServer != (int)GameInfo.ServersList.Japan && DataUtil.Game.gameServer != (int)GameInfo.ServersList.JapanR18)
             {
-                gameFrame = document.getElementById("game_frame");
-                if (gameFrame != null)
+                if (e.Url == DataUtil.Game.gameUrl)
                 {
-                    mainWeb.Navigate(Convert.ToString(gameFrame.getAttribute("src")));
-                    return;
+                    resultURL = (await mainWeb.EvaluateScriptAsync("document.getElementById('game_frame').getAttribute('src');")).Result.ToString();
+                    mainWeb.ExecuteScriptAsync("document.location = document.getElementById('game_frame').getAttribute('src')");
                 }
-                else
+
+                else if (e.Url == resultURL)
                 {
-                    gameFrame = document.getElementById("externalContainer");
+                    mainWeb.ExecuteScriptAsync("document.getElementById('externalContainer').style = '';");
+                    mainWeb.ExecuteScriptAsync("document.getElementsByTagName('body')[0].style='overflow:hidden;';");
+
+                    styleSheetApplied = true;
+                    MiscHelper.AddLog("抽取Flash樣式應用成功！", MiscHelper.LogType.System);
                 }
             }
             else
             {
-                gameFrame = document.getElementById("game_frame");
-            }
-            if (gameFrame != null)
-            {
-                var target = gameFrame?.document as HTMLDocument;
-                if (target != null)
+                if (e.Url == DataUtil.Game.gameUrl)
                 {
-                    if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
-                    {
-                        target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSSAmerican;
-                    }
-                    else
-                    {
-                        target.createStyleSheet().cssText = DataUtil.Config.sysConfig.userCSS;
-                    }
+                    resultURL = (await mainWeb.EvaluateScriptAsync("document.getElementById('game_frame').getAttribute('src');")).Result.ToString();
+                    mainWeb.ExecuteScriptAsync("document.location = document.getElementById('game_frame').getAttribute('src');");
+                }
+
+                if (e.Url == resultURL)
+                {
+                    mainWeb.GetMainFrame().ExecuteJavaScriptAsync("var style = document.createElement('style');");
+                    mainWeb.GetMainFrame().ExecuteJavaScriptAsync("style.innerHTML = `" + DataUtil.Config.sysConfig.userCSS + "`");
+                    mainWeb.GetMainFrame().ExecuteJavaScriptAsync("document.head.appendChild(style);");
+
                     styleSheetApplied = true;
-                    MiscHelper.AddLog("抽取Flash样式应用成功！", MiscHelper.LogType.System);
+                    MiscHelper.AddLog("抽取遊戲樣式應用成功！", MiscHelper.LogType.System);
                 }
             }
 
             //自动登录相关
             if (!loginSubmitted && DataUtil.Config.currentAccount.username != null && DataUtil.Config.currentAccount.username.Trim() != "")
             {
-                IHTMLElement username = null;
-                IHTMLElement password = null;
-                if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
-                {
-                    username = document.getElementById("s-email");
-                    password = document.getElementById("s-password");
-                }
-                else
-                {
-                    username = document.getElementById("login_id");
-                    password = document.getElementById("password");
-                }
-
-                if (username == null || password == null) return;
-
-                DESHelper des = new DESHelper();
-
-                username.setAttribute("value", des.Decrypt(DataUtil.Config.currentAccount.username));
-                password.setAttribute("value", des.Decrypt(DataUtil.Config.currentAccount.password));
-
                 if (DataUtil.Config.currentAccount.username.Trim() == "" || DataUtil.Config.currentAccount.password == "")
                 {
                     loginSubmitted = true;
                     return;
                 }
 
-                //点击登录按钮
+                DESHelper des = new DESHelper();
+
                 if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.American || DataUtil.Game.gameServer == (int)GameInfo.ServersList.AmericanR18)
                 {
-                    IHTMLElement autoLogin = document.getElementById("autoLogin");
-                    IHTMLElement login = document.getElementById("login-button");
-                    if (autoLogin != null) autoLogin.click();
-                    if (login != null)
-                    {
-                        login.click();
-                        loginSubmitted = true;
-                    }
+                    mainWeb.ExecuteScriptAsync("document.getElementById('s-email').value = '" + des.Decrypt(DataUtil.Config.currentAccount.username) + "'");
+                    mainWeb.ExecuteScriptAsync("document.getElementById('s-password').value = '" + des.Decrypt(DataUtil.Config.currentAccount.password) + "'");
+
+                    //点击登录按钮
+                    mainWeb.ExecuteScriptAsync("document.getElementById('autoLogin').click()");
+                    mainWeb.ExecuteScriptAsync("document.getElementById('login-button').click()");
+                    loginSubmitted = true;
                 }
                 else
                 {
-                    foreach (IHTMLElement element in document.all)
-                    {
-                        if (Convert.ToString(element.getAttribute("value")) == "ログイン")
-                        {
-                            element.click();
-                            loginSubmitted = true;
-                            break;
-                        }
-                    }
+                    mainWeb.ExecuteScriptAsync("document.getElementById('login_id').value = '" + des.Decrypt(DataUtil.Config.currentAccount.username) + "'");
+                    mainWeb.ExecuteScriptAsync("document.getElementById('password').value = '" + des.Decrypt(DataUtil.Config.currentAccount.password) + "'");
+
+                    //点击登录按钮
+                    mainWeb.ExecuteScriptAsync("[...document.getElementsByTagName('input')].forEach((item) => { if (item.type == 'submit') item.click(); });");
+                    loginSubmitted = true;
                 }
+            }
+        }
+
+        private void MainWeb_IsBrowserInitializedChanged(object sender, EventArgs e)
+        {
+            if (!mainWeb.IsBrowserInitialized) return;
+
+            if (DataUtil.Config.sysConfig.showLoginDialog && !isRefreshPage)
+            {
+                wfh.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    DataUtil.Config.currentAccount = new SysConfig.AccountList();
+                    LoginWindow login = new LoginWindow();
+                    login.Owner = mainWindow;
+                    login.ShowDialog();
+                }));
+            }
+            else
+            {
+                mainWeb.Load(DataUtil.Game.gameUrl);
             }
         }
 
@@ -885,6 +865,12 @@ namespace FlowerMaster
             mainTab.SelectedIndex = 0;
         }
 
+        private void btnDiv_Click(object sender, RoutedEventArgs e)
+        {
+            if (mainWeb.IsBrowserInitialized)
+                mainWeb.ShowDevTools();
+        }
+
         private async void btnReset_Click(object sender, RoutedEventArgs e)
         {
             tbCssStyle.Text = SysConfig.DefaultCSSJapan;
@@ -892,7 +878,7 @@ namespace FlowerMaster
             {
                 tbCssStyle.Text = SysConfig.DefaultCSSAmerican;
             }
-            await this.ShowMessageAsync("提示", "已经重置为默认抽取样式！");
+            await this.ShowMessageAsync("提示", "已經重製為預設抽取樣式！");
         }
 
         private async void btnSave_Click(object sender, RoutedEventArgs e)
@@ -903,45 +889,31 @@ namespace FlowerMaster
                 if (DataUtil.Config.SaveConfig())
                 {
                     DataUtil.Game.gameServer = DataUtil.Config.sysConfig.gameServer;
-                    await this.ShowMessageAsync("提示", "已成功保存设置！");
+                    await this.ShowMessageAsync("提示", "成功保存設置！");
                     mainTab.SelectedIndex = 0;
                 }
                 else
                 {
-                    await this.ShowMessageAsync("错误", "设置保存失败！");
+                    await this.ShowMessageAsync("錯誤", "保存設置失敗！");
                 }
             }
         }
-        
 
         private async void btnClearCache_Click(object sender, RoutedEventArgs e)
         {
-            Process process = new Process();
-            process.StartInfo.FileName = "RunDll32.exe";
-            process.StartInfo.Arguments = "InetCpl.cpl,ClearMyTracksByProcess 8";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardInput = true;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = true;
-            process.Start();
-            process.WaitForExit();
-            await this.ShowMessageAsync("提示", "浏览器缓存文件清理完毕！");
+            await this.ShowMessageAsync("提示", $"請關閉程式後至'{Path.GetDirectoryName(catchPath)}'刪除'Cache'資料夾");
         }
 
         private async void btnClearCookies_Click(object sender, RoutedEventArgs e)
         {
-            Process process = new Process();
-            process.StartInfo.FileName = "RunDll32.exe";
-            process.StartInfo.Arguments = "InetCpl.cpl,ClearMyTracksByProcess 2";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardInput = true;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = true;
-            process.Start();
-            process.WaitForExit();
-            await this.ShowMessageAsync("提示", "浏览器Cookies清理完毕！");
+            try
+            {
+                if (Cef.GetGlobalCookieManager().DeleteCookies("", ""))
+                    await this.ShowMessageAsync("提示", "瀏覽器Cookies清理完成！");
+                else
+                    await this.ShowMessageAsync("錯誤", "瀏覽器Cookies無法清理！");
+            }
+            catch (Exception ex) { await this.ShowMessageAsync("錯誤", "瀏覽器Cookies無法清理！\n" + ex.Message); }
         }
 
         public void btnAuto_Click(object sender, RoutedEventArgs e)
@@ -949,21 +921,13 @@ namespace FlowerMaster
             if (!DataUtil.Game.isOnline) return;
             if (webHandle == IntPtr.Zero)
             {
-                webHandle = mainWeb.Handle;
-                webHandle = CordCol.GetWebHandle(webHandle);
-                //独立出的获取句柄
-                //StringBuilder className = new StringBuilder(100);
-                //while (className.ToString() != "Internet Explorer_Server") // 浏览器组件类获取
-                //{
-                //    webHandle = GetWindow(webHandle, 5); // 获取子窗口的句柄
-                //    GetClassName(webHandle, className, className.Capacity);
-                //}
+                webHandle = mainWeb.GetBrowserHost().GetWindowHandle();
             }
             if (DataUtil.Game.isAuto)
             {
                 MiscHelper.SetAutoGo(false);
             }
-            else if (DataUtil.Game.canAuto)
+            else
             {
                 MiscHelper.SetAutoGo(true);
             }
@@ -1035,7 +999,7 @@ namespace FlowerMaster
 
         private void btnCap_Click(object sender, RoutedEventArgs e)
         {
-            if (!DataUtil.Game.isOnline) return;
+            //if (!DataUtil.Game.isOnline) return;
             MiscHelper.ScreenShot();
         }
 
@@ -1065,8 +1029,12 @@ namespace FlowerMaster
         /// <param name="e"></param>
         private void btnCord_Click(object sender, RoutedEventArgs e)
         {
-            CordWindow cords = new CordWindow(Process.GetCurrentProcess().MainWindowHandle);
-            cords.Show();
+            if (!isOpenCordWindow)
+            {
+                CordWindow cords = new CordWindow(mainWeb.GetBrowserHost().GetWindowHandle());
+                cords.Show();
+                isOpenCordWindow = true;
+            }
         }
 
         /// <summary>
@@ -1078,20 +1046,25 @@ namespace FlowerMaster
         {
             if (PushTimes.Value() > 0)
             {
-                MessageBox.Show("请点击下面的按钮暂停", "推兔中", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("請點擊下面的按鈕停止", "推兔中", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             //如果状态为0，启动推兔功能
             else
             {
-                MessageBoxResult type = MessageBox.Show("点击OK开始自动推兔\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                MessageBoxResult type = MessageBox.Show("請勿將視窗最小化\r\n" +
+                    "並請保持程式畫面不會被其餘程式擋住\r\n\r\n" +
+                    "點擊OK開始自動推兔\r\n請在遊戲主頁開啟此功能\r\n點擊下面的X停止", 
+                    "腳本開始",
+                    MessageBoxButton.OKCancel, 
+                    MessageBoxImage.Warning);
+
                 if (type == MessageBoxResult.OK)
                 {
                     PushTimes.Load(DataUtil.Config.sysConfig.pushTimes);
                     AutoPush();
                 }
             }
-            
         }
 
         /// <summary>
@@ -1099,11 +1072,12 @@ namespace FlowerMaster
         /// </summary>
         private async void AutoPush()
         {
-            IntPtr Han = GetWebHandle(mainWeb.Handle);
-            MiscHelper.AddLog("开始推兔!", MiscHelper.LogType.System);
+            //IntPtr Han = mainWeb.GetBrowserHost().GetWindowHandle();
+            MiscHelper.ShowPushSetButton(true);
+            MiscHelper.AddLog("開始推兔！", MiscHelper.LogType.System);
             Nodes Node = new Nodes();
 
-            Node.ScInitialize(Han);
+            Node.ScInitialize();
 
             Thread PushThread = new Thread(Node.Start);
             PushThread.Start();
@@ -1113,6 +1087,8 @@ namespace FlowerMaster
                 if (PushTimes.Value() == 0)
                 {
                     PushThread.Abort();
+                    MessageBox.Show("推兔已成功執行完畢！");
+                    MiscHelper.ShowPushSetButton(false);
                 }
                 if (DataUtil.Game.isOnline == false &&
                     DataUtil.Config.sysConfig.gameRestart == true)
@@ -1138,12 +1114,11 @@ namespace FlowerMaster
         /// <param name="e"></param>
         private void btnPush_Set(object sender, RoutedEventArgs e)
         {
-            if(PushTimes.Value() > 0)
+            if (PushTimes.Value() > 0)
             {
                 PushTimes.Reset();
-                MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                //MessageBox.Show("已收到暫停訊息，本次推兔完成後結束", "暫停訊息", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             }
         }
-        
     }
 }

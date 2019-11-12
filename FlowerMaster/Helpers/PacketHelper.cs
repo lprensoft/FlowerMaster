@@ -90,10 +90,17 @@ namespace FlowerMaster.Helpers
         /// <param name="pack">打包后的封包结构体</param>
         /// <returns>打包结果</returns>
         private static bool PackPacket(Session s, out PacketInfo pack)
-        {
+        {                
             pack = new PacketInfo();
             pack.requestUrl = s.Request.PathAndQuery;
             pack.rawData = s.Response.BodyAsString;
+
+            if (s.Request.RequestLine.Method == "OPTIONS") { return false; }
+
+            while (pack.rawData.Substring(0, 1) == "\n")
+            {
+                pack.rawData = pack.rawData.Substring(1);
+            }
 
             if (s.Request.PathAndQuery.IndexOf("/api/v1/") != -1)
             {
@@ -101,7 +108,11 @@ namespace FlowerMaster.Helpers
                 pack.funcApi = s.Request.PathAndQuery.Substring(s.Request.PathAndQuery.IndexOf("/api/") + 7);
                 if (pack.rawData.Substring(0, 1) != "[" && pack.rawData.Substring(0, 1) != "{")
                 {
-                    pack.rawData = DecryptData(s.Response.Body);
+                    try
+                    {
+                        pack.rawData = DecryptData(s.Response.Body);
+                    }
+                    catch { }
                 }
             }
             else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18 ||
@@ -154,8 +165,7 @@ namespace FlowerMaster.Helpers
             try
             {
                 //处理日服DMM用户信息-获取用户昵称
-                if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18 ||
-                    DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChinese || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChineseR18) && pack.funcUrl.IndexOf("/social/") != -1)
+                if (DataUtil.Game.gameServer != (int)GameInfo.ServersList.American && DataUtil.Game.gameServer != (int)GameInfo.ServersList.AmericanR18 && pack.funcUrl.IndexOf("/social/") != -1)
                 {
                     if (pack.funcApi == "/rpc")
                     {
@@ -335,10 +345,10 @@ namespace FlowerMaster.Helpers
 
             mainWindow.Dispatcher.Invoke(new Action(() =>
             {
-                mainWindow.lbAPTime.Content = "体力回满时间：" + apTime.ToString("MM-dd HH:mm:ss");
-                mainWindow.lbBPTime.Content = "战点回满时间：" + bpTime.ToString("MM-dd HH:mm:ss");
-                mainWindow.lbSPTime.Content = "探索回满时间：" + spTime.ToString("MM-dd HH:mm:ss");
-                mainWindow.lbPlantTime.Content = DataUtil.Game.player.plantTime.Year == 1 ? "花盆全满时间：暂无" : "花盆全满时间：" + DataUtil.Game.player.plantTime.ToString("MM-dd HH:mm:ss");
+                mainWindow.lbAPTime.Content = "體力回滿時間：" + apTime.ToString("MM-dd HH:mm:ss");
+                mainWindow.lbBPTime.Content = "戰點回滿時間：" + bpTime.ToString("MM-dd HH:mm:ss");
+                mainWindow.lbSPTime.Content = "探索回滿時間：" + spTime.ToString("MM-dd HH:mm:ss");
+                mainWindow.lbPlantTime.Content = DataUtil.Game.player.plantTime.Year == 1 ? "花盆全滿時間：無" : "花盆全滿時間：" + DataUtil.Game.player.plantTime.ToString("MM-dd HH:mm:ss");
             }));
         }
 
@@ -355,7 +365,7 @@ namespace FlowerMaster.Helpers
                 DataUtil.Game.player.name = json["data"]["nickname"].ToString();
                 mainWindow.Dispatcher.Invoke(new Action(() =>
                 {
-                    mainWindow.notifyIcon.Text = "团长助理 - " + DataUtil.Game.player.name;
+                    mainWindow.notifyIcon.Text = "團長助理 - " + DataUtil.Game.player.name;
                     if (mainWindow.Title.IndexOf("-") == -1 && DataUtil.Config.sysConfig.changeTitle)
                     {
                         mainWindow.Title += " - " + DataUtil.Game.player.name;
@@ -382,7 +392,7 @@ namespace FlowerMaster.Helpers
                 DataUtil.Game.player.name = json["result"]["nickname"].ToString();
                 mainWindow.Dispatcher.Invoke(new Action(() =>
                 {
-                    mainWindow.notifyIcon.Text = "团长助理 - " + DataUtil.Game.player.name;
+                    mainWindow.notifyIcon.Text = "團長助理 - " + DataUtil.Game.player.name;
                     if (mainWindow.Title.IndexOf("-") == -1 && DataUtil.Config.sysConfig.changeTitle)
                     {
                         mainWindow.Title += " - " + DataUtil.Game.player.name;
@@ -421,7 +431,7 @@ namespace FlowerMaster.Helpers
             DataUtil.Game.notifyRecord.lastBP = DataUtil.Game.player.BP;
             DataUtil.Game.notifyRecord.lastSP = DataUtil.Game.player.SP;
             UpdateTimeLeft();
-            MiscHelper.AddLog("已经成功登录游戏", MiscHelper.LogType.System);
+            MiscHelper.AddLog("已經成功登入遊戲", MiscHelper.LogType.System);
             return E_SUCCESS;
         }
 
@@ -492,7 +502,7 @@ namespace FlowerMaster.Helpers
         private static int ProcessGardenPlantHarvest(PacketInfo pack)
         {
             JObject json = pack.data;
-            string log = "收获花盆，获得：";
+            string log = "收取花盆，獲得：";
             JArray items = (JArray)json["gardenHarvestItemList"];
             int gold = 0;
             int coin = 0;
@@ -512,7 +522,7 @@ namespace FlowerMaster.Helpers
                     ap += int.Parse(item["staminaRecoveryNum"].ToString());
                 }
             }
-            log += "金币" + gold.ToString() + "，庭院币" + coin.ToString();
+            log += "金幣" + gold.ToString() + "，庭院幣" + coin.ToString();
             JArray plants = (JArray)json["userGardenPlantPotList"];
             foreach (JObject plant in plants)
             {
@@ -524,11 +534,11 @@ namespace FlowerMaster.Helpers
             }
             if (json["staminaRevoceryNum"] != null && json["staminaRevoceryNum"].ToString() != "0")
             {
-                log += "，体力" + json["staminaRevoceryNum"].ToString();
+                log += "，體力" + json["staminaRevoceryNum"].ToString();
             }
             else if (ap > 0)
             {
-                log += "，体力" + ap.ToString();
+                log += "，體力" + ap.ToString();
             }
             DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["stamina"], json["staminaTime"]);
             UpdateTimeLeft();
@@ -566,7 +576,7 @@ namespace FlowerMaster.Helpers
                 }
             }
             UpdateTimeLeft();
-            string log = string.Format("探索完成，获得体力{0:D}，金币{1:D}，种子{2:D}", ap, gold, gp);
+            string log = string.Format("探索完成，獲得體力{0:D}，金幣{1:D}，種子{2:D}", ap, gold, gp);
             MiscHelper.AddLog(log, MiscHelper.LogType.Search);
             return E_SUCCESS;
         }
@@ -587,7 +597,7 @@ namespace FlowerMaster.Helpers
                 string lv = json["masterRaidBoss"]["raidBossLevelNum"].ToString();
                 string atk = json["masterRaidBoss"]["attack"].ToString();
                 string def = json["masterRaidBoss"]["defense"].ToString();
-                MiscHelper.AddLog("开始首页BOSS战，BOSS：" + name + "，Lv：" + lv + "，HP：" + hp + "/" + mhp + "，攻击：" + atk + "，防御：" + def, MiscHelper.LogType.Boss);
+                MiscHelper.AddLog("開始首頁BOSS戰，BOSS：" + name + "，Lv：" + lv + "，HP：" + hp + "/" + mhp + "，攻擊：" + atk + "，防禦：" + def, MiscHelper.LogType.Boss);
             }
             return E_SUCCESS;
         }
@@ -602,7 +612,7 @@ namespace FlowerMaster.Helpers
             JObject json = pack.data;
             DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.BP, json["battlePoint"], json["battlePointTime"]);
             UpdateTimeLeft();
-            MiscHelper.AddLog("首页BOSS战完成，剩余战点：" + DataUtil.Game.player.BP.ToString() , MiscHelper.LogType.Boss);
+            MiscHelper.AddLog("首頁BOSS戰完成，剩餘戰點：" + DataUtil.Game.player.BP.ToString() , MiscHelper.LogType.Boss);
             return E_SUCCESS;
         }
 
@@ -622,11 +632,11 @@ namespace FlowerMaster.Helpers
                 string mhp = json["maxHitPoint"] != null ? json["maxHitPoint"].ToString() : "0";
                 string atk = json["attack"] != null ? json["attack"].ToString() : "0";
                 string def = json["defense"] != null ? json["defense"].ToString() : "0";
-                MiscHelper.AddLog("开始召唤BOSS战，BOSS：" + name + "，Lv：" + lv + "，HP：" + hp + "/" + mhp + "，攻击：" + atk + "，防御：" + def, MiscHelper.LogType.Boss);
+                MiscHelper.AddLog("開始召喚BOSS戰，BOSS：" + name + "，Lv：" + lv + "，HP：" + hp + "/" + mhp + "，攻擊：" + atk + "，防禦：" + def, MiscHelper.LogType.Boss);
             }
             else
             {
-                MiscHelper.AddLog("开始召唤BOSS战", MiscHelper.LogType.Boss);
+                MiscHelper.AddLog("開始召喚BOSS戰", MiscHelper.LogType.Boss);
             }
             return E_SUCCESS;
         }
@@ -638,7 +648,7 @@ namespace FlowerMaster.Helpers
         /// <returns>处理结果标志</returns>
         private static int ProcessSummonBossFinish(PacketInfo pack)
         {
-            MiscHelper.AddLog("召唤BOSS战完成", MiscHelper.LogType.Boss);
+            MiscHelper.AddLog("召喚BOSS戰完成", MiscHelper.LogType.Boss);
             return E_SUCCESS;
         }
 
@@ -650,18 +660,18 @@ namespace FlowerMaster.Helpers
         private static int ProcessDungeonStageStart(PacketInfo pack)
         {
             JObject json = pack.data;
-            DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["stamina"], json["staminaTime"]);
+            //DataUtil.Game.CalcPlayerGamePoint(GameInfo.PlayerPointType.AP, json["stamina"], json["staminaTime"]);
             string dungeonType = "普通";
             switch (pack.funcApi)
             {
                 case "/dungeon/saveEventStageStart":
-                    dungeonType = "活动";
+                    dungeonType = "活動";
                     break;
                 case "/dungeon/saveEncounterStageStart":
-                    dungeonType = "隐藏";
+                    dungeonType = "隱藏";
                     break;
                 case "/dungeon/saveWhaleStageStart":
-                    dungeonType = "鲸鱼";
+                    dungeonType = "鯨魚";
                     break;
             }
             if (json["bossList"] != null && json["bossList"].ToString() != "")
@@ -687,7 +697,7 @@ namespace FlowerMaster.Helpers
                 catch { }
             }
             UpdateTimeLeft();
-            MiscHelper.AddLog("成功进入" + dungeonType + "副本，剩余体力：" + DataUtil.Game.player.AP.ToString(), MiscHelper.LogType.Stage);
+            MiscHelper.AddLog("成功進入" + dungeonType + "副本"/*，剩餘體力：" + DataUtil.Game.player.AP.ToString()*/, MiscHelper.LogType.Stage);
             DataUtil.Game.canAuto = true;
             MiscHelper.ShowMapInfoButton();
             if (DataUtil.Config.sysConfig.autoGoInMaps) mainWindow.btnAuto_Click(mainWindow, new System.Windows.RoutedEventArgs());
@@ -709,23 +719,23 @@ namespace FlowerMaster.Helpers
             switch (pack.funcApi)
             {
                 case "/dungeon/saveEventStageSuccess":
-                    dungeonType = "活动";
+                    dungeonType = "活動";
                     break;
                 case "/dungeon/saveEncounterStageSuccess":
-                    dungeonType = "隐藏";
+                    dungeonType = "隱藏";
                     break;
                 case "/dungeon/saveWhaleStageSuccess":
-                    dungeonType = "鲸鱼";
+                    dungeonType = "鯨魚";
                     break;
             }
-            string log = "成功通关" + dungeonType + "副本，获得";
-            log += json["givingGameMoney"] != null && json["givingGameMoney"].ToString() != "0" ? "金币" + json["givingGameMoney"].ToString() + "，" : "";
-            log += json["givingGachaPoint"] != null && json["givingGachaPoint"].ToString() != "0" ? "种子" + json["givingGachaPoint"].ToString() + "，" : "";
-            log += json["givingExperience"] != null && json["givingExperience"].ToString() != "0" ? "经验值" + json["givingExperience"].ToString() + "，" : "";
-            log += json["givingChargeMoney"] != null && json["givingChargeMoney"].ToString() != "0" ? "华灵石" + json["givingChargeMoney"].ToString() + "，" : "";
-            log += json["givingEventItemPoint"] != null && json["givingEventItemPoint"].ToString() != "0" ? "活动点数" + json["givingEventItemPoint"].ToString() + "，" : "";
+            string log = "成功通關" + dungeonType + "副本，獲得";
+            log += json["givingGameMoney"] != null && json["givingGameMoney"].ToString() != "0" ? "金幣" + json["givingGameMoney"].ToString() + "，" : "";
+            log += json["givingGachaPoint"] != null && json["givingGachaPoint"].ToString() != "0" ? "種子" + json["givingGachaPoint"].ToString() + "，" : "";
+            log += json["givingExperience"] != null && json["givingExperience"].ToString() != "0" ? "經驗值" + json["givingExperience"].ToString() + "，" : "";
+            log += json["givingChargeMoney"] != null && json["givingChargeMoney"].ToString() != "0" ? "華靈石" + json["givingChargeMoney"].ToString() + "，" : "";
+            log += json["givingEventItemPoint"] != null && json["givingEventItemPoint"].ToString() != "0" ? "活動點數" + json["givingEventItemPoint"].ToString() + "，" : "";
             log += (json["givingUserCharacterList"] as JArray).Count > 0 ? "角色" + (json["givingUserCharacterList"] as JArray).Count.ToString() + "，" : "";
-            log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "装备" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
+            log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "裝備" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
             JArray items = (JArray)json["givingUserPointItemList"];
             foreach (JObject item in items)
             {
@@ -737,22 +747,22 @@ namespace FlowerMaster.Helpers
             {
                 itemAmount += int.Parse(item["amount"].ToString());
             }
-            if (itemAmount > 0) log += "活动物品" + itemAmount.ToString() + "，";
+            if (itemAmount > 0) log += "活動物品" + itemAmount.ToString() + "，";
             if (json["encounterStageName"] != null && json["encounterStageName"].ToString() != "")
             {
-                log += "出现隐藏副本：" + json["encounterStageName"].ToString() + "（需要体力：" + json["encounterStageUseStamina"].ToString() + "），";
+                log += "出現隱藏副本：" + json["encounterStageName"].ToString() + "（需要體力：" + json["encounterStageUseStamina"].ToString() + "），";
                 if (DataUtil.Config.sysConfig.foundStageNotify)
                 {
-                    MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 隐藏副本出现通知", "出现隐藏副本：" + json["encounterStageName"].ToString()
-                            + "，需要体力：" + json["encounterStageUseStamina"].ToString(), System.Windows.Forms.ToolTipIcon.Info);
+                    MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 隱藏副本出現通知", "出現隱藏副本：" + json["encounterStageName"].ToString()
+                            + "，需要體力：" + json["encounterStageUseStamina"].ToString(), System.Windows.Forms.ToolTipIcon.Info);
                 }
             }
             if (json["masterRaidBoss"] != null && json["masterRaidBoss"].ToString() != "")
             {
-                log += "出现主页BOSS：" + json["masterRaidBoss"]["name"].ToString() + "（Lv：" + json["masterRaidBoss"]["raidBossLevelNum"].ToString() + "），";
+                log += "出現主頁BOSS：" + json["masterRaidBoss"]["name"].ToString() + "（Lv：" + json["masterRaidBoss"]["raidBossLevelNum"].ToString() + "），";
                 if (DataUtil.Config.sysConfig.foundBossNotify)
                 {
-                    MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 主页BOSS出现通知", "出现主页BOSS：" + json["masterRaidBoss"]["name"].ToString()
+                    MiscHelper.ShowRemind(10, DataUtil.Game.player.name + " - 主頁BOSS出現通知", "出現主頁BOSS：" + json["masterRaidBoss"]["name"].ToString()
                             + "，Lv：" + json["masterRaidBoss"]["raidBossLevelNum"].ToString(), System.Windows.Forms.ToolTipIcon.Info);
                 }
             }
@@ -779,34 +789,40 @@ namespace FlowerMaster.Helpers
             switch (pack.funcApi)
             {
                 case "/dungeon/saveEventStageFailed":
-                    dungeonType = "活动";
+                    dungeonType = "活動";
                     break;
                 case "/dungeon/saveEncounterStageFailed":
-                    dungeonType = "隐藏";
+                    dungeonType = "隱藏";
                     break;
                 case "/dungeon/saveWhaleStageFailed":
-                    dungeonType = "鲸鱼";
+                    dungeonType = "鯨魚";
                     break;
             }
-            string log = "你已退出" + dungeonType + "副本，获得";
-            log += json["givingGameMoney"] != null && json["givingGameMoney"].ToString() != "0" ? "金币" + json["givingGameMoney"].ToString() + "，" : "";
-            log += json["givingGachaPoint"] != null && json["givingGachaPoint"].ToString() != "0" ? "种子" + json["givingGachaPoint"].ToString() + "，" : "";
-            log += json["givingExperience"] != null && json["givingExperience"].ToString() != "0" ? "经验值" + json["givingExperience"].ToString() + "，" : "";
-            log += json["givingChargeMoney"] != null && json["givingChargeMoney"].ToString() != "0" ? "华灵石" + json["givingChargeMoney"].ToString() + "，" : "";
-            log += json["givingEventItemPoint"] != null && json["givingEventItemPoint"].ToString() != "0" ? "活动点数" + json["givingEventItemPoint"].ToString() + "，" : "";
-            log += (json["givingUserCharacterList"] as JArray).Count > 0 ? "角色" + (json["givingUserCharacterList"] as JArray).Count.ToString() + "，" : "";
-            log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "装备" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
-            JArray items = (JArray)json["givingUserPointItemList"];
-            foreach (JObject item in items)
-            {
-                log += MiscHelper.ProcessUserPointItem(item);
+
+            string log = "你已退出" + dungeonType + "副本";
+
+            if (DataUtil.Game.gameServer != (int)GameInfo.ServersList.Japan && DataUtil.Game.gameServer != (int)GameInfo.ServersList.JapanR18) {
+                log += "，獲得";
+                log += json["givingGameMoney"] != null && json["givingGameMoney"].ToString() != "0" ? "金幣" + json["givingGameMoney"].ToString() + "，" : "";
+                log += json["givingGachaPoint"] != null && json["givingGachaPoint"].ToString() != "0" ? "種子" + json["givingGachaPoint"].ToString() + "，" : "";
+                log += json["givingExperience"] != null && json["givingExperience"].ToString() != "0" ? "經驗值" + json["givingExperience"].ToString() + "，" : "";
+                log += json["givingChargeMoney"] != null && json["givingChargeMoney"].ToString() != "0" ? "華靈石" + json["givingChargeMoney"].ToString() + "，" : "";
+                log += json["givingEventItemPoint"] != null && json["givingEventItemPoint"].ToString() != "0" ? "活動點數" + json["givingEventItemPoint"].ToString() + "，" : "";
+                log += (json["givingUserCharacterList"] as JArray).Count > 0 ? "角色" + (json["givingUserCharacterList"] as JArray).Count.ToString() + "，" : "";
+                log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "裝備" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
+                JArray items = (JArray)json["givingUserPointItemList"];
+                foreach (JObject item in items)
+                {
+                    log += MiscHelper.ProcessUserPointItem(item);
+                }
+                items = (JArray)json["givingUserEventItemList"];
+                foreach (JObject item in items)
+                {
+                    log += "活動物品" + item["amount"].ToString() + "，";
+                } 
             }
-            items = (JArray)json["givingUserEventItemList"];
-            foreach (JObject item in items)
-            {
-                log += "活动物品" + item["amount"].ToString() + "，";
-            }
-            MiscHelper.AddLog(log.Substring(0, log.Length - 1), MiscHelper.LogType.Stage);
+
+            MiscHelper.AddLog(log.TrimEnd(new char[] { '，' }), MiscHelper.LogType.Stage);
             DataUtil.Game.canAuto = false;
             MiscHelper.ShowMapInfoButton(false);
             MiscHelper.SetAutoGo(false);
@@ -820,16 +836,16 @@ namespace FlowerMaster.Helpers
             switch (pack.funcApi)
             {
                 case "/dungeon/saveEventStageDestroyed":
-                    dungeonType = "活动";
+                    dungeonType = "活動";
                     break;
                 case "/dungeon/saveEncounterStageDestroyed":
-                    dungeonType = "隐藏";
+                    dungeonType = "隱藏";
                     break;
                 case "/dungeon/saveWhaleStageDestroyed":
-                    dungeonType = "鲸鱼";
+                    dungeonType = "鯨魚";
                     break;
             }
-            MiscHelper.AddLog("很遗憾，" + dungeonType + "副本进击失败了！", MiscHelper.LogType.Stage);
+            MiscHelper.AddLog(dungeonType + "副本進擊失敗了！", MiscHelper.LogType.Stage);
             DataUtil.Game.canAuto = false;
             return E_SUCCESS;
         }
@@ -857,20 +873,20 @@ namespace FlowerMaster.Helpers
             JObject json = pack.data;
             DataUtil.Game.player.money += json["givingGameMoney"] != null ? int.Parse(json["givingGameMoney"].ToString()) : 0;
             DataUtil.Game.player.stone += json["givingChargeMoney"] != null ? int.Parse(json["givingChargeMoney"].ToString()) : 0;
-            string log = "取出礼品箱内物品，获得";
-            log += json["givingGameMoney"] != null && json["givingGameMoney"].ToString() != "0" ? "金币" + json["givingGameMoney"].ToString() + "，" : "";
-            log += json["givingChargeMoney"] != null && json["givingChargeMoney"].ToString() != "0" ? "华灵石" + json["givingChargeMoney"].ToString() + "，" : "";
-            log += json["givingGachaPoint"] != null && json["givingGachaPoint"].ToString() != "0" ? "种子" + json["givingGachaPoint"].ToString() + "，" : "";
-            log += json["givingRaidBossGachaPoint"] != null && json["givingRaidBossGachaPoint"].ToString() != "0" ? "初级装备种子" + json["givingRaidBossGachaPoint"].ToString() + "，" : "";
+            string log = "領取禮物箱內的物品，獲得";
+            log += json["givingGameMoney"] != null && json["givingGameMoney"].ToString() != "0" ? "金幣" + json["givingGameMoney"].ToString() + "，" : "";
+            log += json["givingChargeMoney"] != null && json["givingChargeMoney"].ToString() != "0" ? "華靈石" + json["givingChargeMoney"].ToString() + "，" : "";
+            log += json["givingGachaPoint"] != null && json["givingGachaPoint"].ToString() != "0" ? "種子" + json["givingGachaPoint"].ToString() + "，" : "";
+            log += json["givingRaidBossGachaPoint"] != null && json["givingRaidBossGachaPoint"].ToString() != "0" ? "初級裝備種子" + json["givingRaidBossGachaPoint"].ToString() + "，" : "";
             log += json["givingUserCharacter"].ToString() != "" ? "角色1，" : "";
-            log += json["givingUserCharacterEquipment"].ToString() != "" ? "装备1，" : "";
-            log += json["givingUserGift"].ToString() != "" ? "赠物1，" : "";
+            log += json["givingUserCharacterEquipment"].ToString() != "" ? "裝備1，" : "";
+            log += json["givingUserGift"].ToString() != "" ? "贈禮品1，" : "";
             if (json["givingUserPointItem"].ToString() != "")
             {
                 log += MiscHelper.ProcessUserPointItem((JObject)json["givingUserPointItem"]);
             }
-            log += json["givingUserEventItem"].ToString() != "" ? "活动物品1，" : "";
-            log += json["givingUserGachaTicket"].ToString() != "" ? "扭蛋券1，" : "";
+            log += json["givingUserEventItem"].ToString() != "" ? "活動物品1，" : "";
+            log += json["givingUserGachaTicket"].ToString() != "" ? "抽卡券1，" : "";
             log += (json["givingUserGardenMakeoverItemList"] as JArray).Count > 0 ? "庭院物品1，" : "";
             MiscHelper.AddLog(log.Substring(0, log.Length - 1), MiscHelper.LogType.Mailbox);
             return E_SUCCESS;
@@ -886,21 +902,21 @@ namespace FlowerMaster.Helpers
             JObject json = pack.data;
             DataUtil.Game.player.money += json["givingGameMoney"] != null ? int.Parse(json["givingGameMoney"].ToString()) : 0;
             DataUtil.Game.player.stone += json["givingChargeMoney"] != null ? int.Parse(json["givingChargeMoney"].ToString()) : 0;
-            string log = "取出礼品箱内物品，获得";
-            log += json["givingGameMoney"] != null && json["givingGameMoney"].ToString() != "0" ? "金币" + json["givingGameMoney"].ToString() + "，" : "";
-            log += json["givingChargeMoney"] != null && json["givingChargeMoney"].ToString() != "0" ? "华灵石" + json["givingChargeMoney"].ToString() + "，" : "";
-            log += json["givingGachaPoint"] != null && json["givingGachaPoint"].ToString() != "0" ? "种子" + json["givingGachaPoint"].ToString() + "，" : "";
-            log += json["givingRaidBossGachaPoint"] != null && json["givingRaidBossGachaPoint"].ToString() != "0" ? "初级装备种子" + json["givingRaidBossGachaPoint"].ToString() + "，" : "";
+            string log = "領取禮物箱內的物品，獲得";
+            log += json["givingGameMoney"] != null && json["givingGameMoney"].ToString() != "0" ? "金幣" + json["givingGameMoney"].ToString() + "，" : "";
+            log += json["givingChargeMoney"] != null && json["givingChargeMoney"].ToString() != "0" ? "華靈石" + json["givingChargeMoney"].ToString() + "，" : "";
+            log += json["givingGachaPoint"] != null && json["givingGachaPoint"].ToString() != "0" ? "種子" + json["givingGachaPoint"].ToString() + "，" : "";
+            log += json["givingRaidBossGachaPoint"] != null && json["givingRaidBossGachaPoint"].ToString() != "0" ? "初級裝備種子" + json["givingRaidBossGachaPoint"].ToString() + "，" : "";
             log += (json["givingUserCharacterList"] as JArray).Count > 0 ? "角色" + (json["givingUserCharacterList"] as JArray).Count.ToString() + "，" : "";
-            log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "装备" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
-            log += (json["givingUserGiftList"] as JArray).Count > 0 ? "赠物" + (json["givingUserGiftList"] as JArray).Count.ToString() + "，" : "";
+            log += (json["givingUserCharacterEquipmentList"] as JArray).Count > 0 ? "裝備" + (json["givingUserCharacterEquipmentList"] as JArray).Count.ToString() + "，" : "";
+            log += (json["givingUserGiftList"] as JArray).Count > 0 ? "贈禮品" + (json["givingUserGiftList"] as JArray).Count.ToString() + "，" : "";
             JArray items = (JArray)json["givingUserPointItemList"];
             foreach (JObject item in items)
             {
                 log += MiscHelper.ProcessUserPointItem(item);
             }
-            log += (json["givingUserEventItemList"] as JArray).Count > 0 ? "活动物品" + (json["givingUserEventItemList"] as JArray).Count.ToString() + "，" : "";
-            log += (json["givingUserGachaTicketList"] as JArray).Count > 0 ? "扭蛋券" + (json["givingUserGachaTicketList"] as JArray).Count.ToString() + "，" : "";
+            log += (json["givingUserEventItemList"] as JArray).Count > 0 ? "活動物品" + (json["givingUserEventItemList"] as JArray).Count.ToString() + "，" : "";
+            log += (json["givingUserGachaTicketList"] as JArray).Count > 0 ? "抽卡券" + (json["givingUserGachaTicketList"] as JArray).Count.ToString() + "，" : "";
             log += (json["givingUserGardenMakeoverItemList"] as JArray).Count > 0 ? "庭院物品" + (json["givingUserGardenMakeoverItemList"] as JArray).Count.ToString() + "，" : "";
             MiscHelper.AddLog(log.Substring(0, log.Length - 1), MiscHelper.LogType.Mailbox);
             return E_SUCCESS;
@@ -915,9 +931,9 @@ namespace FlowerMaster.Helpers
         {
             JObject json = pack.data;
             string type = "角色";
-            if (pack.funcApi == "/character/saveSaleEquipment") type = "装备";
+            if (pack.funcApi == "/character/saveSaleEquipment") type = "裝備";
             if (json["totalGameMoney"] != null) DataUtil.Game.player.money = int.Parse(json["totalGameMoney"].ToString());
-            if (json["totalGameMoney"] != null) MiscHelper.AddLog("出售了一些" + type + "，当前金币：" + json["totalGameMoney"].ToString(), MiscHelper.LogType.Sell);
+            if (json["totalGameMoney"] != null) MiscHelper.AddLog("出售了一些" + type + "，目前金幣：" + json["totalGameMoney"].ToString(), MiscHelper.LogType.Sell);
             return E_SUCCESS;
         }
 

@@ -7,18 +7,25 @@
                       mc:Ignorable="d"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       GlowBrush="{DynamicResource AccentColorBrush}"
-                      Title="鼠标坐标"
-                      Height="100"
-                      Width="200"
+                      Title="滑鼠座標"
+                      Height="126"
+                      Width="250"
                       WindowStartupLocation="CenterScreen"
-                      Loaded="MetroWindow_Loaded">
+                      Closed="MetroWindow_Closed"
+                      ResizeMode="NoResize"
+                      WindowStyle="ToolWindow"
+                      Topmost="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      ShowIconOnTitleBar="False">
 
     <Grid>
-        <TextBlock x:Name="text1"  FontSize="14" FontWeight="ExtraBold" FontFamily="Arial" TextWrapping="Wrap" Margin="0,0,96,35"/>
-        <TextBlock x:Name="text2"  FontSize="14" FontWeight="ExtraBold" FontFamily="Arial" TextWrapping="Wrap" Margin="0,34,96,0" RenderTransformOrigin="0.502,1.261"/>
-        <TextBox x:Name="XBox" Margin="96,0,48,35" Height="34"/>
-        <TextBox x:Name="YBox" Margin="144,0,0,35" Height="34"/>
-        <TextBlock x:Name="Output"  FontSize="14" FontWeight="ExtraBold" FontFamily="Arial" TextWrapping="Wrap" Margin="96,34,0,0" RenderTransformOrigin="0.502,1.261"/>
+        <TextBlock x:Name="text1" FontSize="14" FontWeight="ExtraBold" FontFamily="Arial" TextWrapping="Wrap" Margin="10,15,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBox x:Name="XBox" Margin="0,5,70,0" Height="34" VerticalAlignment="Top" HorizontalAlignment="Right" MinWidth="60" GotFocus="XBox_GotFocus"/>
+        <TextBox x:Name="YBox" Margin="0,5,10,0" Height="34" VerticalAlignment="Top" HorizontalAlignment="Right" MinWidth="60" GotFocus="YBox_GotFocus"/>
+        <TextBlock x:Name="text2" FontSize="14" FontWeight="ExtraBold" FontFamily="Arial" TextWrapping="Wrap" Margin="10,34,0,28" RenderTransformOrigin="0.502,1.261" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBlock x:Name="Output" FontSize="14" FontWeight="ExtraBold" FontFamily="Arial" TextWrapping="Wrap" Margin="0,34,10,28" RenderTransformOrigin="0.502,1.261" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <Button x:Name="btn_Mouse" Content="複製滑鼠座標" Margin="10,0,0,5" Width="72" Height="27" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btn_Mouse_Click" IsTabStop="False"/>
+        <Button x:Name="btn_Input" Content="複製指定座標" Margin="0,0,10,5" Width="72" Height="27" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="btn_Input_Click" IsTabStop="False"/>
     </Grid>
 
 </Controls:MetroWindow>

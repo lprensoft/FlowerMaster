@@ -1,24 +1,22 @@
-﻿<Controls:MetroWindow x:Class="FlowerMaster.MainWindow"
-                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Controls:MetroWindow xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      xmlns:local="clr-namespace:FlowerMaster"
-                      mc:Ignorable="d"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      GlowBrush="{DynamicResource AccentColorBrush}"
-                      Title="团长助理 1.51"
+                      xmlns:cefSharp="clr-namespace:CefSharp.WinForms;assembly=CefSharp.WinForms"
+                      x:Class="FlowerMaster.MainWindow"
+                      mc:Ignorable="d"
+                      Title="團長助理 2.1 (繁中版)"
                       Height="740"
-                      Width="1000"
-                      ResizeMode="CanResizeWithGrip"
+                      Width="1176"
                       Icon="f23.ico"
                       Loaded="MetroWindow_Loaded"
                       Closing="MetroWindow_Closing"
                       StateChanged="MetroWindow_StateChanged"
-                      WindowStartupLocation="CenterScreen">
+                      WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button x:Name="btnTopMost" Content="置顶" ToolTip="使窗口置顶显示" Click="btnTopMost_Click" />
+            <Button x:Name="btnTopMost" Content="置頂" ToolTip="使視窗置頂顯示" Click="btnTopMost_Click" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
     <Grid x:Name="grid">
@@ -36,21 +34,12 @@
                     VerticalAlignment="Stretch"
                     Margin="0,0,0,0"
                     SelectionChanged="mainTab_SelectionChanged" Grid.ColumnSpan="2">
-            <TabItem x:Name="tabItemGame" Header="主页">
+            <TabItem x:Name="tabItemGame" Header="主頁">
                 <Grid x:Name="grid1" Background="#FF0F0F0F">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <WebBrowser x:Name="mainWeb"
-                                HorizontalAlignment="Center"
-                                Height="640"
-                                VerticalAlignment="Center"
-                                Margin="0,0,0,0"
-                                Grid.Column="0"
-                                AllowDrop="False"
-                                LoadCompleted="mainWeb_LoadCompleted"
-                                Width="960"/>
                     <Button x:Name="btnNews"
                             Grid.Column="1"
                             Height="38"
@@ -58,10 +47,9 @@
                             VerticalAlignment="Top"
                             HorizontalAlignment="Right"
                             Margin="0,5,-2,0"
-                            ToolTip="游戏公告"
-                            Visibility="Hidden"
+                            ToolTip="遊戲公告"
                             Click="btnNews_Click"
-                            Style="{DynamicResource MetroCircleButtonStyle}">
+                            Style="{DynamicResource MetroCircleButtonStyle}" Visibility="Hidden">
                         <Rectangle Width="19"
                                    Height="15">
                             <Rectangle.Fill>
@@ -77,7 +65,7 @@
                             VerticalAlignment="Top"
                             HorizontalAlignment="Right"
                             Margin="0,55,-2,0"
-                            ToolTip="地图情报"
+                            ToolTip="地圖情報"
                             Visibility="Hidden"
                             Click="btnMapInfo_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
@@ -96,7 +84,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,-100,-2,0"
-                            ToolTip="截图"
+                            ToolTip="截圖"
                             Click="btnCap_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="19"
@@ -114,7 +102,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,0,-2,0"
-                            ToolTip="自动推兔"
+                            ToolTip="自動推圖"
                             Click="btnAuto_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="19"
@@ -132,7 +120,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,100,-2,0"
-                            ToolTip="静音"
+                            ToolTip="靜音"
                             Click="btnMute_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="19"
@@ -150,7 +138,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
                             Margin="0,100,-2,0"
-                            ToolTip="恢复声音"
+                            ToolTip="恢復聲音"
                             Visibility="Hidden"
                             Click="btnUnMute_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
@@ -169,7 +157,7 @@
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Right"
                             Margin="0,0,-2,5"
-                            ToolTip="重新载入"
+                            ToolTip="重新載入"
                             Click="btnRefresh_Click"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="19"
@@ -181,15 +169,15 @@
                         </Rectangle>
                     </Button>
                     <Button x:Name="btnCord"
-                        Grid.Column="1"
-                        Height="38"
-                        Width="38"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Right"
-                        Margin="0,-300,-2,0"
-                        ToolTip="坐标"
-                        Click="btnCord_Click"
-                        Style="{DynamicResource MetroCircleButtonStyle}">
+                            Grid.Column="1"
+                            Height="38"
+                            Width="38"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="0,-300,-2,0"
+                            ToolTip="座標"
+                            Click="btnCord_Click"
+                            Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="19"
                             Height="19">
                             <Rectangle.Fill>
@@ -199,15 +187,15 @@
                         </Rectangle>
                     </Button>
                     <Button x:Name="btnPush"
-                        Grid.Column="1"
-                        Height="38"
-                        Width="38"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Right"
-                        Margin="0,250,-2,0"
-                        ToolTip="自动推兔2.0"
-                        Click="btnPush_Click"
-                        Style="{DynamicResource MetroCircleButtonStyle}" >
+                            Grid.Column="1"
+                            Height="38"
+                            Width="38"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="0,250,-2,0"
+                            ToolTip="自動推兔 2.0"
+                            Click="btnPush_Click"
+                            Style="{DynamicResource MetroCircleButtonStyle}" >
                         <Rectangle Width="16"
                                 Height="16">
                             <Rectangle.Fill>
@@ -218,14 +206,15 @@
                     </Button>
                     <Button x:Name="btnPushSet"
                             Grid.Column="1"
-                        Height="38"
-                        Width="38"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Right"
-                        Margin="0,325,-2,0"
-                        ToolTip="暂停自动推兔"
-                        Click="btnPush_Set"
-                        Style="{DynamicResource MetroCircleButtonStyle}" >
+                            Height="38"
+                            Width="38"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="0,325,-2,0"
+                            ToolTip="暫停自動推兔"
+                            Click="btnPush_Set"
+                            Visibility="Hidden"
+                            Style="{DynamicResource MetroCircleButtonStyle}" >
                         <Rectangle Width="16"
                             Height="16">
                             <Rectangle.Fill>
@@ -234,9 +223,10 @@
                             </Rectangle.Fill>
                         </Rectangle>
                     </Button>
+                    <WindowsFormsHost x:Name="wfh" Height="640" Width="1136" />
                 </Grid>
             </TabItem>
-            <TabItem Header="日志">
+            <TabItem Header="日誌">
                 <Grid x:Name="grid2" Background="#FF0F0F0F">
                     <RichTextBox x:Name="gameLog"
                                  x:FieldModifier="public"
@@ -247,71 +237,74 @@
                                  IsReadOnly="True"
                                  BorderThickness="0"
                                  Background="#FF0F0F0F" Height="{Binding ActualHeight, ElementName=grid2, Mode=OneWay}">
-                        <FlowDocument>
-                        </FlowDocument>
+                        <FlowDocument/>
                     </RichTextBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="设置">
-                <Grid Background="#FF0F0F0F">
+            <TabItem Header="設定">
+                <Grid Background="#FF0F0F0F" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="165*"/>
                         <ColumnDefinition Width="165*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <ScrollViewer Grid.Column="0"
-                                  VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Auto">
+                                  VerticalScrollBarVisibility="Disabled">
                         <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="223*"/>
+                                <ColumnDefinition Width="117*"/>
+                                <ColumnDefinition Width="208*"/>
+                            </Grid.ColumnDefinitions>
                             <Label FontWeight="Bold"
                            FontSize="16px"
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="5,0,0,0"
-                           Content="登录设置"/>
+                           Content="登入設置" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkShowLogin"
                               VerticalAlignment="Top"
                               Height="25"
                               Margin="25,30,0,0"
-                              Content="显示账号登录界面"/>
+                              Content="顯示帳號登入介面" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkShowNews"
                               VerticalAlignment="Top"
                               Height="25"
                               Margin="25,55,0,0"
-                              Content="登录后显示最新游戏公告"/>
+                              Content="登入後顯示最新遊戲公告" Grid.ColumnSpan="3"/>
                             <Label VerticalAlignment="Top"
                            Margin="25,85,0,0"
-                           Content="游戏服务器："/>
+                           Content="遊戲伺服器：" Grid.ColumnSpan="3"/>
                             <ComboBox x:Name="cbGameServer"
                               SelectionChanged="cbGameServer_SelectionChanged"
                               VerticalAlignment="Top" 
                               HorizontalAlignment="Left"
                               Margin="110,85,0,0"
-                              Width="120">
+                              Width="120" Grid.ColumnSpan="2">
                                 <ComboBoxItem Content="日服-通常版"/>
                                 <ComboBoxItem Content="日服-R18版"/>
                                 <ComboBoxItem Content="美服-通常版"/>
                                 <ComboBoxItem Content="美服-R18版"/>
-                                <ComboBoxItem Content="日服-繁体版"/>
-                                <ComboBoxItem Content="日服-繁体R18"/>
+                                <ComboBoxItem Content="日服-繁中版"/>
+                                <ComboBoxItem Content="日服-繁中R18"/>
                             </ComboBox>
                             <Label VerticalAlignment="Top"
                            Margin="25,115,0,0"
-                           Content="启动时加载："/>
+                           Content="啟動時載入：" Grid.ColumnSpan="3"/>
                             <ComboBox x:Name="cbLoginPage"
                               VerticalAlignment="Top" 
                               HorizontalAlignment="Left"
                               Margin="110,115,0,0"
-                              Width="120">
-                                <ComboBoxItem Content="游戏主页"/>
-                                <ComboBoxItem Content="游戏登录页"/>
+                              Width="120" Grid.ColumnSpan="2">
+                                <ComboBoxItem Content="遊戲主頁"/>
+                                <ComboBoxItem Content="遊戲登入頁"/>
                             </ComboBox>
                             <Label FontWeight="Bold"
                            FontSize="16px"
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="5,155,0,0"
-                           Content="代理设置"/>
+                           Content="代理設置" Grid.ColumnSpan="3"/>
                             <RadioButton x:Name="rbNotUseProxy"
                                  GroupName="proxy"
                                  HorizontalAlignment="Left"
@@ -333,7 +326,7 @@
                             <Label Margin="45,265,0,0"
                            Height="25"
                            VerticalAlignment="Top"
-                           Content="服务器："/>
+                           Content="伺服器：" Grid.ColumnSpan="3"/>
                             <TextBox x:Name="tbProxyServer"
                              VerticalAlignment="Top"
                              HorizontalAlignment="Left"
@@ -344,29 +337,29 @@
                             <Label Margin="190,265,0,0"
                            Height="25"
                            VerticalAlignment="Top"
-                           Content="端口："/>
+                           Content="Port：" Grid.ColumnSpan="3"/>
                             <TextBox x:Name="tbProxyPort"
                              VerticalAlignment="Top"
                              HorizontalAlignment="Left"
-                             Margin="235,265,0,0"
+                             Margin="10,265,0,0"
                              Width="44"
                              MaxLength="5"
-                             Text="" />
+                             Text="" Grid.Column="1" />
                             <Label FontWeight="Bold"
                            FontSize="16px"
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="5,305,0,0"
-                           Content="提醒设置"/>
+                           Content="提醒設置" Grid.ColumnSpan="3"/>
                             <Label Height="25"
                            VerticalAlignment="Top"
                            Margin="25,335,0,0"
-                           Content="体力："/>
+                           Content="體力：" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkAPTarget"
                               VerticalAlignment="Top"
                               Margin="75,335,0,0"
                               Height="25"
-                              Content="回复到"/>
+                              Content="回復到" Grid.ColumnSpan="3"/>
                             <TextBox x:Name="tbAPTarget"
                              VerticalAlignment="Top"
                              HorizontalAlignment="Left"
@@ -377,16 +370,16 @@
                               VerticalAlignment="Top"
                               Margin="210,335,0,0"
                               Height="25"
-                              Content="回复满"/>
+                              Content="回復滿" Grid.ColumnSpan="3"/>
                             <Label Height="25"
                            VerticalAlignment="Top"
                            Margin="25,365,0,0"
-                           Content="战点："/>
+                           Content="戰點：" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkBPTarget"
                               VerticalAlignment="Top"
                               Margin="75,365,0,0"
                               Height="25"
-                              Content="回复到"/>
+                              Content="回復到" Grid.ColumnSpan="3"/>
                             <TextBox x:Name="tbBPTarget"
                              VerticalAlignment="Top"
                              HorizontalAlignment="Left"
@@ -397,74 +390,74 @@
                               VerticalAlignment="Top"
                               Margin="210,365,0,0"
                               Height="25"
-                              Content="回复满"/>
+                              Content="回復滿" Grid.ColumnSpan="3"/>
                             <Label Height="25"
                            VerticalAlignment="Top"
                            Margin="25,395,0,0"
-                           Content="探索："/>
+                           Content="探索：" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkSPEvery"
                                  VerticalAlignment="Top"
                                  Margin="75,395,0,0"
                                  Height="25"
-                                 Content="每回复一点"/>
+                                 Content="每回復一點" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkSPFull"
                                  VerticalAlignment="Top"
                                  Margin="165,395,0,0"
                                  Height="25"
-                                 Content="回复满"/>
+                                 Content="回復滿" Grid.ColumnSpan="3"/>
                             <Label Height="25"
                            VerticalAlignment="Top"
                            Margin="25,425,0,0"
-                           Content="发现："/>
+                           Content="發現：" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkFoundStage"
                                  VerticalAlignment="Top"
                                  Margin="75,425,0,0"
                                  Height="25"
-                                 Content="隐藏副本"/>
+                                 Content="隱藏副本" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkFoundBoss"
                                  VerticalAlignment="Top"
                                  Margin="165,425,0,0"
                                  Height="25"
-                                 Content="主页BOSS"/>
+                                 Content="主頁BOSS" Grid.ColumnSpan="3"/>
                             <Label FontWeight="Bold"
                            FontSize="16px"
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="5,465,0,0"
-                           Content="日志记录"/>
+                           Content="日誌紀錄" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkGameLog"
                               VerticalAlignment="Top"
                               Margin="25,500,0,0"
-                              Content="记录游戏日志"/>
+                              Content="紀錄遊戲日誌" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkGachaLog"
                               VerticalAlignment="Top"
                               Margin="165,500,0,0"
-                              Content="记录扭蛋日志"/>
+                              Content="紀錄抽卡日誌" Grid.ColumnSpan="3"/>
                             <Label FontWeight="Bold"
                            FontSize="16px"
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="5,535,0,0"
-                           Content="自动推兔"/>
+                           Content="自動推圖" Grid.ColumnSpan="3"/>
                             <CheckBox x:Name="chkAutoGo"
                               VerticalAlignment="Top"
                               Margin="25,570,0,0"
-                              Content="进入副本后自动推兔"/>
+                              Content="進入副本後自動推圖" Grid.ColumnSpan="3"/>
                             <Label Height="25"
                            VerticalAlignment="Top"
                            Margin="25,600,0,0"
-                           Content="点击频率：  快"/>
+                           Content="點擊頻率：  快" Grid.ColumnSpan="3"/>
                             <Slider x:Name="slAutoRate"
                                     HorizontalAlignment="Left"
-                                    Margin="125,590,0,0"
-                                    Maximum="500"
-                                    Minimum="150"
+                                    Margin="117,600,0,16"
+                                    Maximum="1000"
+                                    Minimum="250"
                                     Width="120"
-                                    Height="25" />
+                                    Height="25" Grid.ColumnSpan="2" />
                             <Label Height="25"
                                    VerticalAlignment="Top"
-                                   Margin="250,600,0,0"
-                                   Content="慢"/>
+                                   Margin="25,600,0,0"
+                                   Content="慢" Grid.Column="1" Grid.ColumnSpan="2"/>
                         </Grid>
                     </ScrollViewer>
 
@@ -472,43 +465,49 @@
                                   VerticalScrollBarVisibility="Auto"
                                   HorizontalScrollBarVisibility="Auto">
                         <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="517*"/>
+                                <RowDefinition Height="57*"/>
+                                <RowDefinition Height="9*"/>
+                                <RowDefinition Height="58*"/>
+                            </Grid.RowDefinitions>
                             <Label FontWeight="Bold"
                            FontSize="16px"
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="0,0,0,0"
-                           Content="系统设置"/>
+                           Content="系統設置"/>
                             <CheckBox x:Name="chkTitleChange"
                               VerticalAlignment="Top"
                               Height="25"
                               Margin="20,30,0,0"
-                              Content="登录后标题栏显示玩家名字"/>
+                              Content="登入後標題顯示玩家名子"/>
                             <CheckBox x:Name="chkAlwaysTray"
                               VerticalAlignment="Top"
                               Height="25"
                               Margin="20,55,0,0"
-                              Content="始终显示托盘图标"/>
+                              Content="永遠顯示工具列圖示"/>
                             <CheckBox x:Name="chkMiniToTray"
                               VerticalAlignment="Top"
                               Height="25"
                               Margin="20,80,0,0"
-                              Content="最小化到系统托盘"/>
+                              Content="最小化到系統工具列"/>
                             <CheckBox x:Name="chkAutoMute"
                               VerticalAlignment="Top"
                               Height="25"
                               Margin="20,105,0,0"
-                              Content="最小化后自动静音"/>
+                              Content="最小化後自動靜音"/>
                             <CheckBox x:Name="chkExitConfrim"
                               VerticalAlignment="Top"
                               Height="25"
                               Margin="20,130,0,0"
-                              Content="退出时弹出确认框"/>
+                              Content="關閉時跳出確認視窗"/>
                             <Label FontWeight="Bold"
                            FontSize="16px"
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="0,170,0,0"
-                           Content="截图设置"/>
+                           Content="截圖設置"/>
                             <Label Height="30"
                                    VerticalAlignment="Top"
                                    Margin="20,200,0,0"
@@ -518,20 +517,20 @@
                               HorizontalAlignment="Left"
                               Margin="95,200,0,0"
                               Width="140">
-                                <ComboBoxItem Content="PNG格式（高质量）"/>
-                                <ComboBoxItem Content="JPG格式（高压缩）"/>
+                                <ComboBoxItem Content="PNG格式（高質量）"/>
+                                <ComboBoxItem Content="JPG格式（高壓縮）"/>
                             </ComboBox>
                             <Label FontWeight="Bold"
                            FontSize="16px"
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="0,240,0,0"
-                           Content="老板键"/>
+                           Content="老闆鍵"/>
                             <CheckBox x:Name="chkEnableHotKey"
                               VerticalAlignment="Top"
                               Height="25"
                               Margin="20,270,0,0"
-                              Content="启用老板键（仅限单开使用！多开勿启用！）"/>
+                              Content="啟用老闆鍵（僅限單開使用！多開請勿使用！）"/>
                             <CheckBox x:Name="chkHotKeyCtrl"
                               VerticalAlignment="Top"
                               Height="25"
@@ -559,11 +558,11 @@
                            Height="30"
                            VerticalAlignment="Top"
                            Margin="0,335,0,0"
-                           Content="Flash抽取样式"/>
+                           Content="Flash抽取樣式"/>
                             <Label VerticalAlignment="Top"
                            HorizontalAlignment="Left"
                            Margin="15,360,0,0"
-                           Content="仅当自动抽取Flash不正确时，才需修改此设置。"/>
+                           Content="僅當自動抽取Flash不正確時，才需要修改此設置。"/>
                             <TextBox x:Name="tbCssStyle"
                              VerticalAlignment="Top"
                              HorizontalAlignment="Left"
@@ -581,7 +580,7 @@
                             Width="65"
                             Height="30"
                             Click="btnReset_Click"
-                            Content="还原默认"/>
+                            Content="還原預設"/>
                         </Grid>
                     </ScrollViewer>
 
@@ -616,116 +615,137 @@
                                   HorizontalScrollBarVisibility="Auto">
                         <Grid>
                             <Label FontSize="16px"
-                           FontWeight="Bold"
-                           VerticalAlignment="Top"
-                           Margin="5,0,0,0"
-                           Height="30"
-                           Content="回满时间计算（日本标准时）"/>
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Top"
+                                   Margin="5,0,0,0"
+                                   Height="30"
+                                   Content="回滿時間計算（日本時間）"/>
                             <Label x:Name="lbAPTime"
-                           x:FieldModifier="public"
-                           VerticalAlignment="Top"
-                           Margin="25,30,0,0"
-                           Height="30"
-                           Content="体力回满时间："/>
+                                   x:FieldModifier="public"
+                                   VerticalAlignment="Top"
+                                   Margin="25,30,0,0"
+                                   Height="30"
+                                   Content="體力回滿時間："/>
                             <Label x:Name="lbBPTime"
-                           x:FieldModifier="public"
-                           VerticalAlignment="Top"
-                           Margin="25,55,0,0"
-                           Height="30"
-                           Content="战点回满时间："/>
+                                   x:FieldModifier="public"
+                                   VerticalAlignment="Top"
+                                   Margin="25,55,0,0"
+                                   Height="30"
+                                   Content="戰點回滿時間："/>
                             <Label x:Name="lbSPTime"
-                           x:FieldModifier="public"
-                           VerticalAlignment="Top"
-                           Margin="25,80,0,0"
-                           Height="30"
-                           Content="探索回满时间："/>
+                                   x:FieldModifier="public"
+                                   VerticalAlignment="Top"
+                                   Margin="25,80,0,0"
+                                   Height="30"
+                                   Content="探索回滿時間："/>
                             <Label x:Name="lbPlantTime"
-                           x:FieldModifier="public"
-                           VerticalAlignment="Top"
-                           Margin="25,105,0,0"
-                           Height="30"
-                           Content="花盆开花时间："/>
+                                   x:FieldModifier="public"
+                                   VerticalAlignment="Top"
+                                   Margin="25,105,0,0"
+                                   Height="30"
+                                   Content="花盆開花時間："/>
                             <Label FontSize="16px"
-                           FontWeight="Bold"
-                           VerticalAlignment="Top"
-                           Margin="5,140,0,0"
-                           Height="30"
-                           Content="缓存清理"/>
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Top"
+                                   Margin="5,140,0,0"
+                                   Height="30"
+                                   Content="暫存清理"/>
                             <Button x:Name="btnClearCache"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Left"
-                            Margin="25,175,0,0"
-                            Width="75"
-                            Height="30"
-                            Click="btnClearCache_Click"
-                            Content="清理缓存"/>
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Margin="25,175,0,0"
+                                    Width="75"
+                                    Height="30"
+                                    Click="btnClearCache_Click"
+                                    Content="清理暫存"/>
                             <Button x:Name="btnClearCookies"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Left"
-                            Margin="110,175,0,0"
-                            Width="75"
-                            Height="30"
-                            Click="btnClearCookies_Click"
-                            Content="清理Cookies"/>
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Margin="110,175,0,0"
+                                    Width="75"
+                                    Height="30"
+                                    Click="btnClearCookies_Click"
+                                    Content="清理Cookies"/>
+                            <Label x:Name="lab_CacheLength"
+                                   Content="快取大小: 0MB"
+                                   HorizontalAlignment="Left" 
+                                   Margin="185,178,0,0" 
+                                   VerticalAlignment="Top"
+                                   RenderTransformOrigin="0.475,0.24"/>
                             <Label FontSize="16px"
-                           FontWeight="Bold"
-                           VerticalAlignment="Top"
-                           Margin="5,220,0,0"
-                           Height="30"
-                           Content="日志查看"/>
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Top"
+                                   Margin="5,220,0,0"
+                                   Height="30"
+                                   Content="日誌查看"/>
                             <Button x:Name="btnGameLogViewer"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Left"
-                            Margin="25,255,0,0"
-                            Width="75"
-                            Height="30"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Margin="25,255,0,0"
+                                    Width="75"
+                                    Height="30"
                                     Click="btnGameLogViewer_Click"
-                            Content="游戏日志"/>
+                                    Content="遊戲日誌"/>
                             <Button x:Name="btnGachaLogViewer"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Left"
-                            Margin="110,255,0,0"
-                            Width="75"
-                            Height="30"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Margin="110,255,0,0"
+                                    Width="75"
+                                    Height="30"
                                     Click="btnGachaLogViewer_Click"
-                            Content="扭蛋日志"/>
+                                    Content="抽卡日誌"/>
                             <Label FontSize="16px"
-                           FontWeight="Bold"
-                           VerticalAlignment="Top"
-                           Margin="5,300,0,0"
-                           Height="30"
-                           Content="游戏工具"/>
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Top"
+                                   Margin="5,300,0,0"
+                                   Height="30"
+                                   Content="遊戲工具"/>
                             <Button x:Name="btnFriendViewer"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Left"
-                            Margin="25,335,0,0"
-                            Width="75"
-                            Height="30"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Margin="25,335,0,0"
+                                    Width="75"
+                                    Height="30"
                                     Click="btnFriendViewer_Click"
-                            Content="好友探秘"/>
+                                    Content="好友觀測"/>
                             <Button x:Name="btnLocalCache"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Left"
-                            Margin="110,335,0,0"
-                            Width="75"
-                            Height="30"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Margin="110,335,0,0"
+                                    Width="75"
+                                    Height="30"
                                     IsEnabled="False"
                                     Visibility="Hidden"
-                            Content="本地缓存"/>
+                                    Content="本機暫存"/>
                             <Label FontSize="16px"
-                           FontWeight="Bold"
-                           VerticalAlignment="Top"
-                           Margin="5,380,0,0"
-                           Height="30"
-                           Content="娱乐工具"/>
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Top"
+                                   Margin="5,380,0,0"
+                                   Height="30"
+                                   Content="娛樂工具"/>
                             <Button x:Name="btnGacha"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Left"
-                            Margin="25,415,0,0"
-                            Width="75"
-                            Height="30"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Margin="25,415,0,0"
+                                    Width="75"
+                                    Height="30"
                                     Click="btnGacha_Click"
-                            Content="模拟扭蛋"/>
+                                    Content="抽卡模擬器"/>
+                            <Label FontSize="16px"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Top"
+                                   Margin="5,450,0,0"
+                                   Height="30"
+                                   Content="系統工具"/>
+                            <Button x:Name="btnDiv"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Margin="25,480,0,0"
+                                    Width="75"
+                                    Height="30"
+                                    Click="btnDiv_Click"
+                                    Content="開啟偵錯面" 
+                                    RenderTransformOrigin="0.507,4.233"/>
                         </Grid>
                     </ScrollViewer>
 
@@ -734,11 +754,11 @@
                                   HorizontalScrollBarVisibility="Auto">
                         <Grid>
                             <Label FontSize="16px"
-                           FontWeight="Bold"
-                           VerticalAlignment="Top"
-                           Margin="0,0,0,0"
-                           Height="30"
-                           Content="游戏日常副本日历"/>
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Top"
+                                   Margin="0,0,0,0"
+                                   Height="30"
+                                   Content="遊戲日常副本日曆"/>
                             <DataGrid x:Name="dgDaliy"
                                       Margin="0,35,0,0"
                                       VerticalAlignment="Top"
@@ -751,15 +771,15 @@
                                       SelectedCellsChanged="dgDaliy_SelectedCellsChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="星期" Width="70" CanUserResize="False"  CanUserSort="False" IsReadOnly="True" Binding="{Binding day}"/>
-                                    <DataGridTextColumn Header="活动副本" Width="160" CanUserResize="False" CanUserSort="False" IsReadOnly="True" Binding="{Binding eventStage}"/>
+                                    <DataGridTextColumn Header="活動副本" Width="160" CanUserResize="False" CanUserSort="False" IsReadOnly="True" Binding="{Binding eventStage}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                             <Label FontSize="16px"
-                           FontWeight="Bold"
-                           VerticalAlignment="Top"
-                           Margin="0,260,0,0"
-                           Height="30"
-                           Content="游戏主线副本经验表"/>
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Top"
+                                   Margin="0,260,0,0"
+                                   Height="30"
+                                   Content="遊戲主線副本經驗表"/>
                             <DataGrid x:Name="dgMainExp"
                                       Margin="0,295,0,0"
                                       VerticalAlignment="Top"
@@ -771,9 +791,9 @@
                                       SelectionUnit="FullRow"
                                       SelectedCellsChanged="dgDaliy_SelectedCellsChanged">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="关卡" Width="50" CanUserSort="False" IsReadOnly="True" Binding="{Binding stage}"/>
-                                    <DataGridTextColumn Header="体力" Width="55" IsReadOnly="True" Binding="{Binding ap}"/>
-                                    <DataGridTextColumn Header="经验" Width="55" IsReadOnly="True" Binding="{Binding exp}"/>
+                                    <DataGridTextColumn Header="關卡" Width="50" CanUserSort="False" IsReadOnly="True" Binding="{Binding stage}"/>
+                                    <DataGridTextColumn Header="體力" Width="55" IsReadOnly="True" Binding="{Binding ap}"/>
+                                    <DataGridTextColumn Header="經驗" Width="55" IsReadOnly="True" Binding="{Binding exp}"/>
                                     <DataGridTextColumn Header="效率" Width="55" IsReadOnly="True" Binding="{Binding effect}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
@@ -794,123 +814,141 @@
                                 Height="30"
                                 VerticalAlignment="Top"
                                 Margin="5,0,0,0"
-                                Content="推兔设置" Grid.ColumnSpan="1"/>
+                                Content="推兔設置" Grid.ColumnSpan="1"/>
                         <Label VerticalAlignment="Top"
                                 Margin="25,35,0,0"
-                                Content="自动模式：" Grid.ColumnSpan="1" Height="26"/>
+                                Content="自動模式：" Grid.ColumnSpan="1" Height="26"/>
                         <ComboBox x:Name="cbAutoType"
                                 VerticalAlignment="Top" 
                                 HorizontalAlignment="Left"
                                 Margin="110,35,0,0"
                                 Width="120" Grid.ColumnSpan="1" Height="26">
                             <ComboBoxItem Content="推兔"/>
-                            <ComboBoxItem Content="主页待机"/>
+                            <ComboBoxItem Content="主頁待機"/>
                         </ComboBox>
                         <Label VerticalAlignment="Top"
-                                Margin="25,70,0,0"
-                                Content="推兔模式：" Grid.ColumnSpan="1" Height="26"/>
+                               Margin="25,70,0,0"
+                               Content="推兔模式：" Grid.ColumnSpan="1" Height="26"/>
                         <ComboBox x:Name="cbPushType"
-                                VerticalAlignment="Top" 
-                                HorizontalAlignment="Left"
-                                Margin="110,70,0,0"
-                                Width="120" Grid.ColumnSpan="1" Height="26">
-                            <ComboBoxItem Content="主线"/>
-                            <ComboBoxItem Content="活动"/>
-                            <ComboBoxItem Content="上一次图"/>
+                                  VerticalAlignment="Top" 
+                                  HorizontalAlignment="Left"
+                                  Margin="110,70,0,0"
+                                  Width="120" Grid.ColumnSpan="1" Height="26">
+                            <ComboBoxItem Content="主線(暫時沒用)"/>
+                            <ComboBoxItem Content="活動(推薦用下面兩個)"/>
+                            <ComboBoxItem Content="上一次推的圖"/>
+                            <ComboBoxItem Content="自動推下一關"/>
                             <!--<ComboBoxItem Content="水影"/>-->
                         </ComboBox>
                         <Label FontWeight="Bold"
-                                FontSize="16px"
-                                Height="30"
-                                VerticalAlignment="Top"
-                                Margin="0,135,5,0"
-                                Content="体力恢复设置" Grid.ColumnSpan="1"/>
+                               FontSize="16px"
+                               Height="30"
+                               VerticalAlignment="Top"
+                               Margin="0,135,5,0"
+                               Content="體力恢復設置" Grid.ColumnSpan="1"/>
                         <Label Margin="25,105,0,0"
-                                Height="25"
-                                VerticalAlignment="Top"
-                                Content="推兔次数：" Grid.ColumnSpan="1"/>
+                               Height="25"
+                               VerticalAlignment="Top"
+                               Content="推兔次數：" Grid.ColumnSpan="1"/>
                         <TextBox x:Name="tbPushTimes"
-                                VerticalAlignment="Top"
-                                HorizontalAlignment="Left"
-                                Margin="110,105,0,0"
-                                Width="44"
-                                MaxLength="5"
-                                Text="" Height="26" />
+                                 VerticalAlignment="Top"
+                                 HorizontalAlignment="Left"
+                                 Margin="110,105,0,0"
+                                 Width="44"
+                                 MaxLength="5"
+                                 Text=""
+                                 Height="26" />
                         <Label FontWeight="Bold"
-                                FontSize="16px"
-                                Height="30"
-                                VerticalAlignment="Top"
-                                Margin="5,230,0,0"
-                                Content="Raid与特命设置" Grid.ColumnSpan="1"/>
+                               FontSize="16px"
+                               Height="30"
+                               VerticalAlignment="Top"
+                               Margin="5,230,0,0"
+                               Content="Raid與特命設置" 
+                               Grid.ColumnSpan="1"/>
                         <Label Height="25"
-                                VerticalAlignment="Top"
-                                Margin="25,170,0,0"
-                                Content="喝药：" Grid.ColumnSpan="1"/>
+                               VerticalAlignment="Top"
+                               Margin="25,170,0,0"
+                               Content="喝藥："
+                               Grid.ColumnSpan="1"/>
                         <CheckBox x:Name="chkPotionTrue"
-                                VerticalAlignment="Top"
-                                Margin="75,170,0,0"
-                                Height="25"
-                                Content="能者喝！" Grid.ColumnSpan="1" />
+                                  VerticalAlignment="Top"
+                                  Margin="75,170,0,0"
+                                  Height="25"
+                                  Content="" 
+                                  Grid.ColumnSpan="1" />
                         <Label Height="25"
-                                VerticalAlignment="Top"
-                                Margin="25,200,0,0"
-                                Content="碎石：" Grid.ColumnSpan="1"/>
+                               VerticalAlignment="Top"
+                               Margin="25,200,0,0"
+                               Content="課石：" 
+                               Grid.ColumnSpan="1"/>
                         <CheckBox x:Name="chkStoneTrue"
-                                VerticalAlignment="Top"
-                                Margin="75,200,0,0"
-                                Height="25"
-                                Content="强者碎！" Grid.ColumnSpan="1" />
+                                  VerticalAlignment="Top"
+                                  Margin="75,200,0,0"
+                                  Height="25"
+                                  Content=""
+                                  Grid.ColumnSpan="1" />
                         <Label Height="25"
-                                VerticalAlignment="Top"
-                                Margin="25,265,0,0"
-                                Content="Raid：" Grid.ColumnSpan="1"/>
+                               VerticalAlignment="Top"
+                               Margin="25,265,0,0"
+                               Content="Raid："
+                               Grid.ColumnSpan="1"/>
                         <CheckBox x:Name="chkRaidSelf"
-                                VerticalAlignment="Top"
-                                Margin="75,265,0,0"
-                                Height="25"
-                                Content="磨自己的Boss！" Grid.ColumnSpan="1" />
+                                  VerticalAlignment="Top"
+                                  Margin="75,265,0,0"
+                                  Height="25"
+                                  Content="打自己的Boss！" 
+                                  Grid.ColumnSpan="1" />
                         <CheckBox x:Name="chkRaidOther"
-                                VerticalAlignment="Top"
-                                Margin="75,296,0,0"
-                                Height="25"
-                                Content="绿别人的Boss！" Grid.ColumnSpan="1" />
+                                  VerticalAlignment="Top"
+                                  Margin="75,296,0,0"
+                                  Height="25"
+                                  Content="打别人的Boss！"
+                                  Grid.ColumnSpan="1" />
                         <Label Height="25"
-                                VerticalAlignment="Top"
-                                Margin="25,325,0,0"
-                                Content="特命：" Grid.ColumnSpan="1"/>
+                               VerticalAlignment="Top"
+                               Margin="25,325,0,0"
+                               Content="特命："
+                               Grid.ColumnSpan="1"/>
                         <CheckBox x:Name="chkSpecialTrue"
-                                VerticalAlignment="Top"
-                                Margin="75,326,0,0"
-                                Height="25"
-                                Content="虐出来的特命！" Grid.ColumnSpan="1" />
+                                  VerticalAlignment="Top"
+                                  Margin="75,326,0,0"
+                                  Height="25"
+                                  Content="虐出来的特命！" 
+                                  Grid.ColumnSpan="1" />
                         <Label FontWeight="Bold"
-                                FontSize="16px"
-                                Height="30"
-                                VerticalAlignment="Top"
-                                Margin="5,355,0,0"
-                                Content="设置延迟：" Grid.ColumnSpan="1" />
+                               FontSize="16px"
+                               Height="30"
+                               VerticalAlignment="Top"
+                               Margin="5,355,0,0"
+                               Content="設置延遲：" 
+                               Grid.ColumnSpan="1" />
                         <Label Height="25"
-                                VerticalAlignment="Top"
-                                Margin="5,420,0,0"
-                                Content="默认延迟250，根据电脑性能可增减" Grid.ColumnSpan="1"/>
+                               VerticalAlignment="Top"
+                               Margin="5,420,0,0"
+                               Content="預設延遲250，根據電腦性能可增減" 
+                               Grid.ColumnSpan="1"/>
                         <Label Height="25"
-                                VerticalAlignment="Top"
-                                Margin="5,450,0,0"
-                                Content="怕封号建议设置3000以上（还是有可能被封)" Grid.ColumnSpan="1"/>
+                               VerticalAlignment="Top"
+                               Margin="5,450,0,0"
+                               Content="怕被封鎖建議設置3000以上 (還是有可能被封)"
+                               Grid.ColumnSpan="1"/>
                         <Label Height="25"
-                                VerticalAlignment="Top"
-                                Margin="5,480,0,0"
-                                Content="脚本有风险，量力而行" Grid.ColumnSpan="1"/>
+                               VerticalAlignment="Top"
+                               Margin="5,480,0,0"
+                               Content="腳本有風險，量力而行"
+                               Grid.ColumnSpan="1"/>
                         <Label Height="25"
-                                VerticalAlignment="Top"
-                                Margin="25,390,0,0"
-                                Content="数值：" Grid.ColumnSpan="1"/>
+                               VerticalAlignment="Top"
+                               Margin="25,390,0,0"
+                               Content="數值：" 
+                               Grid.ColumnSpan="1"/>
                         <TextBox x:Name="tbDelayTime"
-                                VerticalAlignment="Top"
-                                HorizontalAlignment="Left"
-                                Margin="75,390,0,0"
-                                Width="50"
-                                Text="" Height="26" />
+                                 VerticalAlignment="Top"
+                                 HorizontalAlignment="Left"
+                                 Margin="75,390,0,0"
+                                 Width="50"
+                                 Height="26"
+                                 Text=""/>
                     </Grid>
                     <Button x:Name="btnPushSave"
                         Grid.Column="2"
@@ -934,42 +972,52 @@
                         VerticalAlignment="Top"
                         Margin="50,35,0,0"
                         Height="25"
-                        Content="自动出售" Grid.Column="1" />
+                        Content="自動出售" Grid.Column="1" />
                     <CheckBox x:Name="chkExploreTrue"
                         VerticalAlignment="Top"
                         Margin="50,65,0,0"
                         Height="25"
-                        Content="自动探索" Grid.Column="1" />
+                        Content="自動探索" Grid.Column="1" />
                     <CheckBox x:Name="chkGardenTrue"
                         VerticalAlignment="Top"
                         Margin="50,95,0,0"
                         Height="25"
-                        Content="自动抓虫" Grid.Column="1" />
+                        Content="自動抓蟲" Grid.Column="1" />
                     <CheckBox x:Name="chkActionPrep"
                         VerticalAlignment="Top"
                         Margin="50,125,0,0"
                         Height="25"
-                        Content="提前恢复体力" Grid.Column="1" />
+                        Content="提前回復體力" Grid.Column="1" />
                     <Label FontWeight="Bold"
                         FontSize="16px"
                         Height="30"
                         VerticalAlignment="Top"
                         Margin="25,0,0,0"
-                        Content="自动设置：" Grid.Column="1"/>
+                        Content="自動設置：" Grid.Column="1"/>
                     <CheckBox x:Name="chkGameRestart"
                         VerticalAlignment="Top"
                         Margin="50,175,0,0"
                         Height="25"
-                        Content="掉线自动刷新" Grid.Column="1"/>
+                        Content="斷線自動刷新" Grid.Column="1"/>
                     <Label Height="25"
                         VerticalAlignment="Top"
                         Margin="50,205,0,0"
-                        Content="需要使用设置中的账号登录界面" Grid.Column="1"/>
+                        Content="需要使用設置中的帳號登入介面" Grid.Column="1"/>
                     <CheckBox x:Name="chkSpecialBlock"
                         VerticalAlignment="Top"
                         Margin="50,270,0,0"
                         Height="25"
-                        Content="是否有导致一些推图按钮下推的活动，如眷属(Y+84）" Grid.Column="1"/>
+                        Content="是否有導致一些推圖按鈕下推的活動，如眷屬 (Y+100）" Grid.Column="1"/>
+                    <CheckBox x:Name="chkAutoReStart" 
+                        Content="自動檢測關卡是否已經獲得三勳章" 
+                        HorizontalAlignment="Left"
+                        Margin="50,305,0,0"
+                        VerticalAlignment="Top" Grid.Column="1"/>
+                    <Label Content="若無則會自動重刷關卡，僅限選擇&quot;自動推下一圖&quot;模式時有用"
+                        Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        Margin="44,328,0,0"
+                        VerticalAlignment="Top" Width="363"/>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -988,10 +1036,10 @@
                     </ItemsPanelTemplate>
                 </StatusBar.ItemsPanel>
                 <StatusBarItem Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <TextBlock x:Name="stLog">准备就绪。</TextBlock>
+                    <TextBlock x:Name="stLog"><Run Text="準備就緒。"/></TextBlock>
                 </StatusBarItem>
                 <StatusBarItem Grid.Column="1">
-                    <TextBlock x:Name="stTime"></TextBlock>
+                    <TextBlock x:Name="stTime"/>
                 </StatusBarItem>
             </StatusBar>
         </DockPanel>
