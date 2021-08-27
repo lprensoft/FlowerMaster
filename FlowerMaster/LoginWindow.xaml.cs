@@ -15,6 +15,7 @@ namespace FlowerMaster
         public LoginWindow()
         {
             InitializeComponent();
+            DataUtil.Config.LoadAccounts();
         }
 
         /// <summary>
@@ -66,7 +67,6 @@ namespace FlowerMaster
 
         private void MetroWindow_ContentRendered(object sender, EventArgs e)
         {
-            DataUtil.Config.LoadAccounts();
             cbGameServer.SelectedIndex = DataUtil.Config.LastLoginServer;
             ShowSavedAccounts();
         }
@@ -93,7 +93,7 @@ namespace FlowerMaster
         private void lbDelete_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (cbUsername.SelectedIndex < 0) return;
-            if (MessageBox.Show("确实要删除这个保存的账号吗？", "删除确认", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("確定要刪除這個保存的帳號嗎?", "刪除確認", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 DataUtil.Config.DeleteAccount(cbUsername.Text, cbGameServer.SelectedIndex);
                 cbUsername.Items.RemoveAt(cbUsername.SelectedIndex);

@@ -10,7 +10,7 @@
                       ResizeMode="NoResize"
                       WindowStartupLocation="CenterScreen"
                       Loaded="MetroWindow_Loaded"
-                      Title="地图情报" Height="400" Width="800">
+                      Title="地圖情報" Height="400" Width="800">
     <Grid>
         <DataGrid x:Name="dgBossList"
                                       Margin="0,0,0,0"
@@ -22,14 +22,14 @@
                                       CanUserAddRows="False"
                                       SelectionUnit="FullRow">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="分组" Width="80" IsReadOnly="True" Binding="{Binding group}"/>
+                <DataGridTextColumn Header="分組" Width="80" IsReadOnly="True" Binding="{Binding group}"/>
                 <DataGridTextColumn Header="怪物" Width="160" IsReadOnly="True" Binding="{Binding name}"/>
                 <DataGridTextColumn Header="HP" Width="80" IsReadOnly="True" Binding="{Binding hp}"/>
-                <DataGridTextColumn Header="攻击" Width="60" IsReadOnly="True" Binding="{Binding atk}"/>
-                <DataGridTextColumn Header="防御" Width="60" IsReadOnly="True" Binding="{Binding def}"/>
+                <DataGridTextColumn Header="攻擊" Width="60" IsReadOnly="True" Binding="{Binding atk}"/>
+                <DataGridTextColumn Header="防禦" Width="60" IsReadOnly="True" Binding="{Binding def}"/>
                 <DataGridTextColumn Header="技能" Width="150" IsReadOnly="True" Binding="{Binding skill}"/>
-                <DataGridTextColumn Header="掉落金币" Width="80" IsReadOnly="True" Binding="{Binding money}"/>
-                <DataGridTextColumn Header="掉落种子" Width="100" IsReadOnly="True" Binding="{Binding gp}"/>
+                <DataGridTextColumn Header="掉落金幣" Width="80" IsReadOnly="True" Binding="{Binding money}"/>
+                <DataGridTextColumn Header="掉落種子" Width="100" IsReadOnly="True" Binding="{Binding gp}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

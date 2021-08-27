@@ -101,6 +101,10 @@ namespace FlowerMaster.Models
             /// </summary>
             public bool autoGoInMaps;
             /// <summary>
+            /// 若關卡未獲得三勳章則重新開始
+            /// </summary>
+            public bool autoReStart;
+            /// <summary>
             /// 自动推兔间隔时间
             /// </summary>
             private int _autoGoTimeout;
@@ -334,15 +338,17 @@ namespace FlowerMaster.Models
         /// <summary>
         /// 默认抽取日服Flash的CSS样式
         /// </summary>
-        public const string DefaultCSSJapan = "body {\r\n    margin:0;\r\n    overflow:hidden;\r\n}\r\n\r\n#game_frame {\r\n    position:fixe" +
-                    "d;\r\n    left:50%;\r\n    top:0px;\r\n    margin-left:-480px;\r\n    z-index:1;\r\n}\r\n\r\n" +
-                    ".area-pickupgame,\r\n.area-menu\r\n{\r\n    display:none!important;\r\n}";
+        public const string DefaultCSSJapan = "body {\r\n    overflow:hidden;\r\n}\r\n\r\ndiv {\r\n    left:0px!important;\r\n    top:0px!important;\r\n}" +
+            "\r\n\r\n#main_contents {\r\n    left:-6px!important;\r\n    top:-6px!important;\r\n    width:100%!important;\r\n}";
+            
         /// <summary>
         /// 默认抽取美服Flash的CSS样式
         /// </summary>
-        public const string DefaultCSSAmerican = "body {\r\n    margin:0;\r\n    overflow:hidden;\r\n}\r\n\r\n#externalContainer {\r\n    position:rela" +
-                    "tive;\r\n    left:50%;\r\n    top:0px;\r\n    left:0px;\r\n    z-index:1;\r\n}\r\n\r\n" +
-                    ".area-pickupgame,\r\n.area-menu\r\n{\r\n    display:none!important;\r\n}";
+        public const string DefaultCSSAmerican = DefaultCSSJapan;
+
+        /*"body {\r\n    margin:0;\r\n    overflow:hidden;\r\n}\r\n\r\n#externalContainer {\r\n    position:rela" +
+                "tive;\r\n    left:50%;\r\n    top:0px;\r\n    left:0px;\r\n    z-index:1;\r\n}\r\n\r\n" +
+                ".area-pickupgame,.area-menu\r\n{\r\n    display:none!important;\r\n}";*/
 
         /// <summary>
         /// 初始化 FlowerMaster.Models.SysConfig 类的新实例。
@@ -359,14 +365,14 @@ namespace FlowerMaster.Models
         /// </summary>
         private void InitDefaultConfig()
         {
-            sysConfig.showLoginDialog = false;
+            sysConfig.showLoginDialog = true;
             sysConfig.showLoginNews = false;
-            sysConfig.gameServer = 0;
+            sysConfig.gameServer = 1;
             sysConfig.gameHomePage = 1;
 
             sysConfig.proxyType = ProxySettingsType.DirectAccess;
             sysConfig.proxyServer = "127.0.0.1";
-            sysConfig.proxyPort = 8099;
+            sysConfig.proxyPort = 8888;
 
             sysConfig.apTargetNotify = 0;
             sysConfig.apFullNotify = false;
@@ -381,6 +387,7 @@ namespace FlowerMaster.Models
             sysConfig.logGacha = true;
 
             sysConfig.autoGoInMaps = false;
+            sysConfig.autoReStart = true;
             sysConfig.autoGoTimeout = AUTO_GO_TIMEOUT;
 
             sysConfig.changeTitle = false;
@@ -887,7 +894,7 @@ namespace FlowerMaster.Models
             if (!File.Exists("config.xml"))
             {
                 xmlDoc.AppendChild(Declaration);
-                xmlDoc.CreateElement("Config");
+                rootNode = xmlDoc.CreateElement("Config");
                 xmlDoc.AppendChild(rootNode);
                 accounts = xmlDoc.CreateElement("Accounts");
                 rootNode.AppendChild(accounts);
@@ -900,7 +907,7 @@ namespace FlowerMaster.Models
             bool found = false;
             if (accountList != null)
             {
-                for (int i=0; i<accountList.Count; i++)
+                for (int i = 0; i < accountList.Count; i++)
                 {
                     if (accountList[i].username == acc.username && accountList[i].gameServer == acc.gameServer)
                     {
